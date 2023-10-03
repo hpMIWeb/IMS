@@ -6,14 +6,14 @@ if (!in_array('localhost', explode('/', $Base_link))) {
 
     $master_servername = "localhost";
     $master_username = "root";
-    $master_password = 'Password123*';
+    $master_password = '';
     $master_db = "ims";
 } else {
 
     // local connection
     $master_servername = "localhost";
     $master_username = "root";
-    $master_password = 'Password123*';
+    $master_password = '';
     $master_db = "ims";
 }
 // Create connection
