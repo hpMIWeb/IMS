@@ -1,7 +1,8 @@
 <?php
-session_start();
 include_once './include/session-check.php';
+include_once './include/APICALL.php';
 include_once './include/common-constat.php';
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,7 +26,6 @@ include_once './include/common-constat.php';
         include_once("include/sidebar.php");
 
         ?>
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -64,64 +64,33 @@ include_once './include/common-constat.php';
                             </div>
                         </div>
                         <div class="card-body">
-
                             <table id="amcTable" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>Sr. No.</th>
                                         <th>Customer's Name</th>
-                                        <th>Date of visit</th>
-                                        <th>Work Details</th>
-                                        <th>Customer Name</th>
                                         <th>Contact Number</th>
-                                        <th>AMC Attend By</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Action</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Client 1</td>
-                                        <td>1234</td>
-                                        <td>1234567890</td>
-                                        <td>1234567890</td>
-                                        <td>1234567890</td>
 
-                                        <td class="text-center-block py-0 align-middle">
-                                            <div class="">
-                                                <a href="#" class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-warning btn-sm">
-                                                    <i class="fas fa-pen"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-
-                                    </tr>
 
                                 </tbody>
-
-
                             </table>
                         </div>
                     </div>
                     </form>
                 </div>
-
+            </section>
         </div>
 
     </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-    </div>
     <?php
-
     include_once("include/footer.php");
-
     ?>
 
     <!-- Control Sidebar -->
@@ -142,6 +111,68 @@ include_once './include/common-constat.php';
 
 
     <script>
+        $(document).ready(function() {
+            getAmcList();
+        });
+        // Add a click event handler for the "Delete" buttons
+        $('#amcTable').on('click', '.delete-category', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+            const categoryId = $(this).data(
+                'category-id'); // Get the category ID from the data attribute
+            deleteCategory(categoryId);
+        });
+
+
+        function getAmcList() {
+
+            let sendApiDataObj = {
+                '<?php echo systemProject ?>': 'Masters',
+                '<?php echo systemModuleFunction ?>': 'getAmcMasterDetails',
+
+            };
+            APICallAjax(sendApiDataObj, function(response) {
+                if (response.responseCode == RESULT_OK) {
+
+                    let html = '';
+                    let count = 1;
+                    $.each(response.result.amcMaster, function(index, amcMaster) {
+                        html += '<tr>';
+                        html += '<td>' + count + '</td>';
+                        html += '<td>' + amcMaster.customerName + '</td>';
+                        html += '<td>' + amcMaster.contactNumber + '</td>';
+                        html += '<td>' + amcMaster.startDateDisplay + '</td>';
+                        html += '<td>' + amcMaster.endDateDisplay + '</td>';
+
+
+                        html += '<td class="text-center-block py-0 align-middle">';
+                        html += '<div class = "" > ';
+                        html +=
+                            ' <a href="#"  class="btn btn-primary btn-sm c-amc-master" data-amcmaster-id="' +
+                            amcMaster.id + '">';
+                        html += '<i class = "fas fa-eye" > </i>';
+                        html += '</a>';
+                        html +=
+                            ' <a href="#"  class="btn btn-warning btn-sm edit-amc-master" data-amcmaster-id="' +
+                            amcMaster.id + '">';
+                        html += '<i class = "fas fa-pen" > </i>';
+                        html += '</a>';
+                        html +=
+                            ' <a href="#" class="btn btn-danger btn-sm delete-amc-master" data-amcmaster-id="' +
+                            amcMaster.id + '">';
+                        html += '<i class = "fas fa-trash" > </i>';
+                        html += '</a>';
+                        html += '</div>';
+                        html += '</td > ';
+                        html += '</tr>';
+                        count++;
+
+                    });
+                    $('#amcTable tbody').html(html);
+                } else {
+                    toast_error(response.message);
+                }
+            });
+        }
         $("#amcTable").DataTable({
             "responsive": true,
             "autoWidth": false,

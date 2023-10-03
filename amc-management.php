@@ -19,13 +19,10 @@ include_once './include/common-constat.php';
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
-
         <?php
         include_once("include/header.php");
         include_once("include/sidebar.php");
-
         ?>
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -44,14 +41,14 @@ include_once './include/common-constat.php';
                     </div>
                 </div>
             </section>
-
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
 
                     <div class="card card-default">
                         <form>
-
+                            <input type="hidden" id="action" value="add">
+                            <input type="hidden" id="amcMasterId" value="">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -69,13 +66,12 @@ include_once './include/common-constat.php';
 
                                     </div>
                                     <div class="col-md-6">
-                                        <label>Contact Number</label>
-                                        <input type="text" name="contactNumber" id="contactNumber" class="form-control"
-                                            placeholder="Enter contact number">
-
                                         <div class="form-group">
-
+                                            <label>Contact Number</label>
+                                            <input type="text" name="contactNumber" id="contactNumber"
+                                                class="form-control" placeholder="Enter contact number">
                                         </div>
+
                                         <div class="form-group">
                                             <label>Number Of Bathrooms</label>
                                             <input type="text" name="noOfBathroom" id="noOfBathroom"
@@ -96,24 +92,29 @@ include_once './include/common-constat.php';
                                                         <i class="far fa-calendar-alt"></i>
                                                     </span>
                                                 </div>
-                                                <input type="text" class="form-control float-right" id="reservation">
+                                                <input type="text" class="form-control float-right"
+                                                    id="dateRangeSelector">
                                             </div>
-                                            <!-- /.input group -->
                                         </div>
                                     </div>
 
                                     <div class="col-12 col-sm-6">
                                         <div class="form-group">
                                             <label for="subscribeNews">No of service require during year : </label>
+                                            <select class="form-control select2" id="noOfService" name="noOfService">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
 
-                                            <select class="form-control select2" style="width: 100%;">
-                                                <option selected="selected">Alabama</option>
-                                                <option>Alaska</option>
-                                                <option>California</option>
-                                                <option>Delaware</option>
-                                                <option>Tennessee</option>
-                                                <option>Texas</option>
-                                                <option>Washington</option>
                                             </select>
 
                                         </div>
@@ -122,8 +123,8 @@ include_once './include/common-constat.php';
 
                                     <div class="col-12 col-sm-6">
                                         <div class="form-group">
-                                            <label>Amc Charrges</label>
-                                            <input type="text" name="gst_rate" id="gst_rate" class="form-control"
+                                            <label>Amc Charges</label>
+                                            <input type="text" name="amcCharges" id="amcCharges" class="form-control"
                                                 placeholder="Enter GST rate">
                                         </div>
 
@@ -131,68 +132,67 @@ include_once './include/common-constat.php';
                                     <div class="col-12 col-sm-6">
                                         <div class="form-group">
                                             <label>Special Remarks</label>
-                                            <input type="text" name="gst_rate" id="gst_rate" class="form-control"
+                                            <input type="text" name="remark" id="remark" class="form-control"
                                                 placeholder="Enter GST rate">
                                         </div>
 
                                     </div>
-
-
-
-
-
                                 </div>
-
+                                <div class="float-right">
+                                    <button type="button" id="addUpdateAmcMasterBtn" name="submit"
+                                        class="btn btn-primary">Save</button>
+                                    <button type="button" name="delete" class="btn btn-danger">Cancel</button>
+                                </div>
                             </div>
-                            <div class="float-right">
-                                <button type="submit" name="submit" class="btn btn-primary">Save</button>
-                                <button type="submit" name="delete" class="btn btn-danger">Cancel</button>
-                            </div>
+                        </form>
                     </div>
-
-
-
                 </div>
-
+            </section>
         </div>
-
-        </form>
-    </div>
-
-    </div>
-
-    </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
     </div>
     <?php
-
     include_once("include/footer.php");
-
     ?>
-
-    <!-- Control Sidebar -->
-    <aside class=" control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
-
-    <!-- jQuery -->
-
     <?php
-
     include_once("include/jquery.php");
-
-
     ?>
-
     <script>
     //Initialize Select2 Elements
     $('.select2').select2()
     //Date range picker
-    $('#reservation').daterangepicker()
+    $('#dateRangeSelector').daterangepicker();
+
+    $('#addUpdateAmcMasterBtn').on('click', function(event) {
+        let action = $('#action').val();
+        let dateRangeArray = $('#dateRangeSelector').val().split("-");
+        let startDate = dateRangeArray[0]
+        let endDate = dateRangeArray[1]
+        let amcMasterId = $('#amcMasterId').val();
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'addUpdateAmcMaster',
+            'amcMasterId': amcMasterId,
+            'customerName': $('#customerName').val(),
+            'address': $('#address').val(),
+            'contactNumber': $('#contactNumber').val(),
+            'noOfBathroom': $('#noOfBathroom').val(),
+            'startDate': startDate,
+            'endDate': endDate,
+            'noOfService': $('#noOfService').val(),
+            'amcCharges': $('#amcCharges').val(),
+            'remark': $('#remark').val(),
+            'action': action,
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+
+                toast_success(response.message);
+                //   resetFormFields()
+            } else {
+                toast_error(response.message);
+            }
+        });
+    });
     </script>
 </body>
 
