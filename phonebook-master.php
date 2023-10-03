@@ -1,15 +1,17 @@
 <?php
-        session_start();
-        include_once './include/session-check.php';
-        include_once './include/common-constat.php';
+include_once './include/session-check.php';
+include_once './include/APICALL.php';
+include_once './include/common-constat.php';
+
 ?>
 <!DOCTYPE html>
+
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Phonebook-Master</title>
+    <title>phonebook-Master</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
@@ -34,7 +36,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Phonebook-Master</h1>
+                            <h1>PhoneBook-Master</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -61,134 +63,310 @@
                                     <div class="card-body">
                                         <!-- Date range -->
                                         <div class="row">
-                                            <div class="col-3 form-group">
+                                            <input type="hidden" name="phonebookMasterId" id="phonebookMasterId" value="">
+                                            <input type="hidden" name="action" id="action" value="add">
+                                            <div class="col-6 form-group">
+                                                <label>Category</label>
+                                                <select name="category" id="category" class="form-control select2" style="width: 100%; ">
+                                                    <option selected="selected"></option>
+
+                                                </select>
+                                            </div>
+                                            <div class="col-6 form-group">
+
                                                 <div class="form-group">
-                                                    <label>Category</label>
-                                                    <select name="category" class="form-control select2" style="width: 100%;">
-                                                        <option selected="selected">Select Category </option>
-                                                        <option>Category-1</option>
-                                                        <option>Category-2</option>
-                                                        <option>Category-3</option>
-                                                        <option>Category-4</option>
-                                                    </select>
+                                                    <label>Address</label>
+                                                    <input type="text" name="address" id="address" class="form-control" placeholder="Enter Address">
                                                 </div>
-
                                             </div>
-                                            <div class="col-3  form-group">
+                                        </div>
+                                        <div class="row">
 
-
+                                            <div class="col-6 form-group">
                                                 <label>Name</label>
-                                                <input type="text" name="category_name" id="category_name" class="form-control" placeholder="Enter Name">
+                                                <input type="text" name="categoryName" id="categoryName" class="form-control" placeholder="Enter Name">
+                                            </div>
+                                            <div class="col-6 form-group">
 
+                                                <div class="form-group">
+                                                    <label>Designation</label>
+                                                    <input type="text" name="designation" id="designation" class="form-control" placeholder="designation">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-6 form-group">
+                                                <label>Company Name</label>
+                                                <input type="text" name="companyName" id="companyName" class="form-control" placeholder="Enter company Name">
+                                            </div>
+                                            <div class="col-6 form-group">
+
+                                                <div class="form-group">
+                                                    <label>Remark</label>
+                                                    <input type="text" name="remark" id="remark" class="form-control" placeholder="Remark">
+                                                </div>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <label>Contact Number</label>
+                                                <input type="text" name="contactNumber" id="contactNumber" class="form-control" placeholder="Enter Contact Number">
+                                            </div>
+                                            <div class="col-6 form-group">
 
                                             </div>
-                                            <div class="col-3 form-group">
-                                                <label>Description</label>
-                                                <input type="text" name="description" id="description" class="form-control" placeholder="Decription..">
-
-
-                                            </div>
-                                            <div class="col-3 text-center mt-4 ">
-                                                <button class="btn  btn-primary mt-2">Save</button>
-                                                <button class="btn btn-danger mt-2 ">Cancel</button>
-                                            </div>
-
-
-
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="float-right">
+                                            <button type="button" id="addUpdatePhonebookMasterButton" name="submit" class="btn btn-primary">Save</button>
+                                            <button type="button" name="delete" class="btn btn-danger" onclick="resetFormFields()">Delete</button>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- /.card-body -->
+                                <div class="card-body">
+
+                                    <table id="phonebookMasterTable" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-1">sr.no</th>
+                                                <th>Name</th>
+                                                <th>Address</th>
+                                                <th>Contact Number</th>
+                                                <th>Designation</th>
+                                                <th>Company Name</th>
+                                                <th>Remark</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
 
-                            <div class="card-body">
-
-                                <table id="example2" class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th class="col-1">Id</th>
-                                            <th>Plumber Name</th>
-                                            <th>Description..</th>
-                                            <th>Action</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Category 1</td>
-                                            <td>Description..</td>
-                                            <td class="text-center-block py-0 align-middle">
-                                                <div class="">
-                                                    <a href="#" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-danger btn-sm">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Category 2</td>
-                                            <td>Description..</td>
-                                            <td class="text-center-block py-0 align-middle">
-                                                <div class="">
-                                                    <a href="#" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-danger btn-sm">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-
-
-                                </table>
-                            </div>
+                            <!-- /.card-body -->
                         </div>
 
-                        <!-- /.card-body -->
                     </div>
-
+                    <!-- /.col -->
                 </div>
-                <!-- /.col -->
-        </div>
-        <!-- ./wrapper -->
-        <?php
+                <!-- ./wrapper -->
 
-        include_once("include/footer.php");
+                <!-- jQuery -->
 
-        ?>
-        <!-- jQuery -->
+                <?php
 
-        <?php
+                include_once("include/jquery.php");
 
-        include_once("include/jquery.php");
+                ?>
 
-        ?>
+                <script>
+                    $(document).ready(function() {
 
-        <script>
-            $(function() {
-                $("#example1").DataTable({
-                    "responsive": true,
-                    "autoWidth": false,
-                });
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": false,
-                    "searching": false,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                });
-            });
-        </script>
+                        getPhonebookMaster();
+                        getCategory();
+
+
+                    });
+
+                    function getCategory() {
+
+                        let sendApiDataObj = {
+                            '<?php echo systemProject ?>': 'Masters',
+                            '<?php echo systemModuleFunction ?>': 'getCategoryMasterDetails',
+
+                        };
+                        APICallAjax(sendApiDataObj, function(response) {
+                            if (response.responseCode == RESULT_OK) {
+
+                                let html = '';
+
+                                $.each(response.result.category, function(index, category) {
+                                    html += '<option value = "' + category.id + '" > ' + category.name + ' </option>';
+                                });
+                                $('#category').html(html);
+
+                            } else {
+                                toast_error(response.message);
+                            }
+                        });
+                    }
+
+                    // Add a click event handler for the "Delete" buttons
+                    $('#phonebookMasterTable').on('click', '.delete-phonebookMaster', function(event) {
+                        event.preventDefault(); // Prevent the default link behavior
+
+                        const phonebookMasterId = $(this).data(
+                            'phonebookmaster-id'); // Get the category ID from the data attribute
+                        console.log(phonebookMasterId)
+                        deletePhonebookMaster(phonebookMasterId);
+                    });
+
+
+
+                    function deletePhonebookMaster(phonebookMasterId) {
+
+                        let sendApiDataObj = {
+                            '<?php echo systemProject ?>': 'Masters',
+                            '<?php echo systemModuleFunction ?>': 'deletePhonebookMaster',
+                            'phonebookMasterId': phonebookMasterId,
+                        };
+                        APICallAjax(sendApiDataObj, function(response) {
+                            if (response.responseCode == RESULT_OK) {
+                                toast_success(response.message);
+                                getPhonebookMaster();
+                            } else {
+                                toast_error(response.message);
+                            }
+                        });
+                    }
+
+                    $('#phonebookMasterTable').on('click', '.edit-phonebookMaster', function(event) {
+                        event.preventDefault(); // Prevent the default link behavior
+                        const phonebookMasterId = $(this).data(
+                            'phonebookmaster-id'); // Get the category ID from the data attribute
+                        let sendApiDataObj = {
+                            '<?php echo systemProject ?>': 'Masters',
+                            '<?php echo systemModuleFunction ?>': 'getPhonebookMasterDetails',
+                            'phonebookMasterId': phonebookMasterId,
+
+                        };
+                        APICallAjax(sendApiDataObj, function(response) {
+                            if (response.responseCode == RESULT_OK) {
+                                $.each(response.result.phoneBookMaster, function(index, phoneBookMaster) {
+                                    console.log(phoneBookMaster)
+                                    $('#phonebookMasterId').val(phoneBookMaster.id);
+                                    $('#action').val("edit");
+                                    $('#category').val(phoneBookMaster.category).trigger('change');
+                                    $('#categoryName').val(phoneBookMaster.name);
+                                    $('#contactNumber').val(phoneBookMaster.contactNumber);
+                                    $('#address').val(phoneBookMaster.address);
+                                    $('#designation').val(phoneBookMaster.designation);
+                                    $('#companyName').val(phoneBookMaster.companyName);
+                                    $('#remark').val(phoneBookMaster.remark);
+                                });
+
+                            } else {
+                                toast_error(response.message);
+                            }
+                        });
+                    });
+
+                    function deletephonebookMaster(PhonebookMasterId) {
+
+                        let sendApiDataObj = {
+                            '<?php echo systemProject ?>': 'Masters',
+                            '<?php echo systemModuleFunction ?>': 'deletephonebookMaster',
+                            'PhonebookMasterId': PhonebookMasterId,
+                        };
+                        APICallAjax(sendApiDataObj, function(response) {
+                            if (response.responseCode == RESULT_OK) {
+                                toast_success(response.message);
+                                getPhonebookMaster();
+                            } else {
+                                toast_error(response.message);
+                            }
+                        });
+                    }
+
+
+                    $('#addUpdatePhonebookMasterButton').on('click', function(event) {
+                        let category = $('#category').val();
+                        let name = $('#categoryName').val();
+                        let address = $('#address').val();
+                        let action = $('#action').val();
+                        let contactNumber = $('#contactNumber').val();
+                        let designation = $('#designation').val();
+                        let companyName = $('#companyName').val();
+                        let remark = $('#remark').val();
+                        let phonebookMasterId = $('#phonebookMasterId').val();
+                        let sendApiDataObj = {
+                            '<?php echo systemProject ?>': 'Masters',
+                            '<?php echo systemModuleFunction ?>': 'addUpdatePhonebookMaster',
+                            'phonebookMasterId': phonebookMasterId,
+                            'name': name,
+                            'address': address,
+                            'contactNumber': contactNumber,
+                            'designation': designation,
+                            'companyName': companyName,
+                            'remark': remark,
+                            'action': action,
+                            'category': category
+                        };
+
+                        APICallAjax(sendApiDataObj, function(response) {
+                            if (response.responseCode == RESULT_OK) {
+                                getPhonebookMaster();
+                                toast_success(response.message);
+                                resetFormFields()
+                            } else {
+                                toast_error(response.message);
+                            }
+                        });
+                    });
+
+
+                    function getPhonebookMaster() {
+
+                        let sendApiDataObj = {
+                            '<?php echo systemProject ?>': 'Masters',
+                            '<?php echo systemModuleFunction ?>': 'getPhonebookMasterDetails',
+
+                        };
+                        APICallAjax(sendApiDataObj, function(response) {
+                            if (response.responseCode == RESULT_OK) {
+
+                                let html = '';
+                                let count = 1;
+
+                                $.each(response.result.phoneBookMaster, function(index, phoneBookMaster) {
+                                    html += '<tr>';
+                                    html += '<td>' + count + '</td>';
+                                    html += '<td>' + phoneBookMaster.name + '</td>';
+                                    html += '<td>' + phoneBookMaster.address + '</td>';
+                                    html += '<td>' + phoneBookMaster.contactNumber + '</td>';
+                                    html += '<td>' + phoneBookMaster.designation + '</td>';
+                                    html += '<td>' + phoneBookMaster.companyName + '</td>';
+                                    html += '<td>' + phoneBookMaster.remark + '</td>';
+                                    html += '<td class="text-center-block py-0 align-middle">';
+                                    html += '<div class = "" > ';
+                                    html +=
+                                        '<button  class="btn btn-warning btn-sm edit-phonebookMaster" data-phonebookmaster-id="' +
+                                        phoneBookMaster.id + '">';
+                                    html += '<i class = "fas fa-eye" > </i>';
+                                    html += '</button>';
+                                    html +=
+                                        '<button class="btn btn-danger btn-sm delete-phonebookMaster" data-phonebookmaster-id="' +
+                                        phoneBookMaster.id + '">';
+                                    html += '<i class = "fas fa-trash" > </i>';
+                                    html += '</button>';
+                                    html += '</div>';
+                                    html += '</td > ';
+                                    html += '</tr>';
+                                    count++;
+
+                                });
+
+                                $('#phonebookMasterTable tbody').html(html);
+                            } else {
+                                toast_error(response.message);
+                            }
+                        });
+                    }
+
+                    // Function to reset form fields
+                    function resetFormFields() {
+                        $('#category').val('');
+                        $('#categoryName').val('');
+                        $('#address').val('');
+                        $('#contactNumber').val('');
+                        $('#designation').val('');
+                        $('#companyName').val('');
+                        $('#remark').val('');
+                        $('#action').val('add');
+                        $('#phonebookMasterId').val();
+                    }
+                </script>
 </body>
 
 </html>
