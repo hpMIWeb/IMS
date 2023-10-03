@@ -39,6 +39,11 @@ $.widget.bridge('uibutton', $.ui.button)
 <script src="./assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <!-- Toastr -->
 <script src="./assets/plugins/toastr/toastr.min.js"></script>
+<!-- Select2 -->
+<script src="./assets/plugins/select2/js/select2.full.min.js"></script>
+
+<!-- date-range-picker -->
+<script src="./assets/plugins/daterangepicker/daterangepicker.js"></script>
 
 <script>
 function toast_success(msg) {

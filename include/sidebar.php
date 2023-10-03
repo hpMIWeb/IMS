@@ -109,7 +109,7 @@ $superAdminMenu = array(
     ),
     array(
         "displayName" => "Amc-management",
-        "redirectPage" => "amc-management.php",
+        "redirectPage" => "amc-list.php",
         "isHasSubMenu" => false,
         "icon" => "nav-icon fas fa-bars",
         "submenuArray" => array(),
