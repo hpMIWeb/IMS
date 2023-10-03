@@ -2,3 +2,4 @@
 api/classes/*
 vendor/*
 
+DB/connection.php
