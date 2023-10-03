@@ -149,7 +149,7 @@ include_once './include/common-constat.php';
 
                     </div>
                     <!-- /.col -->
-                </div>
+</div>
                 <!-- ./wrapper -->
 
                 <!-- jQuery -->

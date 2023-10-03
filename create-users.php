@@ -1,8 +1,8 @@
 <?php
-session_start();
-ob_start();
-    include_once './include/session-check.php';
-    include_once './include/common-constat.php';
+
+include_once './include/session-check.php';
+include_once './include/APICALL.php';
+include_once './include/common-constat.php';
 
 
 
@@ -32,17 +32,18 @@ ob_start();
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Users</h1>
+                            <h1>User-Create</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">user</li>
+                                <li class="breadcrumb-item active">user-create</li>
                             </ol>
                         </div>
                     </div>
@@ -51,127 +52,108 @@ ob_start();
 
             <!-- Main content -->
             <section class="content">
-                <div class="container-fluid">
-                    <!-- SELECT2 EXAMPLE -->
-                    <div class="card card-default">
-                        <form action="generate-pdf.php" method="POST">
-
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <!-- <div class="card-header">
+              <h3 class="card-title">DataTable with minimal features & hover style</h3>
+            </div> -->
                             <!-- /.card-header -->
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
+                            <div class="col-md-12 pt-3">
+                                <div class="card card-primary">
 
-                                    </div>
-                                    <!-- /.col -->
-                                    <div class="col-md-6">
-
-                                        <!-- /.form-group -->
-
-                                        <!-- /.form-group -->
-                                    </div>
-                                    <!-- /.col -->
-                                </div>
-                                <!-- /.row -->
-
-                                <div class="row">
-
-                                    <!-- /.col -->
-
-                                    <!-- /.col -->
-
-                                </div>
+                                    <div class="card-body">
+                                        <!-- Date range -->
+                                        <div class="row">
+                                            <input type="hidden" name="userId" id="userId" value="">
+                                            <input type="hidden" name="action" id="action" value="add">
+                                            <div class="col-6 form-group">
+                                                <label>First Name</label>
+                                                <input type="text" name="firstName" id="firstName" class="form-control" placeholder="Enter Frist Name">
 
 
-                                <div class="row">
-                                    <div class="col">
-                                        <label> First Name</label>
-                                        <input type="text" name="fname" id="lname" class=" form-control" placeholder="Enter First Name">
+                                                </select>
+                                            </div>
+                                            <div class="col-6 form-group">
 
+                                                <div class="form-group">
+                                                    <label>Last Name</label>
+                                                    <input type="text" name="lastName" id="lastName" class="form-control" placeholder="Enter Last Name">
 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
 
-                                    </div>
-                                    <div class="col">
-                                        <label>Last Name</label>
-                                        <input type="text" name="lname" id=" lname" class="form-control" placeholder="Enter Last Name">
-                                    </div>
+                                            <div class="col-6 form-group">
+                                                <label>User Name</label>
+                                                <input type="text" name="userName" id="userName" class="form-control" placeholder="Enter User Name">
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <label>State:</label>
+                                                <select name="state" id="state" class="form-control select2" style="width: 100%; ">
+                                                    <option selected="selected"></option>
+                                                    <option>Gujarat</option>
+                                                    <option>Maharastra</option>
+                                                    <option>Kerala</option>
+                                                    <option>Punjab</option>
+                                                </select>
+                                                <div class="form-group">
 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
 
-                                </div>
+                                            <div class="col-6 form-group">
+                                                <label>Address</label>
+                                                <input type="text" name="address" id="address" class="form-control" placeholder="Enter Address">
+                                            </div>
+                                            <div class="col-6 form-group">
 
+                                                <div class="form-group">
+                                                    <label>Email Id</label>
+                                                    <input type="text" name="email" id="email" class="form-control" placeholder="Emate Email Id">
+                                                </div>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <label>Password</label>
+                                                <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password">
+                                            </div>
+                                            <div class="col-6 form-group">
 
-                                <div class="row">
-                                    <div class="col">
-                                        <label> Address</label>
-                                        <textarea name="user_add" id="user_add" class="form-control" rows="2" placeholder="Address.."></textarea>
+                                                <label>Contact Number</label>
+                                                <input type="text" name="contactNumber" id="contactNumber" class="form-control" placeholder="Enter Contact Number">
 
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-group">
-                                            <label>State:</label>
-                                            <select name=" client_state" class="form-control select2" style="width: 100%; ">
-                                                <option selected="selected"></option>
-                                                <option>Gujarat</option>
-                                                <option>Maharastra</option>
-                                                <option>Kerala</option>
-                                                <option>Punjab</option>
-                                            </select>
+                                            </div>
+                                            <div class="col-6 form-group">
 
+                                                <label>Confirm Password</label>
+                                                <input type="password" name="cpassword" id="cpassword" class="form-control" placeholder="Enter Confrirm Password">
+
+                                            </div>
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="float-right">
+                                            <button type="button" id="addUpdateUserCreateButton" name="submit" class="btn btn-primary">Save</button>
+                                            <button type="button" name="delete" class="btn btn-danger" onclick="resetFormFields()">Delete</button>
                                         </div>
                                     </div>
-
-
-
                                 </div>
-                                <div class="row">
-                                    <div class="col-6 ">
-                                        <div class="form-group">
-                                            <label>Client's Email Id</label>
-                                            <input type="text" name="client_email" id="client_email" class="form-control" placeholder="Enter Client's Email Id">
-                                        </div>
-                                        <!-- /.form-group -->
-                                    </div>
-                                    <div class="col-6 ">
-                                        <div class="form-group">
-                                            <label>Client's Contact Number</label>
-                                            <input type="text" name="client_num" id="client_num" class="form-control" placeholder="Enter Client's Contact Number">
-                                        </div>
-
-                                        <!-- /.form-group -->
-                                    </div>
-                                    <div class="col-6 ">
-                                        <div class="form-group">
-                                            <label>Password</label>
-                                            <input type="text" name="pass" id="pass" class="form-control" placeholder="Enter Password">
-                                        </div>
-
-                                        <!-- /.form-group -->
-                                    </div>
-                                    <div class="col-6 ">
-                                        <div class="form-group">
-                                            <label>Confirm Password</label>
-                                            <input type="text" name="cpass" id="cpass" class="form-control" placeholder="Enter Confirm Password">
-                                        </div>
-
-                                        <!-- /.form-group -->
-                                    </div>
-
-                                </div>
-                                <div class="float-right">
-                                    <button type="submit" name="submit" class="btn btn-primary">save</button>
-                                    <button type="submit" name="delete" class="btn btn-danger">Delete</button>
-                                </div>
-
 
                             </div>
+
+                            <!-- /.card-body -->
+                        </div>
+
                     </div>
-                    </form>
+                    <!-- /.col -->
                 </div>
 
-        </div>
 
-    </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+        </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
     </div>
     <?php
 
@@ -194,6 +176,102 @@ ob_start();
     include_once("include/jquery.php");
 
     ?>
+
+
+    <script>
+        $(document).ready(function() {
+
+            //getUserCreate();
+
+
+        });
+
+        function getUserCreate() {
+
+            let sendApiDataObj = {
+                '<?php echo systemProject ?>': 'Sessions',
+                '<?php echo systemModuleFunction ?>': 'getUserCreateDetails',
+
+            };
+            APICallAjax(sendApiDataObj, function(response) {
+                if (response.responseCode == RESULT_OK) {
+
+
+                } else {
+                    toast_error(response.message);
+                }
+            });
+        }
+
+        function deleteUsers(userId) {
+
+            let sendApiDataObj = {
+                '<?php echo systemProject ?>': 'Sessions',
+                '<?php echo systemModuleFunction ?>': 'deleteUsers',
+                'userId': userId,
+            };
+            APICallAjax(sendApiDataObj, function(response) {
+                if (response.responseCode == RESULT_OK) {
+                    toast_success(response.message);
+                    get();
+                } else {
+                    toast_error(response.message);
+                }
+            });
+        }
+
+
+        $('#addUpdateUserCreateButton').on('click', function(event) {
+            let firstName = $('#firstName').val();
+            let lastName = $('#lastName').val();
+            let userName = $('#userName').val();
+            let address = $('#address').val();
+            let state = $('#state').val();
+            let mobile = $('#mobile').val();
+            let password = $('#password').val();
+            let email = $('#email').val();
+            let action = $('#action').val();
+            let userId = $('#userId').val();
+            let sendApiDataObj = {
+                '<?php echo systemProject ?>': 'Sessions',
+                '<?php echo systemModuleFunction ?>': 'addUpdateCreateUser',
+                'userId': userId,
+                'firstName': firstName,
+                'lastName': lastName,
+                'userName': userName,
+                'address': address,
+                'state': state,
+                'mobile': mobile,
+                'password': password,
+                'email': email,
+                'action': $('#action').val(),
+            };
+
+            APICallAjax(sendApiDataObj, function(response) {
+                if (response.responseCode == RESULT_OK) {
+                    toast_success(response.message);
+                    window.location = "user-list.php";
+                    resetFormFields()
+                } else {
+                    toast_error(response.message);
+                }
+            });
+        });
+
+        // Function to reset form fields
+        function resetFormFields() {
+            $('#firstName').val('');
+            $('#lastName').val('');
+            $('#userName').val('');
+            $('#address').val('');
+            $('#state').val('');
+            $('#mobile').val('');
+            $('#password').val('');
+            $('#email').val('');
+            $('#action').val('add');
+            $('#userId').val();
+        }
+    </script>
 </body>
 
 </html>
