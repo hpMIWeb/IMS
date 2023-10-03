@@ -111,73 +111,109 @@ include_once './include/common-constat.php';
 
 
     <script>
-        $(document).ready(function() {
-            getAmcList();
+    $(document).ready(function() {
+        getAmcList();
+    });
+    // Add a click event handler for the "Delete" buttons
+    $('#amcTable').on('click', '.delete-amc-master', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        const amcMasterId = $(this).data(
+            'amcmaster-id');
+        deleteAmcMaster(amcMasterId);
+    });
+
+    // Add a click event handler for the "Edit" buttons
+    $('#amcTable').on('click', '.edit-amc-master', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        const amcMasterId = $(this).data(
+            'amcmaster-id');
+        window.location = "amc-management.php?id=" + amcMasterId;
+
+    });
+    // Add a click event handler for the "Edit" buttons
+    $('#amcTable').on('click', '.customer-amc-master', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        const amcMasterId = $(this).data(
+            'amcmaster-id');
+        window.location = "amc-customer-list.php?id=" + amcMasterId;
+
+    });
+
+
+    function getAmcList() {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getAmcMasterDetails',
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+
+                let html = '';
+                let count = 1;
+                $.each(response.result.amcMaster, function(index, amcMaster) {
+                    html += '<tr>';
+                    html += '<td>' + count + '</td>';
+                    html += '<td>' + amcMaster.customerName + '</td>';
+                    html += '<td>' + amcMaster.contactNumber + '</td>';
+                    html += '<td>' + amcMaster.startDateDisplay + '</td>';
+                    html += '<td>' + amcMaster.endDateDisplay + '</td>';
+
+
+                    html += '<td class="text-center-block py-0 align-middle">';
+                    html += '<div class = "" > ';
+                    html +=
+                        ' <a href="#"  class="btn btn-primary btn-sm customer-amc-master" data-amcmaster-id="' +
+                        amcMaster.id + '">';
+                    html += '<i class = "fas fa-eye" > </i>';
+                    html += '</a>';
+                    html +=
+                        ' <a href="#"  class="btn btn-warning btn-sm edit-amc-master" data-amcmaster-id="' +
+                        amcMaster.id + '">';
+                    html += '<i class = "fas fa-pen" > </i>';
+                    html += '</a>';
+                    html +=
+                        ' <a href="#" class="btn btn-danger btn-sm delete-amc-master" data-amcmaster-id="' +
+                        amcMaster.id + '">';
+                    html += '<i class = "fas fa-trash" > </i>';
+                    html += '</a>';
+                    html += '</div>';
+                    html += '</td > ';
+                    html += '</tr>';
+                    count++;
+
+                });
+                $('#amcTable tbody').html(html);
+            } else {
+                toast_error(response.message);
+            }
         });
-        // Add a click event handler for the "Delete" buttons
-        $('#amcTable').on('click', '.delete-category', function(event) {
-            event.preventDefault(); // Prevent the default link behavior
-            const categoryId = $(this).data(
-                'category-id'); // Get the category ID from the data attribute
-            deleteCategory(categoryId);
+    }
+
+
+
+    function deleteAmcMaster(amcMasterId) {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'deleteAmcMaster',
+            'amcMasterId': amcMasterId,
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+                toast_success(response.message);
+                getAmcList();
+            } else {
+                toast_error(response.message);
+            }
         });
-
-
-        function getAmcList() {
-
-            let sendApiDataObj = {
-                '<?php echo systemProject ?>': 'Masters',
-                '<?php echo systemModuleFunction ?>': 'getAmcMasterDetails',
-
-            };
-            APICallAjax(sendApiDataObj, function(response) {
-                if (response.responseCode == RESULT_OK) {
-
-                    let html = '';
-                    let count = 1;
-                    $.each(response.result.amcMaster, function(index, amcMaster) {
-                        html += '<tr>';
-                        html += '<td>' + count + '</td>';
-                        html += '<td>' + amcMaster.customerName + '</td>';
-                        html += '<td>' + amcMaster.contactNumber + '</td>';
-                        html += '<td>' + amcMaster.startDateDisplay + '</td>';
-                        html += '<td>' + amcMaster.endDateDisplay + '</td>';
-
-
-                        html += '<td class="text-center-block py-0 align-middle">';
-                        html += '<div class = "" > ';
-                        html +=
-                            ' <a href="#"  class="btn btn-primary btn-sm c-amc-master" data-amcmaster-id="' +
-                            amcMaster.id + '">';
-                        html += '<i class = "fas fa-eye" > </i>';
-                        html += '</a>';
-                        html +=
-                            ' <a href="#"  class="btn btn-warning btn-sm edit-amc-master" data-amcmaster-id="' +
-                            amcMaster.id + '">';
-                        html += '<i class = "fas fa-pen" > </i>';
-                        html += '</a>';
-                        html +=
-                            ' <a href="#" class="btn btn-danger btn-sm delete-amc-master" data-amcmaster-id="' +
-                            amcMaster.id + '">';
-                        html += '<i class = "fas fa-trash" > </i>';
-                        html += '</a>';
-                        html += '</div>';
-                        html += '</td > ';
-                        html += '</tr>';
-                        count++;
-
-                    });
-                    $('#amcTable tbody').html(html);
-                } else {
-                    toast_error(response.message);
-                }
-            });
-        }
-        $("#amcTable").DataTable({
-            "responsive": true,
-            "autoWidth": false,
-            ordering: false,
-        });
+    }
+    $("#amcTable").DataTable({
+        "responsive": true,
+        "autoWidth": false,
+        ordering: false,
+    });
     </script>
 </body>
 

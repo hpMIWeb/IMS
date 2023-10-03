@@ -42,9 +42,6 @@ $.widget.bridge('uibutton', $.ui.button)
 <!-- Select2 -->
 <script src="./assets/plugins/select2/js/select2.full.min.js"></script>
 
-<!-- date-range-picker -->
-<script src="./assets/plugins/daterangepicker/daterangepicker.js"></script>
-
 <script>
 function toast_success(msg) {
     console.log(msg)
@@ -146,5 +143,10 @@ function toast_info(msg) {
     };
 
     toastr.info(msg);
+}
+
+function displayViewAmountDigit(amount, digit = 2) {
+    Number = parseFloat(amount);
+    return Number.toFixed(digit);
 }
 </script>
