@@ -13,25 +13,25 @@ $superAdminMenu = array(
         "submenuArray" => array(),
         "icon" => "nav-icon fas fa-tachometer-alt"
     ),
-    array(
-        "displayName" => "Vendor",
-        "redirectPage" => "vendor-list.php",
-        "isHasSubMenu" => true,
-        "icon" => "nav-icon fas fa-user-secret",
-        "submenuArray" => array(
-            array(
-                "displayName" => "Create",
-                "redirectPage" => "create-vendor.php",
-                "icon" => "nav-icon fas fa-plus"
-            ),  array(
-                "displayName" => "List",
-                "redirectPage" => "vendor-list.php",
-                "icon" => "nav-icon fas fa-list"
-            ),
+    // array(
+    //     "displayName" => "Vendor",
+    //     "redirectPage" => "vendor-list.php",
+    //     "isHasSubMenu" => true,
+    //     "icon" => "nav-icon fas fa-user-secret",
+    //     "submenuArray" => array(
+    //         array(
+    //             "displayName" => "Create",
+    //             "redirectPage" => "create-vendor.php",
+    //             "icon" => "nav-icon fas fa-plus"
+    //         ),  array(
+    //             "displayName" => "List",
+    //             "redirectPage" => "vendor-list.php",
+    //             "icon" => "nav-icon fas fa-list"
+    //         ),
 
-        ),
+    //     ),
 
-    ),
+    // ),
     array(
         "displayName" => "Client",
         "redirectPage" => "client-list.php",
@@ -82,7 +82,7 @@ $superAdminMenu = array(
 
     ),
     array(
-        "displayName" => "Users",
+        "displayName" => "Sales User",
         "redirectPage" => "list-item.php",
         "isHasSubMenu" => true,
         "icon" => "fas fa-users",
@@ -182,7 +182,7 @@ $backOfficeMenu =   array(
         )
     ),
     array(
-        "displayName" => "Users",
+        "displayName" => "Sales User",
         "redirectPage" => "list-item.php",
         "isHasSubMenu" => true,
         "icon" => "fas fa-users",
