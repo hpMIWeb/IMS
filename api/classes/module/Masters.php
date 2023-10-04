@@ -314,4 +314,81 @@ class Masters extends Config
             $this->exceptionData();
         }
     }
+
+    public function getAmcDetails()
+    {
+        try {
+
+            $amcMasterId = $this->handleSpecialCharacters($_POST['amcMasterId']);
+
+            $appendQuery = '';
+
+            if ($this->isNotNullOrEmptyOrZero($amcMasterId)) {
+                $appendQuery = " WHERE `amc_details`.amc_master_id = '$amcMasterId' ";
+            }
+            $query = $this::$masterConn->prepare("SELECT `amc_details`.*,`user_master`.username AS amcAttendPerson FROM `amc_details` 
+            LEFT JOIN `user_master` ON  `user_master`.id = `amc_details`.created_by
+            $appendQuery ORDER BY `amc_details`.id DESC");
+            if ($query->execute()) {
+                if ($query->rowCount() > 0) {
+                    $this->successData();
+                    foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                        $this->data[] = array(
+                            'id' => $this->convertNullOrEmptyStringToZero($row['id']),
+                            'amcMasterId' => $this->convertNullOrEmptyStringToZero($row['amc_master_id']),
+                            'customerName' => $this->convertNullToEmptyString($row['customer_name']),
+                            'contactNumber' => $this->convertNullToEmptyString($row['contact_number']),
+                            'visitDate' => $this->convertNullToEmptyString($row['visit_date']),
+                            'visitDateDisplay' => $this->convertNullToEmptyString($this->formatDateTime('d-m-Y', $row['visit_date'])),
+                            'workDetails' => $this->convertNullToEmptyString($row['work_details']),
+                            'amcAttendPerson' => $this->convertNullToEmptyString($row['amcAttendPerson']),
+                        );
+                    }
+                    $this::$result = array('amcDetails' => $this->data);
+                } else {
+                    $this->noData("No any amcDetails");
+                }
+            } else {
+                $this->failureData();
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData();
+        }
+    }
+
+    public function addUpdateAmcDetails()
+    {
+
+        try {
+
+            $amcMasterId = $this->handleSpecialCharacters($_POST['amcMasterId']);
+            $customerName = $this->handleSpecialCharacters($_POST['customerName']);
+            $workDetails = $this->handleSpecialCharacters($_POST['workDetails']);
+            $contactNumber = $this->handleSpecialCharacters($_POST['contactNumber']);
+            $visitDate =  $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['visitDate'], true, false));;
+
+            if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                $query = $this::$masterConn->prepare("INSERT INTO `amc_details`( `amc_master_id`, `customer_name`, `visit_date`, `work_details`, `contact_number`, `created_by`) 
+                VALUES ('$amcMasterId','$customerName','$visitDate','$workDetails','$contactNumber','" . $this->userMasterId . "')");
+            }
+
+
+
+            if ($query->execute()) {
+                if ($query->rowCount() > 0) {
+                    if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                        $this->successData("AMC Master master Add successfully.");
+                    } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
+                        $this->successData("AMC Master master Update successfully.");
+                    }
+                } else {
+                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+                }
+            } else {
+                $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData($e);
+        }
+    }
 }

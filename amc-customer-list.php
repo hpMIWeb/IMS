@@ -223,6 +223,7 @@ $amcMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                 'customerName': $('#customerName').val(),
                 'workDetails': $('#workDetails').val(),
                 'contactNumber': $('#contactNumber').val(),
+                'visitDate': $('#visitDate').val(),
                 'action': action,
             };
             APICallAjax(sendApiDataObj, function(response) {
