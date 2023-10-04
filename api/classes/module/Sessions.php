@@ -502,14 +502,6 @@ class Sessions extends Config
         }
     }
 
-    public function userRegister()
-    {
-        try {
-        } catch (PDOException $e) {
-            $this->exceptionData();
-        }
-    }
-
 
     public function getUserDetails()
     {
@@ -532,10 +524,10 @@ class Sessions extends Config
                             'id' => $this->convertNullOrEmptyStringToZero($row['id']),
                             'firstName' => $this->convertNullToEmptyString($row['first_name']),
                             'lastName' => $this->convertNullToEmptyString($row['last_name']),
-                            'user_name' => $this->convertNullToEmptyString($row['user_name']),
+                            'userName' => $this->convertNullToEmptyString($row['username']),
                             'address' => $this->convertNullToEmptyString($row['address']),
                             'state' => $this->convertNullToEmptyString($row['state']),
-                            'password' => $this->convertNullToEmptyString($row['passsword']),
+                            'password' => $this->convertNullToEmptyString($row['password']),
                             'email' => $this->convertNullToEmptyString($row['email']),
                             'mobile' => $this->convertNullToEmptyString($row['mobile']),
                         );
@@ -569,23 +561,18 @@ class Sessions extends Config
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
                 $query = $this::$masterConn->prepare("INSERT INTO `user_master`
-                 (`first_name`,`last_name`,`username`,`address`,`state`,`password`,`mobile`,`email`,`created_by`) 
-                VALUES ('$firstName', '$lastName','$userName','$address','$state','$password','$mobile', '$email','" . $this->userMasterId . "'); ");
+                 (`first_name`,`last_name`,`username`,`address`,`state`,`password`,`mobile`,`email`) 
+                VALUES ('$firstName', '$lastName','$userName','$address','$state','$password','$mobile', '$email'); ");
             } elseif ($this->isNotNullOrEmptyOrZero($userId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
-                $query = $this::$masterConn->prepare("UPDATE `user_master` SET `first_name` = '$firstName',`last_name`='$lastName',`user_name`='$userName',`address`='$address',`state`='$state',`password`='$password',`mobile`='$mobile',`email`='$email',`modified_by` = '" . $this->userMasterId . "' WHERE `id` ='$userId'");
+                $query = $this::$masterConn->prepare("UPDATE `user_master` SET `first_name` = '$firstName',`last_name`='$lastName',`username`='$userName',`address`='$address',`state`='$state',`password`='$password',`mobile`='$mobile',`email`='$email'  WHERE `id` ='$userId'");
             }
 
 
-
             if ($query->execute()) {
-                if ($query->rowCount() > 0) {
-                    if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                        $this->successData("User Add successfully.");
-                    } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
-                        $this->successData("User Update successfully.");
-                    }
-                } else {
-                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+                if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                    $this->successData("User Add successfully.");
+                } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
+                    $this->successData("User Update successfully.");
                 }
             } else {
                 $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
