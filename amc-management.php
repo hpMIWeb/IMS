@@ -135,7 +135,7 @@ $amcMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                                 </div>
                                 <div class="float-right">
                                     <button type="button" id="addUpdateAmcMasterBtn" name="submit" class="btn btn-primary">Save</button>
-                                    <button type="button" name="delete" class="btn btn-danger">Cancel</button>
+                                    <button type="button" name="cancelBtn" class="btn btn-danger" id="cancelBtn">Cancel</button>
                                 </div>
                             </div>
                         </form>
@@ -222,6 +222,9 @@ $amcMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                     toast_error(response.message);
                 }
             });
+        });
+        $('#cancelBtn').on('click', function(event) {
+            window.location = "amc-list.php";
         });
     </script>
 </body>

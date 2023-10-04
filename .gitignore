@@ -3,3 +3,4 @@ api/mail/*
 vendor/*
 
 api/classes/mail/
+api/classes/Config.php

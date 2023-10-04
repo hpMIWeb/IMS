@@ -77,6 +77,55 @@ trait ProjectCommon
         }
     }
 
+    /**
+     * @Author:Pinank Soni
+     * @Description: This Function Convert Date & time Fomat as you want
+     * @Default : by default getValue Current DateTime Value
+     *
+     * @param string $getDateTimeValue = Your Date or DateTime Value
+     * @param bool $isGetDateTimeValue = default this function return dateTimeValue then default value set = true
+     * @param bool $isGetOnlyDate = if you want to only convert to Date then this flag true
+     * @param string $expectedDateFormat = This function work for only Date Format so if you want to get any other format then pass format here
+     * @param string $expectedDateTimeFormat = This function work form only DateTime Format so if you want to get date other format then pass there format here
+     * @return false|string = return as expected format wise date or DateTime value
+     */
+    function convertDateTimeFormat($getDateTimeValue = "", $isGetDateTimeValue = true, $isGetOnlyDate = false, $expectedDateFormat = "", $expectedDateTimeFormat = "")
+    {
+
+        if (empty($expectedDateFormat)) // default set 'Y-m-d' Format
+        {
+            $expectedDateFormat = 'Y-m-d';
+        }
+        if (empty($expectedDateTimeFormat)) // default set 'Y-m-d H:i:s' Format
+        {
+            $expectedDateTimeFormat = 'Y-m-d H:i:s';
+        }
+
+        if ($isGetDateTimeValue)  // Convert only DateTime
+        {
+            if ($this->isNotNullOrEmptyOrZero($getDateTimeValue)) // if you pass Date or DateTime Value
+            {
+                $getTime = explode(" ", $getDateTimeValue);
+
+                if ($this->isNotNullOrEmptyOrZero($getTime) || $getTime[1] == "00:00:00") {
+                    $getDateTimeValue = $getTime[0] . '' . date('H:i:s');
+                }
+                return date($expectedDateTimeFormat, strtotime($getDateTimeValue));
+            } else {
+                return date($expectedDateTimeFormat);
+            }
+        } else if ($isGetOnlyDate) // Convert only Date
+        {
+            if ($getDateTimeValue) // if you pass Date or DateTime Value
+            {
+                return date($expectedDateFormat, strtotime($getDateTimeValue));
+            } else {
+                return date($expectedDateFormat);
+            }
+        }
+    }
+
+
     function uploadAttachment($filePathStructure, $filePrefixName, $attachmentName = '', $attachmentBase64Str = '', $otherPostfix = "", $putFileName = "", $isTicket = false)
     {
         $fileNameArray = array();

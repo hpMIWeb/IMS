@@ -202,4 +202,116 @@ class Masters extends Config
             $this->exceptionData();
         }
     }
+
+
+    public function getAmcMasterDetails()
+    {
+        try {
+
+            $amcMasterId = $this->handleSpecialCharacters($_POST['amcMasterId']);
+
+            $appendQuery = '';
+
+            if ($this->isNotNullOrEmptyOrZero($amcMasterId)) {
+                $appendQuery = " WHERE id = '$amcMasterId' ";
+            }
+            $query = $this::$masterConn->prepare("SELECT * FROM `amc_master` $appendQuery ORDER BY id DESC");
+            if ($query->execute()) {
+                if ($query->rowCount() > 0) {
+                    $this->successData();
+                    foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                        $this->data[] = array(
+                            'id' => $this->convertNullOrEmptyStringToZero($row['id']),
+                            'customerName' => $this->convertNullToEmptyString($row['customer_name']),
+                            'contactNumber' => $this->convertNullToEmptyString($row['contact_number']),
+                            'startDate' => $this->convertNullToEmptyString($row['start_date']),
+                            'startDateDisplay' => $this->convertNullToEmptyString($this->formatDateTime('d-m-Y', $row['end_date'])),
+                            'endDate' => $this->convertNullToEmptyString($row['start_date']),
+                            'endDateDisplay' => $this->convertNullToEmptyString($this->formatDateTime('d-m-Y', $row['end_date'])),
+                            'address' => $this->convertNullToEmptyString($row['address']),
+                            'noOfBathroom' => $this->convertNullOrEmptyStringToZero($row['no_of_bathroom']),
+                            'noService' => $this->convertNullOrEmptyStringToZero($row['no_service']),
+                            'amcCharges' => $this->convertNullOrEmptyStringToZero($row['amc_charges']),
+                            'remark' => $this->convertNullToEmptyString($row['remark']),
+                        );
+                    }
+                    $this::$result = array('amcMaster' => $this->data);
+                } else {
+                    $this->noData("No any amcMaster");
+                }
+            } else {
+                $this->failureData();
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData();
+        }
+    }
+
+
+    public function addUpdateAmcMaster()
+    {
+
+        try {
+
+            $customerName = $this->handleSpecialCharacters($_POST['customerName']);
+            $address = $this->handleSpecialCharacters($_POST['address']);
+            $contactNumber = $this->handleSpecialCharacters($_POST['contactNumber']);
+            $startDate =  $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['startDate'], true, false));;
+            $endDate =  $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['endDate'], true, false));;
+            $noOfService = $this->handleSpecialCharacters($_POST['noOfService']);
+            $noOfBathroom = $this->handleSpecialCharacters($_POST['noOfBathroom']);
+            $amcCharges = $this->handleSpecialCharacters($_POST['amcCharges']);
+            $remark = $this->handleSpecialCharacters($_POST['remark']);
+            $amcMasterId = $this->handleSpecialCharacters($_POST['amcMasterId']);
+
+            if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                $query = $this::$masterConn->prepare("INSERT INTO `amc_master`
+                ( `customer_name`, `address`, `contact_number`, `no_of_bathroom`, `start_date`, `end_date`, `no_service`, `amc_charges`, `remark`, `created_by`) 
+                VALUES ('$customerName','$address','$contactNumber','$noOfBathroom','$startDate','$endDate','$noOfService','$amcCharges','$remark','" . $this->userMasterId . "')");
+            } elseif ($this->isNotNullOrEmptyOrZero($amcMasterId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
+                $query = $this::$masterConn->prepare("UPDATE `amc_master` SET `customer_name`='$customerName',`address`='$address',`contact_number`='$contactNumber',`no_of_bathroom`='$noOfBathroom',`start_date`='$startDate',`end_date`='$endDate',`no_service`='$noOfService',`amc_charges`='$amcCharges',`remark`='$remark',`modified_by`='" . $this->userMasterId . "' WHERE id = '$amcMasterId'");
+            }
+
+
+
+            if ($query->execute()) {
+                if ($query->rowCount() > 0) {
+                    if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                        $this->successData("AMC Master master Add successfully.");
+                    } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
+                        $this->successData("AMC Master master Update successfully.");
+                    }
+                } else {
+                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+                }
+            } else {
+                $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData($e);
+        }
+    }
+
+
+    public function deleteAmcMaster()
+    {
+
+        try {
+            $amcMasterId = $this->handleSpecialCharacters($_POST['amcMasterId']);
+
+            if ($this->isNotNullOrEmptyOrZero($amcMasterId)) {
+
+                $query = $this::$masterConn->prepare("DELETE FROM `amc_master` WHERE id = '$amcMasterId'");
+                if ($query->execute()) {
+                    if ($query->rowCount() > 0) {
+                        $this->successData("AMC Master Deleted successfully.");
+                    }
+                } else {
+                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+                }
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData();
+        }
+    }
 }
