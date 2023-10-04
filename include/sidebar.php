@@ -13,6 +13,36 @@ $superAdminMenu = array(
         "submenuArray" => array(),
         "icon" => "nav-icon fas fa-tachometer-alt"
     ),
+    array(
+        "displayName" => "Item Management",
+        "redirectPage" => "list-item.php",
+        "isHasSubMenu" => true,
+        "icon" => "nav-icon fas fa-book",
+        "submenuArray" => array(
+            array(
+                "displayName" => "Create",
+                "redirectPage" => "create-item.php",
+                "icon" => "nav-icon fas fa-plus"
+            ),
+            array(
+                "displayName" => "List",
+                "redirectPage" => "list-item.php",
+                "icon" => "nav-icon fas fa-list"
+            ),
+            array(
+                "displayName" => "  Items-allocate",
+                "redirectPage" => "items-allocate.php",
+                "icon" => "nav-icon fas fa-tag",
+            ),
+            array(
+                "displayName" => "Defective-master",
+                "redirectPage" => "defactive-master.php",
+                "icon" => "nav-icon fas fa-tag",
+            ),
+
+        ),
+
+    ),
     // array(
     //     "displayName" => "Vendor",
     //     "redirectPage" => "vendor-list.php",
@@ -51,36 +81,7 @@ $superAdminMenu = array(
         ),
 
     ),
-    array(
-        "displayName" => "Item Management",
-        "redirectPage" => "list-item.php",
-        "isHasSubMenu" => true,
-        "icon" => "nav-icon fas fa-book",
-        "submenuArray" => array(
-            array(
-                "displayName" => "Create",
-                "redirectPage" => "create-item.php",
-                "icon" => "nav-icon fas fa-plus"
-            ),
-            array(
-                "displayName" => "List",
-                "redirectPage" => "list-item.php",
-                "icon" => "nav-icon fas fa-list"
-            ),
-            array(
-                "displayName" => "  Items-allocate",
-                "redirectPage" => "items-allocate.php",
-                "icon" => "nav-icon fas fa-tag",
-            ),
-            array(
-                "displayName" => "Defective-master",
-                "redirectPage" => "defactive-master.php",
-                "icon" => "nav-icon fas fa-tag",
-            ),
 
-        ),
-
-    ),
     array(
         "displayName" => "Sales User",
         "redirectPage" => "list-item.php",
