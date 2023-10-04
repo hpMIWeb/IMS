@@ -29,9 +29,9 @@ class Config
         'Server' => array(
             'baseUrl' => 'http://68.178.170.217/',
             'masterConnServer' => 'localhost',
-            'masterConnUsername' => 'root',
-            'masterConnPassword' => '',
-            'masterConnDBName' => 'ims'
+            'masterConnUsername' => 'husfilms_rmpho',
+            'masterConnPassword' => 'rmpho@2020',
+            'masterConnDBName' => 'husfilms_rmphotoshoot'
         )
     );
 

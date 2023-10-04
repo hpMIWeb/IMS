@@ -5,9 +5,9 @@ $Base_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 if (!in_array('localhost', explode('/', $Base_link))) {
 
     $master_servername = "localhost";
-    $master_username = "root";
-    $master_password = 'Password123*';
-    $master_db = "ims";
+    $master_username = "husfilms_rmpho";
+    $master_password = 'rmpho@2020';
+    $master_db = "husfilms_rmphotoshoot";
 } else {
 
     // local connection
