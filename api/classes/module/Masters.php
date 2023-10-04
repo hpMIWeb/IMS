@@ -391,4 +391,112 @@ class Masters extends Config
             $this->exceptionData($e);
         }
     }
+
+
+    public function getItemDetails()
+    {
+        try {
+
+            $itemId = $this->handleSpecialCharacters($_POST['itemId']);
+
+            $appendQuery = '';
+
+            if ($this->isNotNullOrEmptyOrZero($itemId)) {
+                $appendQuery = " WHERE id = '$itemId' ";
+            }
+            $query = $this::$masterConn->prepare("SELECT * FROM `item_list` $appendQuery ORDER BY id DESC ");
+
+            if ($query->execute()) {
+                if ($query->rowCount() > 0) {
+                    $this->successData();
+                    foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                        $this->data[] = array(
+                            'id' => $this->convertNullOrEmptyStringToZero($row['id']),
+                            'itemName' => $this->convertNullToEmptyString($row['item_name']),
+                            'itemCode' => $this->convertNullToEmptyString($row['item_code']),
+                            'hsnCode' => $this->convertNullToEmptyString($row['hsn_code']),
+                            'minimumStockLevel' => $this->convertNullOrEmptyStringToZero($row['minimum_stock_level']),
+                            'openingStock' => $this->convertNullOrEmptyStringToZero($row['opening_stock']),
+                            'purchaseBasicCost' => $this->convertNullOrEmptyStringToZero($row['purchase_basic_cost']),
+                            'basicSellingPrice' => $this->convertNullOrEmptyStringToZero($row['basic_selling_price']),
+                            'landingCost' => $this->convertNullOrEmptyStringToZero($row['landing_cost']),
+                            'mrp' => $this->convertNullOrEmptyStringToZero($row['mrp']),
+                        );
+                    }
+                    $this::$result = array('itemList' => $this->data);
+                } else {
+                    $this->noData("No any Item");
+                }
+            } else {
+                $this->failureData();
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData();
+        }
+    }
+
+    public function addUpdateItem()
+    {
+
+        try {
+
+            $itemName = $this->handleSpecialCharacters($_POST['itemName']);
+            $itemCode = $this->handleSpecialCharacters($_POST['itemCode']);
+            $hsnCode = $this->handleSpecialCharacters($_POST['hsnCode']);
+            $openingStock = $this->handleSpecialCharacters($_POST['openingStock']);
+            $minimumStockLevel = $this->handleSpecialCharacters($_POST['minimumStockLevel']);
+            $purchaseBasicCost = $this->handleSpecialCharacters($_POST['purchaseBasicCost']);
+            $basicSellingPrice = $this->handleSpecialCharacters($_POST['basicSellingPrice']);
+            $landingCost = $this->handleSpecialCharacters($_POST['landingCost']);
+            $mrp = $this->handleSpecialCharacters($_POST['mrp']);
+            $itemId = $this->handleSpecialCharacters($_POST['itemId']);
+
+
+            if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                $query = $this::$masterConn->prepare("INSERT INTO `item_list`
+                 (`item_name`,`item_code`,`hsn_code`,`opening_stock`,`minimum_stock_level`,`purchase_basic_cost`,`basic_selling_price`,`landing_cost`,`mrp`,`created_by`) 
+                VALUES ('$itemName', '$itemCode','$hsnCode','$openingStock','$minimumStockLevel','$purchaseBasicCost','$basicSellingPrice', '$landingCost','$mrp','" . $this->userMasterId . "'); ");
+            } elseif ($this->isNotNullOrEmptyOrZero($itemId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
+                $query = $this::$masterConn->prepare("UPDATE `item_list` SET `item_name` = '$itemName',`item_code`='$itemCode',`hsn_code`='$hsnCode',`opening_stock`='$openingStock',`minimum_stock_level`='$minimumStockLevel',`purchase_basic_cost`='$purchaseBasicCost',`basic_selling_price`='$basicSellingPrice',`landing_cost`='$landingCost',`mrp`='$mrp',`modified_by` = '" . $this->userMasterId . "' WHERE `id` ='$itemId'");
+            }
+
+            if ($query->execute()) {
+                if ($query->rowCount() > 0) {
+                    if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                        $this->successData("Item Add successfully.");
+                    } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
+                        $this->successData("Item Update successfully.");
+                    }
+                } else {
+                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+                }
+            } else {
+                $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData($e);
+        }
+    }
+
+    public function deleteItems()
+    {
+
+        try {
+            $itemId = $this->handleSpecialCharacters($_POST['itemId']);
+
+            if ($this->isNotNullOrEmptyOrZero($itemId)) {
+
+                $query = $this::$masterConn->prepare("DELETE FROM `item_list` WHERE id = '$itemId'");
+                if ($query->execute()) {
+                    if ($query->rowCount() > 0) {
+                        $this->successData("Item Delete successfully.");
+                    }
+                } else {
+                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+                }
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData();
+        }
+    }
 }

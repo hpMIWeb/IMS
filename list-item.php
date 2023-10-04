@@ -1,7 +1,8 @@
 <?php
 session_start();
-    include_once './include/session-check.php';
-    include_once './include/common-constat.php';
+include_once './include/session-check.php';
+include_once './include/APICALL.php';
+include_once './include/common-constat.php';
 
 
 ?>
@@ -32,7 +33,7 @@ session_start();
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">
-                <div class="container-fluid">
+                <div class="container-fl">
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1>List</h1>
@@ -58,56 +59,20 @@ session_start();
 
                             <div class="card-body">
 
-                                <table id="example2" class="table table-bordered table-hover">
+                                <table id="listItemTable" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th class="col-1">Id</th>
                                             <th>Item Name</th>
                                             <th>Item Qty</th>
                                             <th>Item Rate</th>
-                                            <th>Status</th>
                                             <th>Action</th>
 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Item 1</td>
-                                            <td>20</td>
-                                            <td>123</td>
-                                            <td></td>
 
-                                            <td class="text-center-block py-0 align-middle">
-                                                <div class="">
-                                                    <a href="#" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-danger btn-sm">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
 
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Vendor 2</td>
-                                            <td>1234</td>
-                                            <td>123</td>
-
-                                            <td></td>
-                                            <td class="text-center-block py-0 align-middle">
-                                                <div class="">
-                                                    <a href="#" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-danger btn-sm">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
                                     </tbody>
 
 
@@ -144,6 +109,99 @@ session_start();
     include_once("include/jquery.php");
 
     ?>
+
+    <script>
+    $(document).ready(function() {
+        getItemDetails();
+    });
+    // Add a click event handler for the "Delete" buttons
+    $('#listItemTable').on('click', '.delete-item', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+
+        const itemId = $(this).data(
+            'items-id'); // Get the item ID from the data attribute
+        console.log(itemId)
+        deleteItems(itemId);
+    });
+
+
+    function deleteItems(itemId) {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'deleteItems',
+            'itemId': itemId,
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+                toast_success(response.message);
+                getItemDetails();
+            } else {
+                toast_error(response.message);
+            }
+        });
+    }
+
+    $('#listItemTable').on('click', '.edit-item', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        const itemId = $(this).data(
+            'items-id'); // Get the category ID from the data attribute
+        window.location = "create-item.php?id=" +
+            itemId
+    });
+
+    function getItemDetails() {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getItemDetails',
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+
+                let html = '';
+                let count = 1;
+
+                $.each(response.result.itemList, function(index, items) {
+                    html += '<tr>';
+                    html += '<td>' + count + '</td>';
+                    html += '<td>' + items.itemName + '</td>';
+                    html += '<td>' + items.minimumStockLevel + '</td>';
+                    html += '<td>' + items.mrp + '</td>';
+                    html += '<td class="text-center-block py-0 align-middle">';
+                    html += '<div class = "" > ';
+                    html +=
+                        ' <button  class="btn btn-warning btn-sm edit-item" data-items-id="' +
+                        items.id + '">';
+                    html += '<i class = "fas fa-pen" > </i>';
+                    html += '</button>';
+                    html +=
+                        ' <button class="btn btn-danger btn-sm delete-item" data-items-id="' +
+                        items.id + '">';
+                    html += '<i class = "fas fa-trash" > </i>';
+                    html += '</button>';
+                    html += '</div>';
+                    html += '</td > ';
+                    html += '</tr>';
+                    count++;
+
+                });
+
+                $('#listItemTable tbody').html(html);
+            } else {
+                toast_error(response.message);
+            }
+        });
+        // Function to reset form fields
+        function resetFormFields() {
+            $('#itemName').val('');
+            $('#minimumStockLevel').val('');
+            $('#mrp').val('');
+            $('#action').val('add');
+        }
+    }
+    </script>
 </body>
 
 </html>
