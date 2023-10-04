@@ -2,3 +2,4 @@
 api/mail/*
 vendor/*
 
+api/classes/mail/
