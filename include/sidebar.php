@@ -14,112 +14,52 @@ $superAdminMenu = array(
         "icon" => "nav-icon fas fa-tachometer-alt"
     ),
     array(
-        "displayName" => "Item Management",
+        "displayName" => "Add Item",
         "redirectPage" => "list-item.php",
-        "isHasSubMenu" => true,
-        "icon" => "nav-icon fas fa-book",
-        "submenuArray" => array(
-            array(
-                "displayName" => "Create",
-                "redirectPage" => "create-item.php",
-                "icon" => "nav-icon fas fa-plus"
-            ),
-            array(
-                "displayName" => "List",
-                "redirectPage" => "list-item.php",
-                "icon" => "nav-icon fas fa-list"
-            ),
-            array(
-                "displayName" => "  Items-allocate",
-                "redirectPage" => "items-allocate.php",
-                "icon" => "nav-icon fas fa-tag",
-            ),
-            array(
-                "displayName" => "Defective-master",
-                "redirectPage" => "defactive-master.php",
-                "icon" => "nav-icon fas fa-tag",
-            ),
-
-        ),
-
-    ),
-    // array(
-    //     "displayName" => "Vendor",
-    //     "redirectPage" => "vendor-list.php",
-    //     "isHasSubMenu" => true,
-    //     "icon" => "nav-icon fas fa-user-secret",
-    //     "submenuArray" => array(
-    //         array(
-    //             "displayName" => "Create",
-    //             "redirectPage" => "create-vendor.php",
-    //             "icon" => "nav-icon fas fa-plus"
-    //         ),  array(
-    //             "displayName" => "List",
-    //             "redirectPage" => "vendor-list.php",
-    //             "icon" => "nav-icon fas fa-list"
-    //         ),
-
-    //     ),
-
-    // ),
-    array(
-        "displayName" => "Client",
-        "redirectPage" => "client-list.php",
-        "isHasSubMenu" => true,
-        "icon" => "nav-icon fas fa-user",
-        "submenuArray" => array(
-            array(
-                "displayName" => "Create",
-                "redirectPage" => "create-client.php",
-                "icon" => "nav-icon fas fa-plus"
-            ),  array(
-                "displayName" => "List",
-                "redirectPage" => "client-list.php",
-                "icon" => "nav-icon fas fa-list"
-            ),
-
-        ),
-
-    ),
-
-    array(
-        "displayName" => "Sales User",
-        "redirectPage" => "list-item.php",
-        "isHasSubMenu" => true,
-        "icon" => "nav-icon fas fa-users",
-        "submenuArray" => array(
-            array(
-                "displayName" => "Create",
-                "redirectPage" => "create-users.php",
-                "icon" => "nav-icon fas fa-plus"
-            ),  array(
-                "displayName" => "List",
-                "redirectPage" => "user-list.php",
-                "icon" => "nav-icon fas fa-list"
-            ),
-
-        ),
-
-    ),
-    array(
-        "displayName" => "Report",
-        "redirectPage" => "reports.php",
+        "icon" => "nav-icon fas fa-plus",
         "isHasSubMenu" => false,
-        "icon" => "nav-icon fas fa-table",
         "submenuArray" => array(),
     ),
     array(
-        "displayName" => "Amc-management",
+        "displayName" => "New Item Issue",
+        "redirectPage" => "items-allocate.php",
+        "icon" => "nav-icon fas fa-tag",
+        "isHasSubMenu" => false,
+        "submenuArray" => array(),
+    ),
+    array(
+        "displayName" => "New Item Return",
+        "redirectPage" => "items-allocate.php",
+        "icon" => "nav-icon fas fa-tag",
+        "isHasSubMenu" => false,
+        "submenuArray" => array(),
+    ),
+    array(
+        "displayName" => "Defective Item Receive",
+        "redirectPage" => "defactive-master.php",
+        "icon" => "nav-icon fas fa-tag",
+        "isHasSubMenu" => false,
+        "submenuArray" => array(),
+    ),
+    array(
+        "displayName" => "Make Invoice",
+        "redirectPage" => "invoice.php",
+        "isHasSubMenu" => false,
+        "icon" => "nav-icon fas fa-file-invoice",
+        "submenuArray" => array(),
+    ),
+    array(
+        "displayName" => "AMC Management",
         "redirectPage" => "amc-list.php",
         "isHasSubMenu" => false,
         "icon" => "nav-icon fas fa-bars",
         "submenuArray" => array(),
     ),
     array(
-        "displayName" => "Invoice-Bill",
-        "redirectPage" => "invoice.php",
+        "displayName" => "Reports",
+        "redirectPage" => "reports.php",
         "isHasSubMenu" => false,
-        "icon" => "nav-icon fas fa-file-invoice",
+        "icon" => "nav-icon fas fa-table",
         "submenuArray" => array(),
     ),
     array(
@@ -144,6 +84,63 @@ $superAdminMenu = array(
 
         ),
     ),
+    /* array(
+        "displayName" => "Client",
+        "redirectPage" => "client-list.php",
+        "isHasSubMenu" => true,
+        "icon" => "nav-icon fas fa-user",
+        "submenuArray" => array(
+            array(
+                "displayName" => "Create",
+                "redirectPage" => "create-client.php",
+                "icon" => "nav-icon fas fa-plus"
+            ),  array(
+                "displayName" => "List",
+                "redirectPage" => "client-list.php",
+                "icon" => "nav-icon fas fa-list"
+            ),
+
+        ),
+
+        ),
+        array(
+        "displayName" => "Vendor",
+        "redirectPage" => "vendor-list.php",
+        "isHasSubMenu" => true,
+        "icon" => "nav-icon fas fa-user-secret",
+        "submenuArray" => array(
+            array(
+                "displayName" => "Create",
+                "redirectPage" => "create-vendor.php",
+                "icon" => "nav-icon fas fa-plus"
+            ),  array(
+                "displayName" => "List",
+                "redirectPage" => "vendor-list.php",
+                "icon" => "nav-icon fas fa-list"
+            ),
+
+        ),
+
+    )*/
+    array(
+        "displayName" => "User Accounts",
+        "redirectPage" => "list-item.php",
+        "isHasSubMenu" => true,
+        "icon" => "nav-icon fas fa-users",
+        "submenuArray" => array(
+            array(
+                "displayName" => "Create",
+                "redirectPage" => "create-users.php",
+                "icon" => "nav-icon fas fa-plus"
+            ),  array(
+                "displayName" => "List",
+                "redirectPage" => "user-list.php",
+                "icon" => "nav-icon fas fa-list"
+            ),
+
+        ),
+
+    ),
     array(
         "displayName" => "Logout",
         "redirectPage" => "logout.php",
@@ -151,43 +148,47 @@ $superAdminMenu = array(
         "icon" => "nav-icon far fa-circle nav-icon",
         "submenuArray" => array(),
     ),
-
-
-
 );
 
 $backOfficeMenu =   array(
     array(
-        "displayName" => "Item Management",
-        "redirectPage" => "list-item.php",
-        "isHasSubMenu" => true,
-        "icon" => "nav-icon fas fa-book",
-        "submenuArray" => array(
-            array(
-                "displayName" => "Create",
-                "redirectPage" => "create-item.php",
-                "icon" => "nav-icon fas fa-plus"
-            ),
-            array(
-                "displayName" => "List",
-                "redirectPage" => "list-item.php",
-                "icon" => "nav-icon fas fa-list"
-            ),
-            array(
-                "displayName" => "  Items-allocate",
-                "redirectPage" => "items-allocate.php",
-                "icon" => "nav-icon fas fa-tag",
-            ),
-            array(
-                "displayName" => "Defective-master",
-                "redirectPage" => "defactive-master.php",
-                "icon" => "nav-icon fas fa-tag",
-            ),
-
-        )
+        "displayName" => "Dashboard",
+        "redirectPage" => "./dashboard.php",
+        "isHasSubMenu" => false,
+        "submenuArray" => array(),
+        "icon" => "nav-icon fas fa-tachometer-alt"
     ),
     array(
-        "displayName" => "Sales User",
+        "displayName" => "Add Item",
+        "redirectPage" => "list-item.php",
+        "icon" => "nav-icon fas fa-plus",
+        "isHasSubMenu" => false,
+        "submenuArray" => array(),
+    ),
+    array(
+        "displayName" => "New Item Issue",
+        "redirectPage" => "items-allocate.php",
+        "icon" => "nav-icon fas fa-tag",
+        "isHasSubMenu" => false,
+        "submenuArray" => array(),
+    ),
+    array(
+        "displayName" => "New Item Return",
+        "redirectPage" => "items-allocate.php",
+        "icon" => "nav-icon fas fa-tag",
+        "isHasSubMenu" => false,
+        "submenuArray" => array(),
+    ),
+    array(
+        "displayName" => "Defective Item Receive",
+        "redirectPage" => "defactive-master.php",
+        "icon" => "nav-icon fas fa-tag",
+        "isHasSubMenu" => false,
+        "submenuArray" => array(),
+    ),
+
+    array(
+        "displayName" => "User Accounts",
         "redirectPage" => "list-item.php",
         "isHasSubMenu" => true,
         "icon" => "nav-icon fas fa-users",
