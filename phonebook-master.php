@@ -53,10 +53,7 @@ $phoneBookMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <!-- <div class="card-header">
-              <h3 class="card-title">DataTable with minimal features & hover style</h3>
-            </div> -->
-                            <!-- /.card-header -->
+
                             <div class="col-md-12 pt-3">
                                 <div class="card card-primary">
 
@@ -117,7 +114,8 @@ $phoneBookMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                                             <div class="col-4 form-group">
                                                 <label>Contact Number</label>
                                                 <input type="text" name="contactNumber" id="contactNumber"
-                                                    class="form-control" placeholder="Enter Contact Number">
+                                                    class="form-control allowOnlyDigit"
+                                                    placeholder="Enter Contact Number" maxlength="12">
                                             </div>
                                             <div class="col-4 form-group"></div>
                                             <div class="col-4 form-group ">
@@ -231,6 +229,22 @@ $phoneBookMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                             let remark = $('#remark').val();
                             let phoneBookMasterId = $('#phoneBookMasterId').val();
 
+
+                            if (!isNotNullOrEmptyOrZero(category)) {
+                                toast_error("Please select category.");
+                                $('#category').focus()
+                                return false;
+                            }
+                            if (!isNotNullOrEmptyOrZero(name)) {
+                                toast_error("Please enter name.");
+                                $('#categoryName').focus()
+                                return false;
+                            }
+                            if (!isNotNullOrEmptyOrZero(contactNumber)) {
+                                toast_error("Please enter contact number.");
+                                $('#contactNumber').focus()
+                                return false;
+                            }
 
                             let sendApiDataObj = {
                                 '<?php echo systemProject ?>': 'Masters',

@@ -151,4 +151,25 @@ function displayViewAmountDigit(amount, digit = 2) {
     Number = parseFloat(amount);
     return Number.toFixed(digit);
 }
+
+function isNotNullOrEmptyOrZero(str) {
+    return str !== "" && str !== "0";
+}
+/**
+ * @auther SP
+ * Only Allow Maximun digit Allow in Amount
+ */
+
+$(document).on('keypress', '.allowOnlyDigit', function(event) {
+    var $this = $(this);
+
+    if ((event.which != 46 || $this.val().indexOf('.') != -1) &&
+        ((event.which < 48 || event.which > 57) &&
+            (event.which != 0 && event.which != 8))) {
+        event.preventDefault();
+    }
+
+
+
+});
 </script>
