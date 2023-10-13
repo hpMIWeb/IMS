@@ -72,19 +72,17 @@ include_once './include/common-constat.php';
                                     </div>
                                     <div class="card-body">
                                         <div>
-                                            <div class="row" style="margin-bottom: -50px;">
+                                            <div class="row">
                                                 <div class="col-4 form-group">
                                                     <label>Category</label>
-                                                    <select class="form-control select2" style="width: 100%;"
-                                                        id="categoryId">
+                                                    <select class="form-control select2" style="width: 100%;" id="categoryId">
                                                         <option value="">All Category</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <table id="phoneBookMasterTable"
-                                                        class="table table-bordered table-striped">
+                                                    <table id="phoneBookMasterTable" class="table table-bordered table-striped">
                                                         <thead>
                                                             <tr>
                                                                 <th>Sr.No.</th>
@@ -124,163 +122,163 @@ include_once './include/common-constat.php';
                         ?>
 
                         <script>
-                        $('.select2').select2()
+                            $('.select2').select2()
 
-                        resetDataTable('phoneBookMasterTable');
+                            resetDataTable('phoneBookMasterTable');
 
-                        $(document).ready(function() {
-                            getPhoneBookMaster();
-                            getCategory();
-                        });
-
-                        function getCategory() {
-
-                            let sendApiDataObj = {
-                                '<?php echo systemProject ?>': 'Masters',
-                                '<?php echo systemModuleFunction ?>': 'getCategoryMasterDetails',
-
-                            };
-                            APICallAjax(sendApiDataObj, function(response) {
-                                if (response.responseCode == RESULT_OK) {
-
-                                    let htmlForListDropDown = '<option value="">All Category</option>';
-
-                                    $.each(response.result.category, function(index, category) {
-
-                                        htmlForListDropDown += '<option value = "' + category.id +
-                                            '" > ' +
-                                            category.name +
-                                            ' </option>';
-                                    });
-
-                                    $('#categoryId').html(htmlForListDropDown);
-
-                                } else {
-                                    toast_error(response.message);
-                                }
+                            $(document).ready(function() {
+                                getPhoneBookMaster();
+                                getCategory();
                             });
-                        }
 
-                        // Add a click event handler for the "Delete" buttons
-                        $('#phoneBookMasterTable').on('click', '.delete-phone-bookMaster', function(event) {
-                            event.preventDefault(); // Prevent the default link behavior
+                            function getCategory() {
 
-                            const phoneBookMasterId = $(this).data(
-                                'phone-book-master-id'); // Get the category ID from the data attribute
-                            console.log(phoneBookMasterId)
-                            deletePhoneBookMaster(phoneBookMasterId);
-                        });
+                                let sendApiDataObj = {
+                                    '<?php echo systemProject ?>': 'Masters',
+                                    '<?php echo systemModuleFunction ?>': 'getCategoryMasterDetails',
 
-                        function deletePhoneBookMaster(phoneBookMasterId) {
+                                };
+                                APICallAjax(sendApiDataObj, function(response) {
+                                    if (response.responseCode == RESULT_OK) {
 
-                            let sendApiDataObj = {
-                                '<?php echo systemProject ?>': 'Masters',
-                                '<?php echo systemModuleFunction ?>': 'deletePhoneBookMaster',
-                                'phoneBookMasterId': phoneBookMasterId,
-                            };
-                            APICallAjax(sendApiDataObj, function(response) {
-                                if (response.responseCode == RESULT_OK) {
-                                    toast_success(response.message);
-                                    getPhoneBookMaster();
-                                } else {
-                                    toast_error(response.message);
-                                }
+                                        let htmlForListDropDown = '<option value="">All Category</option>';
+
+                                        $.each(response.result.category, function(index, category) {
+
+                                            htmlForListDropDown += '<option value = "' + category.id +
+                                                '" > ' +
+                                                category.name +
+                                                ' </option>';
+                                        });
+
+                                        $('#categoryId').html(htmlForListDropDown);
+
+                                    } else {
+                                        toast_error(response.message);
+                                    }
+                                });
+                            }
+
+                            // Add a click event handler for the "Delete" buttons
+                            $('#phoneBookMasterTable').on('click', '.delete-phone-bookMaster', function(event) {
+                                event.preventDefault(); // Prevent the default link behavior
+
+                                const phoneBookMasterId = $(this).data(
+                                    'phone-book-master-id'); // Get the category ID from the data attribute
+                                console.log(phoneBookMasterId)
+                                deletePhoneBookMaster(phoneBookMasterId);
                             });
-                        }
 
-                        // Add a click event handler for the "Edit" buttons
-                        $('#phoneBookMasterTable').on('click', '.edit-phone-book-master', function(event) {
-                            event.preventDefault(); // Prevent the default link behavior
-                            const phoneBookMasterId = $(this).data(
-                                'phone-book-master-id'); // Get the category ID from the data attribute
-                            let sendApiDataObj = {
-                                '<?php echo systemProject ?>': 'Masters',
-                                '<?php echo systemModuleFunction ?>': 'getPhoneBookMasterDetails',
-                                'phoneBookMasterId': phoneBookMasterId,
+                            function deletePhoneBookMaster(phoneBookMasterId) {
 
-                            };
-                            window.location = "phonebook-master.php?id=" + phoneBookMasterId;
+                                let sendApiDataObj = {
+                                    '<?php echo systemProject ?>': 'Masters',
+                                    '<?php echo systemModuleFunction ?>': 'deletePhoneBookMaster',
+                                    'phoneBookMasterId': phoneBookMasterId,
+                                };
+                                APICallAjax(sendApiDataObj, function(response) {
+                                    if (response.responseCode == RESULT_OK) {
+                                        toast_success(response.message);
+                                        getPhoneBookMaster();
+                                    } else {
+                                        toast_error(response.message);
+                                    }
+                                });
+                            }
 
-                        });
+                            // Add a click event handler for the "Edit" buttons
+                            $('#phoneBookMasterTable').on('click', '.edit-phone-book-master', function(event) {
+                                event.preventDefault(); // Prevent the default link behavior
+                                const phoneBookMasterId = $(this).data(
+                                    'phone-book-master-id'); // Get the category ID from the data attribute
+                                let sendApiDataObj = {
+                                    '<?php echo systemProject ?>': 'Masters',
+                                    '<?php echo systemModuleFunction ?>': 'getPhoneBookMasterDetails',
+                                    'phoneBookMasterId': phoneBookMasterId,
 
+                                };
+                                window.location = "phonebook-master.php?id=" + phoneBookMasterId;
 
-
-                        function deletePhoneBookMaster(phoneBookMasterId) {
-
-                            let sendApiDataObj = {
-                                '<?php echo systemProject ?>': 'Masters',
-                                '<?php echo systemModuleFunction ?>': 'deletePhoneBookMaster',
-                                'phoneBookMasterId': phoneBookMasterId,
-                            };
-                            APICallAjax(sendApiDataObj, function(response) {
-                                if (response.responseCode == RESULT_OK) {
-                                    toast_success(response.message);
-                                    getPhoneBookMaster();
-                                } else {
-                                    toast_error(response.message);
-                                }
                             });
-                        }
 
 
 
-                        $('#categoryId').on('change', function(event) {
-                            getPhoneBookMaster();
-                        });
+                            function deletePhoneBookMaster(phoneBookMasterId) {
 
-                        function getPhoneBookMaster() {
+                                let sendApiDataObj = {
+                                    '<?php echo systemProject ?>': 'Masters',
+                                    '<?php echo systemModuleFunction ?>': 'deletePhoneBookMaster',
+                                    'phoneBookMasterId': phoneBookMasterId,
+                                };
+                                APICallAjax(sendApiDataObj, function(response) {
+                                    if (response.responseCode == RESULT_OK) {
+                                        toast_success(response.message);
+                                        getPhoneBookMaster();
+                                    } else {
+                                        toast_error(response.message);
+                                    }
+                                });
+                            }
 
-                            let sendApiDataObj = {
-                                '<?php echo systemProject ?>': 'Masters',
-                                '<?php echo systemModuleFunction ?>': 'getPhoneBookMasterDetails',
-                                'categoryId': $("#categoryId").val(),
-                                'phoneBookMasterId': $("#phoneBookMasterId").val()
 
-                            };
-                            $("#phoneBookMasterTable").dataTable().fnDestroy();
-                            $('#phoneBookMasterTable tbody').html('');
-                            APICallAjax(sendApiDataObj, function(response) {
-                                if (response.responseCode == RESULT_OK) {
 
-                                    let html = '';
-                                    let count = 1;
-
-                                    $.each(response.result.phoneBookMaster, function(index, phoneBookMaster) {
-                                        html += '<tr>';
-                                        html += '<td>' + count + '</td>';
-                                        html += '<td>' + phoneBookMaster.name + '</td>';
-                                        html += '<td>' + phoneBookMaster.address + '</td>';
-                                        html += '<td>' + phoneBookMaster.contactNumber + '</td>';
-                                        html += '<td>' + phoneBookMaster.designation + '</td>';
-                                        html += '<td>' + phoneBookMaster.companyName + '</td>';
-                                        html += '<td>' + phoneBookMaster.remark + '</td>';
-                                        html += '<td class="text-center-block py-0 align-middle">';
-                                        html += '<div class = "" > ';
-                                        html +=
-                                            ' <button  class="btn btn-warning btn-sm edit-phone-book-master" data-phone-book-master-id="' +
-                                            phoneBookMaster.id + '" title="Edit Phone Book">';
-                                        html += '<i class = "fas fa-pen" > </i>';
-                                        html += '</button>';
-                                        html +=
-                                            ' <button class="btn btn-danger btn-sm delete-phone-bookMaster" data-phone-book-master-id="' +
-                                            phoneBookMaster.id + '" title="Delete Phone Book">';
-                                        html += '<i class = "fas fa-trash" > </i>';
-                                        html += '</button>';
-                                        html += '</div>';
-                                        html += '</td > ';
-                                        html += '</tr>';
-                                        count++;
-
-                                    });
-                                    $('#phoneBookMasterTable tbody').html(html);
-                                    resetDataTable('phoneBookMasterTable');
-
-                                } else {
-                                    resetDataTable('phoneBookMasterTable');
-                                    toast_error(response.message);
-                                }
+                            $('#categoryId').on('change', function(event) {
+                                getPhoneBookMaster();
                             });
-                        }
+
+                            function getPhoneBookMaster() {
+
+                                let sendApiDataObj = {
+                                    '<?php echo systemProject ?>': 'Masters',
+                                    '<?php echo systemModuleFunction ?>': 'getPhoneBookMasterDetails',
+                                    'categoryId': $("#categoryId").val(),
+                                    'phoneBookMasterId': $("#phoneBookMasterId").val()
+
+                                };
+                                $("#phoneBookMasterTable").dataTable().fnDestroy();
+                                $('#phoneBookMasterTable tbody').html('');
+                                APICallAjax(sendApiDataObj, function(response) {
+                                    if (response.responseCode == RESULT_OK) {
+
+                                        let html = '';
+                                        let count = 1;
+
+                                        $.each(response.result.phoneBookMaster, function(index, phoneBookMaster) {
+                                            html += '<tr>';
+                                            html += '<td>' + count + '</td>';
+                                            html += '<td>' + phoneBookMaster.name + '</td>';
+                                            html += '<td>' + phoneBookMaster.address + '</td>';
+                                            html += '<td>' + phoneBookMaster.contactNumber + '</td>';
+                                            html += '<td>' + phoneBookMaster.designation + '</td>';
+                                            html += '<td>' + phoneBookMaster.companyName + '</td>';
+                                            html += '<td>' + phoneBookMaster.remark + '</td>';
+                                            html += '<td class="text-center-block py-0 align-middle">';
+                                            html += '<div class = "" > ';
+                                            html +=
+                                                ' <button  class="btn btn-warning btn-sm edit-phone-book-master" data-phone-book-master-id="' +
+                                                phoneBookMaster.id + '" title="Edit Phone Book">';
+                                            html += '<i class = "fas fa-pen" > </i>';
+                                            html += '</button>';
+                                            html +=
+                                                ' <button class="btn btn-danger btn-sm delete-phone-bookMaster" data-phone-book-master-id="' +
+                                                phoneBookMaster.id + '" title="Delete Phone Book">';
+                                            html += '<i class = "fas fa-trash" > </i>';
+                                            html += '</button>';
+                                            html += '</div>';
+                                            html += '</td > ';
+                                            html += '</tr>';
+                                            count++;
+
+                                        });
+                                        $('#phoneBookMasterTable tbody').html(html);
+                                        resetDataTable('phoneBookMasterTable');
+
+                                    } else {
+                                        resetDataTable('phoneBookMasterTable');
+                                        toast_error(response.message);
+                                    }
+                                });
+                            }
                         </script>
 </body>
 

@@ -178,12 +178,13 @@ $(document).on('keypress', '.allowOnlyDigit', function(event) {
 function resetDataTable(tableName) {
     $("#" + tableName).DataTable({
         paging: true,
-        // lengthChange: false,
+        lengthChange: false,
         searching: true,
-        //ordering: true,
-        //info: true,
-        //autoWidth: true,
+        ordering: true,
+        info: true,
+        autoWidth: true,
         responsive: true,
+        "bDestroy": true
     });
 }
 </script>
