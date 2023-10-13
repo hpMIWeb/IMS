@@ -1,7 +1,7 @@
 <?php
 session_start();
-    include_once './include/session-check.php';
-    include_once './include/common-constat.php';
+include_once './include/session-check.php';
+include_once './include/common-constat.php';
 
 
 ?>
@@ -99,6 +99,7 @@ session_start();
                                         <div class="form-group">
                                             <label>Total</label>
                                             <input type="text" name="item_qty" class="form-control" placeholder="Total">
+                                            <span>Qty You have : - 5</span>
                                         </div>
 
 
@@ -106,7 +107,7 @@ session_start();
 
                                     <div class="col-1  text-center mt-4 ">
                                         <div class="form-group">
-                                            <button type="button" name=" assign " class="btn btn-primary mt-2" >Assign</button>
+                                            <button type="button" name=" assign " class="btn btn-primary mt-2">Assign</button>
                                         </div>
 
 
@@ -156,8 +157,10 @@ session_start();
             let html = "<tr>"
             html += "<td>jbjk</td>"
 
-            html += "<input type='text' class='form-group select 2' id='items' name='items_name' value='' placeholder='Select item' />"
-            html += "<input type='text' class='form-group select 2' id='itemsqty' name='items_qty' value='' placeholder='Select qty' />"
+            html +=
+                "<input type='text' class='form-group select 2' id='items' name='items_name' value='' placeholder='Select item' />"
+            html +=
+                "<input type='text' class='form-group select 2' id='itemsqty' name='items_qty' value='' placeholder='Select qty' />"
             html += "<td>jbjkb</td>"
             html += "</tr>"
 
