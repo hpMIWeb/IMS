@@ -7,6 +7,9 @@ $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap 4 -->
 <script src="./assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 -->
+<script src="./assets/plugins/select2/js/select2.full.min.js"></script>
+
 <!-- ChartJS -->
 <script src="./assets/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
@@ -39,8 +42,7 @@ $.widget.bridge('uibutton', $.ui.button)
 <script src="./assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <!-- Toastr -->
 <script src="./assets/plugins/toastr/toastr.min.js"></script>
-<!-- Select2 -->
-<script src="./assets/plugins/select2/js/select2.full.min.js"></script>
+
 
 <script>
 function toast_success(msg) {

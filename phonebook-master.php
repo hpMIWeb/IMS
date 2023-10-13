@@ -63,7 +63,7 @@ include_once './include/common-constat.php';
                                     <div class="card-body">
                                         <!-- Date range -->
                                         <div class="row">
-                                            <input type="hidden" name="phonebookMasterId" id="phonebookMasterId" value="">
+                                            <input type="hidden" name="phoneBookMasterId" id="phoneBookMasterId" value="">
                                             <input type="hidden" name="action" id="action" value="add">
                                             <div class="col-6 form-group">
                                                 <label>Category</label>
@@ -118,13 +118,20 @@ include_once './include/common-constat.php';
                                         <!-- /.card-body -->
                                         <div class="float-right">
                                             <button type="button" id="addUpdatePhonebookMasterButton" name="submit" class="btn btn-primary">Save</button>
-                                            <button type="button" name="delete" class="btn btn-danger" onclick="resetFormFields()">Delete</button>
+                                            <button type="button" name="delete" class="btn btn-danger" onclick="resetFormFields()">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-body">
-
-                                    <table id="phonebookMasterTable" class="table table-bordered table-hover">
+                                    <div class="row">
+                                        <div class="col-6 form-group">
+                                            <label>Category</label>
+                                            <select class="form-control select2" style="width: 100%;" id="categoryId">
+                                                <option value="">All Category</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <table id="phoneBookMasterTable" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th class="col-1">sr.no</th>
@@ -161,12 +168,11 @@ include_once './include/common-constat.php';
                 ?>
 
                 <script>
+                    $('.select2').select2()
+
                     $(document).ready(function() {
-
-                        getPhonebookMaster();
+                        getPhoneBookMaster();
                         getCategory();
-
-
                     });
 
                     function getCategory() {
@@ -179,12 +185,18 @@ include_once './include/common-constat.php';
                         APICallAjax(sendApiDataObj, function(response) {
                             if (response.responseCode == RESULT_OK) {
 
-                                let html = '';
+                                let html = '<option value="">Select Category</option>';
+                                let htmlForListDropDown = '<option value="">All Category</option>';
 
                                 $.each(response.result.category, function(index, category) {
-                                    html += '<option value = "' + category.id + '" > ' + category.name + ' </option>';
+                                    html += '<option value = "' + category.id + '" > ' + category.name +
+                                        ' </option>';
+                                    htmlForListDropDown += '<option value = "' + category.id + '" > ' +
+                                        category.name +
+                                        ' </option>';
                                 });
                                 $('#category').html(html);
+                                $('#categoryId').html(htmlForListDropDown);
 
                             } else {
                                 toast_error(response.message);
@@ -193,49 +205,47 @@ include_once './include/common-constat.php';
                     }
 
                     // Add a click event handler for the "Delete" buttons
-                    $('#phonebookMasterTable').on('click', '.delete-phonebookMaster', function(event) {
+                    $('#phoneBookMasterTable').on('click', '.delete-phonebookMaster', function(event) {
                         event.preventDefault(); // Prevent the default link behavior
 
-                        const phonebookMasterId = $(this).data(
+                        const phoneBookMasterId = $(this).data(
                             'phonebookmaster-id'); // Get the category ID from the data attribute
-                        console.log(phonebookMasterId)
-                        deletePhonebookMaster(phonebookMasterId);
+                        console.log(phoneBookMasterId)
+                        deletePhoneBookMaster(phoneBookMasterId);
                     });
 
-
-
-                    function deletePhonebookMaster(phonebookMasterId) {
+                    function deletePhoneBookMaster(phoneBookMasterId) {
 
                         let sendApiDataObj = {
                             '<?php echo systemProject ?>': 'Masters',
-                            '<?php echo systemModuleFunction ?>': 'deletePhonebookMaster',
-                            'phonebookMasterId': phonebookMasterId,
+                            '<?php echo systemModuleFunction ?>': 'deletePhoneBookMaster',
+                            'phoneBookMasterId': phoneBookMasterId,
                         };
                         APICallAjax(sendApiDataObj, function(response) {
                             if (response.responseCode == RESULT_OK) {
                                 toast_success(response.message);
-                                getPhonebookMaster();
+                                getPhoneBookMaster();
                             } else {
                                 toast_error(response.message);
                             }
                         });
                     }
 
-                    $('#phonebookMasterTable').on('click', '.edit-phonebookMaster', function(event) {
+                    $('#phoneBookMasterTable').on('click', '.edit-phonebookMaster', function(event) {
                         event.preventDefault(); // Prevent the default link behavior
-                        const phonebookMasterId = $(this).data(
+                        const phoneBookMasterId = $(this).data(
                             'phonebookmaster-id'); // Get the category ID from the data attribute
                         let sendApiDataObj = {
                             '<?php echo systemProject ?>': 'Masters',
-                            '<?php echo systemModuleFunction ?>': 'getPhonebookMasterDetails',
-                            'phonebookMasterId': phonebookMasterId,
+                            '<?php echo systemModuleFunction ?>': 'getPhoneBookMasterDetails',
+                            'phoneBookMasterId': phoneBookMasterId,
 
                         };
                         APICallAjax(sendApiDataObj, function(response) {
                             if (response.responseCode == RESULT_OK) {
                                 $.each(response.result.phoneBookMaster, function(index, phoneBookMaster) {
                                     console.log(phoneBookMaster)
-                                    $('#phonebookMasterId').val(phoneBookMaster.id);
+                                    $('#phoneBookMasterId').val(phoneBookMaster.id);
                                     $('#action').val("edit");
                                     $('#category').val(phoneBookMaster.category).trigger('change');
                                     $('#categoryName').val(phoneBookMaster.name);
@@ -252,23 +262,22 @@ include_once './include/common-constat.php';
                         });
                     });
 
-                    function deletephonebookMaster(PhonebookMasterId) {
+                    function deletePhoneBookMaster(phoneBookMasterId) {
 
                         let sendApiDataObj = {
                             '<?php echo systemProject ?>': 'Masters',
-                            '<?php echo systemModuleFunction ?>': 'deletephonebookMaster',
-                            'PhonebookMasterId': PhonebookMasterId,
+                            '<?php echo systemModuleFunction ?>': 'deletePhoneBookMaster',
+                            'PhoneBookMasterId': phoneBookMasterId,
                         };
                         APICallAjax(sendApiDataObj, function(response) {
                             if (response.responseCode == RESULT_OK) {
                                 toast_success(response.message);
-                                getPhonebookMaster();
+                                getPhoneBookMaster();
                             } else {
                                 toast_error(response.message);
                             }
                         });
                     }
-
 
                     $('#addUpdatePhonebookMasterButton').on('click', function(event) {
                         let category = $('#category').val();
@@ -279,11 +288,11 @@ include_once './include/common-constat.php';
                         let designation = $('#designation').val();
                         let companyName = $('#companyName').val();
                         let remark = $('#remark').val();
-                        let phonebookMasterId = $('#phonebookMasterId').val();
+                        let phoneBookMasterId = $('#phoneBookMasterId').val();
                         let sendApiDataObj = {
                             '<?php echo systemProject ?>': 'Masters',
-                            '<?php echo systemModuleFunction ?>': 'addUpdatePhonebookMaster',
-                            'phonebookMasterId': phonebookMasterId,
+                            '<?php echo systemModuleFunction ?>': 'addUpdatePhoneBookMaster',
+                            'phoneBookMasterId': phoneBookMasterId,
                             'name': name,
                             'address': address,
                             'contactNumber': contactNumber,
@@ -294,9 +303,11 @@ include_once './include/common-constat.php';
                             'category': category
                         };
 
+                        console.log(sendApiDataObj)
+
                         APICallAjax(sendApiDataObj, function(response) {
                             if (response.responseCode == RESULT_OK) {
-                                getPhonebookMaster();
+                                getPhoneBookMaster();
                                 toast_success(response.message);
                                 resetFormFields()
                             } else {
@@ -305,14 +316,20 @@ include_once './include/common-constat.php';
                         });
                     });
 
+                    $('#categoryId').on('change', function(event) {
+                        getPhoneBookMaster();
+                    });
 
-                    function getPhonebookMaster() {
+                    function getPhoneBookMaster() {
 
                         let sendApiDataObj = {
                             '<?php echo systemProject ?>': 'Masters',
-                            '<?php echo systemModuleFunction ?>': 'getPhonebookMasterDetails',
+                            '<?php echo systemModuleFunction ?>': 'getPhoneBookMasterDetails',
+                            'categoryId': $("#categoryId").val(),
+                            'phoneBookMasterId': $("#phoneBookMasterId").val()
 
                         };
+                        $('#phoneBookMasterTable tbody').html('');
                         APICallAjax(sendApiDataObj, function(response) {
                             if (response.responseCode == RESULT_OK) {
 
@@ -331,13 +348,13 @@ include_once './include/common-constat.php';
                                     html += '<td class="text-center-block py-0 align-middle">';
                                     html += '<div class = "" > ';
                                     html +=
-                                        '<button  class="btn btn-warning btn-sm edit-phonebookMaster" data-phonebookmaster-id="' +
-                                        phoneBookMaster.id + '">';
-                                    html += '<i class = "fas fa-eye" > </i>';
+                                        ' <button  class="btn btn-warning btn-sm edit-phonebookMaster" data-phonebookmaster-id="' +
+                                        phoneBookMaster.id + '" title="Edit Phone Book">';
+                                    html += '<i class = "fas fa-pen" > </i>';
                                     html += '</button>';
                                     html +=
-                                        '<button class="btn btn-danger btn-sm delete-phonebookMaster" data-phonebookmaster-id="' +
-                                        phoneBookMaster.id + '">';
+                                        ' <button class="btn btn-danger btn-sm delete-phonebookMaster" data-phonebookmaster-id="' +
+                                        phoneBookMaster.id + '" title="Delete Phone Book">';
                                     html += '<i class = "fas fa-trash" > </i>';
                                     html += '</button>';
                                     html += '</div>';
@@ -347,7 +364,7 @@ include_once './include/common-constat.php';
 
                                 });
 
-                                $('#phonebookMasterTable tbody').html(html);
+                                $('#phoneBookMasterTable tbody').html(html);
                             } else {
                                 toast_error(response.message);
                             }
@@ -364,13 +381,9 @@ include_once './include/common-constat.php';
                         $('#companyName').val('');
                         $('#remark').val('');
                         $('#action').val('add');
-                        $('#phonebookMasterId').val();
+                        $('#phoneBookMasterId').val();
                     }
                 </script>
-</body>
-
-</html>
-</script>
 </body>
 
 </html>

@@ -101,18 +101,22 @@ class Masters extends Config
     }
 
 
-    public function getPhonebookMasterDetails()
+    public function getPhoneBookMasterDetails()
     {
         try {
 
-            $phonebookMasterId = $this->handleSpecialCharacters($_POST['phonebookMasterId']);
+            $phoneBookMasterId = $this->handleSpecialCharacters($_POST['phoneBookMasterId']);
+            $categoryId = $this->handleSpecialCharacters($_POST['categoryId']);
 
             $appendQuery = '';
 
-            if ($this->isNotNullOrEmptyOrZero($phonebookMasterId)) {
-                $appendQuery = " WHERE id = '$phonebookMasterId' ";
+            if ($this->isNotNullOrEmptyOrZero($categoryId)) {
+                $appendQuery = " WHERE category = '$categoryId' ";
             }
-            $query = $this::$masterConn->prepare("SELECT * FROM `phonebook_master` $appendQuery ORDER BY name ASC ");
+            if ($this->isNotNullOrEmptyOrZero($phoneBookMasterId)) {
+                $appendQuery = " WHERE id = '$phoneBookMasterId' ";
+            }
+            $query = $this::$masterConn->prepare("SELECT * FROM `phone_book_master` $appendQuery ORDER BY name ASC ");
             if ($query->execute()) {
                 if ($query->rowCount() > 0) {
                     $this->successData();
@@ -141,7 +145,7 @@ class Masters extends Config
     }
 
 
-    public function addUpdatePhonebookMaster()
+    public function addUpdatePhoneBookMaster()
     {
 
         try {
@@ -153,25 +157,23 @@ class Masters extends Config
             $designation = $this->handleSpecialCharacters($_POST['designation']);
             $companyName = $this->handleSpecialCharacters($_POST['companyName']);
             $remark = $this->handleSpecialCharacters($_POST['remark']);
-            $phonebookMasterId = $this->handleSpecialCharacters($_POST['phonebookMasterId']);
+            $phoneBookMasterId = $this->handleSpecialCharacters($_POST['phoneBookMasterId']);
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                $query = $this::$masterConn->prepare("INSERT INTO `phonebook_master` (`category`,`name`,`address`,`contact_number`,`designation`,`company_name`,`remark`,`created_by`) 
+                $query = $this::$masterConn->prepare("INSERT INTO `phone_book_master` (`category`,`name`,`address`,`contact_number`,`designation`,`company_name`,`remark`,`created_by`) 
                 VALUES ('$category', '$name','$address','$contactNumber','$designation','$companyName','$remark', '" . $this->userMasterId . "'); ");
-            } elseif ($this->isNotNullOrEmptyOrZero($phonebookMasterId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
-                $query = $this::$masterConn->prepare("UPDATE `phonebook_master` SET `name` = '$name',`address`='$address',`contactNumber`='$contactNumber',`designation`='$designation',`companyName`='$companyName',`remark`=''`modified_by` = '" . $this->userMasterId . "' WHERE `id` ='$phonebookMasterId'");
+            } elseif ($this->isNotNullOrEmptyOrZero($phoneBookMasterId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
+                $query = $this::$masterConn->prepare("UPDATE `phone_book_master` SET `name` = '$name',`address`='$address',`contact_number`='$contactNumber',`designation`='$designation',`company_name`='$companyName',`remark`='$remark',`modified_by` = '" . $this->userMasterId . "' WHERE `id` ='$phoneBookMasterId'");
             }
 
 
+            var_dump($query);
             if ($query->execute()) {
-                if ($query->rowCount() > 0) {
-                    if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                        $this->successData("Phonebook master Add successfully.");
-                    } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
-                        $this->successData("Phonebook master Update successfully.");
-                    }
-                } else {
-                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+
+                if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                    $this->successData("Phone book master Add successfully.");
+                } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
+                    $this->successData("Phone book master Update successfully.");
                 }
             } else {
                 $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
@@ -181,18 +183,18 @@ class Masters extends Config
         }
     }
 
-    public function deletePhonebookMaster()
+    public function deletePhoneBookMaster()
     {
 
         try {
-            $phonebookMasterId = $this->handleSpecialCharacters($_POST['phonebookMasterId']);
+            $phoneBookMasterId = $this->handleSpecialCharacters($_POST['phoneBookMasterId']);
 
-            if ($this->isNotNullOrEmptyOrZero($phonebookMasterId)) {
+            if ($this->isNotNullOrEmptyOrZero($phoneBookMasterId)) {
 
-                $query = $this::$masterConn->prepare("DELETE FROM `phonebook_master` WHERE id = '$phonebookMasterId'");
+                $query = $this::$masterConn->prepare("DELETE FROM `phone_book_master` WHERE id = '$phoneBookMasterId'");
                 if ($query->execute()) {
                     if ($query->rowCount() > 0) {
-                        $this->successData("Category Delete successfully.");
+                        $this->successData("Phone Book  Delete successfully.");
                     }
                 } else {
                     $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
