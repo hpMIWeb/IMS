@@ -86,16 +86,16 @@ $superAdminMenu = array(
         "displayName" => "Sales User",
         "redirectPage" => "list-item.php",
         "isHasSubMenu" => true,
-        "icon" => "fas fa-users",
+        "icon" => "nav-icon fas fa-users",
         "submenuArray" => array(
             array(
                 "displayName" => "Create",
                 "redirectPage" => "create-users.php",
-                "icon" => "fas fa-plus"
+                "icon" => "nav-icon fas fa-plus"
             ),  array(
                 "displayName" => "List",
                 "redirectPage" => "user-list.php",
-                "icon" => "fas fa-list"
+                "icon" => "nav-icon fas fa-list"
             ),
 
         ),
@@ -131,11 +131,15 @@ $superAdminMenu = array(
             array(
                 "displayName" => "Category",
                 "redirectPage" => "category.php",
-                "icon" => "fas fa-plus"
+                "icon" => "nav-icon fas fa-plus"
             ),  array(
                 "displayName" => "Phone book Master",
                 "redirectPage" => "phonebook-master.php",
                 "icon" => "nav-icon fas fa-address-book"
+            ), array(
+                "displayName" => "Phone book List",
+                "redirectPage" => "phonebook-master-list.php",
+                "icon" => "nav-icon fas fa-bars"
             ),
 
         ),
@@ -186,16 +190,16 @@ $backOfficeMenu =   array(
         "displayName" => "Sales User",
         "redirectPage" => "list-item.php",
         "isHasSubMenu" => true,
-        "icon" => "fas fa-users",
+        "icon" => "nav-icon fas fa-users",
         "submenuArray" => array(
             array(
                 "displayName" => "Create",
                 "redirectPage" => "create-users.php",
-                "icon" => "fas fa-plus"
+                "icon" => "nav-icon fas fa-plus"
             ),  array(
                 "displayName" => "List",
                 "redirectPage" => "user-list.php",
-                "icon" => "fas fa-list"
+                "icon" => "nav-icon fas fa-list"
             ),
 
         ),

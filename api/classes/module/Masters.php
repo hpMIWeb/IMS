@@ -167,7 +167,7 @@ class Masters extends Config
             }
 
 
-            var_dump($query);
+
             if ($query->execute()) {
 
                 if ($this->equals($this->action, $this->arrayAllAction['add'])) {
