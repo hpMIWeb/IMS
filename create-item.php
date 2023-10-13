@@ -53,85 +53,99 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
                 <div class="container-fluid">
                     <!-- SELECT2 EXAMPLE -->
                     <div class="card card-default">
-                        <form>
 
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                <div class="row">
-                                    <input type="hidden" name="itemId" id="itemId" value="<?php echo $itemId; ?>">
-                                    <input type="hidden" name="action" id="action" value="add">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Item Name:</label>
-                                            <input type="text" name="itemName" id="itemName" class="form-control" placeholder="Enter Item Name">
-                                        </div>
-                                        <!-- /.form-group -->
-
-                                        <!-- /.form-group -->
-                                        <div class="form-group">
-                                            <label>Hsn Code</label>
-                                            <input type="text" name="hsnCode" id="hsnCode" class="form-control" placeholder="Enter Hsn Code">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Minimum Stock Level</label>
-                                            <input type="text" name="minimumStockLevel" id="minimumStockLevel" class="form-control" placeholder="Enter Minimum Stock Level">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Purchase Basic Cost</label>
-                                            <input type="text" name="purchaseBasicCost" id="purchaseBasicCost" class="form-control" placeholder="Enter Purchase Basic Cost">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>MRP</label>
-                                            <input type="text" name="mrp" id="mrp" class="form-control" placeholder="Enter MRP">
-                                        </div>
-
+                        <div class="card-body">
+                            <div class="row">
+                                <input type="hidden" name="itemId" id="itemId" value="<?php echo $itemId; ?>">
+                                <input type="hidden" name="action" id="action" value="add">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Item Name:</label>
+                                        <input type="text" name="itemName" id="itemName" class="form-control" placeholder="Enter Item Name">
                                     </div>
-                                    <!-- /.col -->
-                                    <div class="col-md-6">
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
                                         <label>Item Code</label>
                                         <input type="text" name="itemCode" id="itemCode" class="form-control" placeholder="Enter Item Code">
-
-                                        <!-- /.form-group -->
-                                        <div class="form-group">
-
-                                        </div>
-
-                                        <!-- /.form-group -->
-                                        <div class="form-group">
-                                            <label>Opening Stock</label>
-                                            <input type="text" name="openingStock" id="openingStock" class="form-control" placeholder="Enter Opening Stock">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Landing Cost</label>
-                                            <input type="text" name="landingCost" id="landingCost" class="form-control" placeholder="Enter Lending Cost">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Basic Selling Cost </label>
-                                            <input type="text" name="basicSellingPrice" id="basicSellingPrice" class="form-control" placeholder="Enter Basic Selling Price">
-                                        </div>
                                     </div>
-                                    <!-- /.col -->
                                 </div>
-                                <!-- /.row -->
-
-
-                                <div class="float-right">
-                                    <button type="button" id="addUpdateItemButton" name="submit" class="btn btn-primary">Save</button>
-                                    <button type="button" name="delete" class="btn btn-danger" onclick="resetFormFields()">Cancel</button>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Hsn Code</label>
+                                        <input type="text" name="hsnCode" id="hsnCode" class="form-control" placeholder="Enter Hsn Code">
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label>Opening Stock</label>
+                                        <input type="text" name="openingStock" id="openingStock" class="form-control allowOnlyDigit openingStock" placeholder="Enter Opening Stock">
+                                    </div>
 
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label>Minimum Stock Level</label>
+                                        <input type="text" name="minimumStockLevel" id="minimumStockLevel" class="form-control allowOnlyDigit minimumStockLevel" placeholder="Enter Minimum Stock Level">
+                                    </div>
 
+                                </div>
                             </div>
 
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Purchase Basic Cost</label>
+                                        <input type="text" name="purchaseBasicCost" id="purchaseBasicCost" class="form-control allowOnlyDigit purchaseBasicCost" placeholder="Enter Purchase Basic Cost">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Tax</label>
+                                        <input type="text" name="purchaseBasicCostTax" id="purchaseBasicCostTax" class="form-control allowOnlyDigit purchaseBasicCostTax" placeholder="Enter Tax">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Landing Cost</label>
+                                        <input type="text" name="landingCost" id="landingCost" class="form-control allowOnlyDigit landingCost" placeholder="Enter Lending Cost">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Basic Selling Cost </label>
+                                        <input type="text" name="basicSellingPrice" id="basicSellingPrice" class="form-control allowOnlyDigit basicSellingPrice" placeholder="Enter Basic Selling Price">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Tax</label>
+                                        <input type="text" name="basicSellingPriceTax" id="basicSellingPriceTax" class="form-control allowOnlyDigit basicSellingPriceTax" placeholder="Enter Tax">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>MRP</label>
+                                        <input type="text" name="mrp" id="mrp" class="form-control allowOnlyDigit mrp" placeholder="Enter MRP">
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="float-right">
+                                <button type="button" id="addUpdateItemButton" name="submit" class="btn btn-primary">Save</button>
+                                <button type="button" name="delete" class="btn btn-danger" onclick="resetFormFields()">Cancel</button>
+                            </div>
+
+                        </div>
                     </div>
-                    </form>
                 </div>
-
+            </section>
         </div>
-
-    </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
     </div>
     <?php
 
@@ -145,10 +159,6 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
     </aside>
     <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    <!-- jQuery -->
-
     <?php
 
     include_once("include/jquery.php");
@@ -192,6 +202,24 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
                 }
             });
         }
+
+
+        //find landing cost calculation
+        function updateLandingCost() {
+            let purchaseBasicCost = parseFloat($("#purchaseBasicCost").val());
+            let purchaseBasicCostTax = parseFloat($("#purchaseBasicCostTax").val());
+            let landingCost = parseFloat($("#landingCost").val());
+
+            if (isNotNullOrEmptyOrZero(purchaseBasicCost) || isNotNullOrEmptyOrZero(purchaseBasicCostTax)) {
+                landingCost = parseFloat(purchaseBasicCost) / parseFloat(purchaseBasicCostTax);
+            }
+
+            $("#landingCost").val(displayViewAmountDigit(landingCost));
+        }
+
+        $('#purchaseBasicCost').on('change', updateLandingCost);
+        $('#purchaseBasicCostTax').on('change', updateLandingCost);
+        $('#landingCost').on('change', updateLandingCost);
 
 
         $('#addUpdateItemButton').on('click', function(event) {
