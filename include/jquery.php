@@ -155,9 +155,10 @@ function displayViewAmountDigit(amount, digit = 2) {
 function isNotNullOrEmptyOrZero(str) {
     return str !== "" && str !== "0";
 }
+
 /**
- * @auther SP
- * Only Allow Maximun digit Allow in Amount
+ * @auther Pinank Soni
+ *@use: Only Allow digit Allow in Amount
  */
 
 $(document).on('keypress', '.allowOnlyDigit', function(event) {
@@ -168,8 +169,21 @@ $(document).on('keypress', '.allowOnlyDigit', function(event) {
             (event.which != 0 && event.which != 8))) {
         event.preventDefault();
     }
-
-
-
 });
+
+/**
+ * @auther Pinank Soni
+ *@use: Reset and initiate Datatable
+ */
+function resetDataTable(tableName) {
+    $("#" + tableName).DataTable({
+        paging: true,
+        // lengthChange: false,
+        searching: true,
+        //ordering: true,
+        //info: true,
+        //autoWidth: true,
+        responsive: true,
+    });
+}
 </script>

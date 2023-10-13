@@ -64,23 +64,23 @@ $amcMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                             </div>
                         </div>
                         <div class="card-body">
-                            <table id="amcTable" class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Sr. No.</th>
-                                        <th>Date Of Visit</th>
-                                        <th>Work Detail</th>
-                                        <th>Customer Name</th>
-                                        <th>Contact No.</th>
-                                        <th>AMC Attended By</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-
-                                </tbody>
-                            </table>
+                            <div class="row">
+                                <div class="col-12">
+                                    <table id="amcTable" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr. No.</th>
+                                                <th>Date Of Visit</th>
+                                                <th>Work Detail</th>
+                                                <th>Customer Name</th>
+                                                <th>Contact No.</th>
+                                                <th>AMC Attended By</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     </form>
@@ -181,6 +181,7 @@ $amcMasterId = isset($_GET['id']) ? $_GET['id'] : 0
 
     <script>
         $(document).ready(function() {
+            resetDataTable('amcTable');
             let amcMasterId = $('#amcMasterId').val();
             if (amcMasterId !== '0') {
                 getAmcData(amcMasterId)
@@ -247,6 +248,8 @@ $amcMasterId = isset($_GET['id']) ? $_GET['id'] : 0
 
             };
             APICallAjax(sendApiDataObj, function(response) {
+                $("#amcTable").dataTable().fnDestroy();
+                $('#amcTable tbody').html('');
                 if (response.responseCode == RESULT_OK) {
 
                     let html = '';
@@ -265,7 +268,9 @@ $amcMasterId = isset($_GET['id']) ? $_GET['id'] : 0
 
                     });
                     $('#amcTable tbody').html(html);
+                    resetDataTable('amcTable');
                 } else {
+                    resetDataTable('amcTable');
                     toast_error(response.message);
                 }
             });
