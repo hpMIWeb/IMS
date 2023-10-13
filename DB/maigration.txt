@@ -18,5 +18,8 @@ ALTER TABLE `category_master` CHANGE `contact_number` `contact_number` VARCHAR(1
 ALTER TABLE `phonbook_master` 
 RENAME TO  `phone_book_master` ;
 
+ALTER TABLE `amc_master` 
+ADD COLUMN `customer_card_number` VARCHAR(45) NULL DEFAULT NULL AFTER `modified_at`;
+
 ***********query 13-October-2023**********************
 

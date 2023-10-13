@@ -231,6 +231,7 @@ class Masters extends Config
                             'endDate' => $this->convertNullToEmptyString($row['start_date']),
                             'endDateDisplay' => $this->convertNullToEmptyString($this->formatDateTime('d-m-Y', $row['end_date'])),
                             'address' => $this->convertNullToEmptyString($row['address']),
+                            'customerCardNumber' => $this->convertNullToEmptyString($row['customer_card_number']),
                             'noOfBathroom' => $this->convertNullOrEmptyStringToZero($row['no_of_bathroom']),
                             'noService' => $this->convertNullOrEmptyStringToZero($row['no_service']),
                             'amcCharges' => $this->convertNullOrEmptyStringToZero($row['amc_charges']),
@@ -264,17 +265,16 @@ class Masters extends Config
             $noOfBathroom = $this->handleSpecialCharacters($_POST['noOfBathroom']);
             $amcCharges = $this->handleSpecialCharacters($_POST['amcCharges']);
             $remark = $this->handleSpecialCharacters($_POST['remark']);
+            $customerCardNumber = $this->handleSpecialCharacters($_POST['customerCardNumber']);
             $amcMasterId = $this->handleSpecialCharacters($_POST['amcMasterId']);
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
                 $query = $this::$masterConn->prepare("INSERT INTO `amc_master`
-                ( `customer_name`, `address`, `contact_number`, `no_of_bathroom`, `start_date`, `end_date`, `no_service`, `amc_charges`, `remark`, `created_by`) 
-                VALUES ('$customerName','$address','$contactNumber','$noOfBathroom','$startDate','$endDate','$noOfService','$amcCharges','$remark','" . $this->userMasterId . "')");
+                ( `customer_name`, `address`, `contact_number`, `no_of_bathroom`, `start_date`, `end_date`, `no_service`, `amc_charges`, `remark`, `customer_card_number`,`created_by`) 
+                VALUES ('$customerName','$address','$contactNumber','$noOfBathroom','$startDate','$endDate','$noOfService','$amcCharges','$remark','$customerCardNumber','" . $this->userMasterId . "')");
             } elseif ($this->isNotNullOrEmptyOrZero($amcMasterId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
-                $query = $this::$masterConn->prepare("UPDATE `amc_master` SET `customer_name`='$customerName',`address`='$address',`contact_number`='$contactNumber',`no_of_bathroom`='$noOfBathroom',`start_date`='$startDate',`end_date`='$endDate',`no_service`='$noOfService',`amc_charges`='$amcCharges',`remark`='$remark',`modified_by`='" . $this->userMasterId . "' WHERE id = '$amcMasterId'");
+                $query = $this::$masterConn->prepare("UPDATE `amc_master` SET `customer_name`='$customerName',`address`='$address',`contact_number`='$contactNumber',`no_of_bathroom`='$noOfBathroom',`start_date`='$startDate',`end_date`='$endDate',`no_service`='$noOfService',`amc_charges`='$amcCharges',`remark`='$remark',`customer_card_number`='$customerCardNumber',`modified_by`='" . $this->userMasterId . "' WHERE id = '$amcMasterId'");
             }
-
-
 
             if ($query->execute()) {
                 if ($query->rowCount() > 0) {
