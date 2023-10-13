@@ -58,11 +58,21 @@ include_once './include/common-constat.php';
             </div> -->
                             <!-- /.card-header -->
                             <div class="col-md-12 pt-3">
-                                <div class="card card-primary">
-
+                                <div class="card card-default">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="float-right">
+                                                    <a href="phonebook-master.php" class="btn btn-primary">
+                                                        <i class="fas fa-plus"></i> Add
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="card-body">
                                         <div>
-                                            <div class="row">
+                                            <div class="row" style="margin-bottom: -50px;">
                                                 <div class="col-4 form-group">
                                                     <label>Category</label>
                                                     <select class="form-control select2" style="width: 100%;" id="categoryId">
@@ -70,23 +80,28 @@ include_once './include/common-constat.php';
                                                     </select>
                                                 </div>
                                             </div>
-                                            <table id="phoneBookMasterTable" class="table table-bordered table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Sr.No.</th>
-                                                        <th>Name</th>
-                                                        <th>Address</th>
-                                                        <th>Contact Number</th>
-                                                        <th>Designation</th>
-                                                        <th>Company Name</th>
-                                                        <th>Remark</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <table id="phoneBookMasterTable" class="table table-bordered table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Sr.No.</th>
+                                                                <th>Name</th>
+                                                                <th>Address</th>
+                                                                <th>Contact Number</th>
+                                                                <th>Designation</th>
+                                                                <th>Company Name</th>
+                                                                <th>Remark</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
 
-                                                </tbody>
-                                            </table>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
 

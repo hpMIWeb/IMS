@@ -72,22 +72,10 @@ $phoneBookMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                                                 </select>
                                             </div>
                                             <div class="col-4 form-group">
-
-                                                <div class="form-group">
-                                                    <label>Address</label>
-                                                    <input type="text" name="address" id="address" class="form-control"
-                                                        placeholder="Enter Address">
-                                                </div>
-                                            </div>
-                                            <div class="col-4 form-group">
                                                 <label>Name</label>
                                                 <input type="text" name="categoryName" id="categoryName"
                                                     class="form-control" placeholder="Enter Name">
                                             </div>
-                                        </div>
-                                        <div class="row">
-
-
                                             <div class="col-4 form-group">
 
                                                 <div class="form-group">
@@ -96,19 +84,7 @@ $phoneBookMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                                                         class="form-control" placeholder="designation">
                                                 </div>
                                             </div>
-                                            <div class="col-4 form-group">
-                                                <label>Company Name</label>
-                                                <input type="text" name="companyName" id="companyName"
-                                                    class="form-control" placeholder="Enter company Name">
-                                            </div>
-                                            <div class="col-4 form-group">
 
-                                                <div class="form-group">
-                                                    <label>Remark</label>
-                                                    <input type="text" name="remark" id="remark" class="form-control"
-                                                        placeholder="Remark">
-                                                </div>
-                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-4 form-group">
@@ -117,13 +93,40 @@ $phoneBookMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                                                     class="form-control allowOnlyDigit"
                                                     placeholder="Enter Contact Number" maxlength="12">
                                             </div>
+
+                                            <div class="col-4 form-group">
+                                                <label>Company Name</label>
+                                                <input type="text" name="companyName" id="companyName"
+                                                    class="form-control" placeholder="Enter company Name">
+                                            </div>
+                                            <div class="col-4 form-group">
+
+                                                <div class="form-group">
+                                                    <label>Address</label>
+                                                    <input type="text" name="address" id="address" class="form-control"
+                                                        placeholder="Enter Address">
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4 form-group">
+
+                                                <div class="form-group">
+                                                    <label>Remark</label>
+                                                    <input type="text" name="remark" id="remark" class="form-control"
+                                                        placeholder="Remark">
+                                                </div>
+                                            </div>
                                             <div class="col-4 form-group"></div>
                                             <div class="col-4 form-group ">
                                                 <div class="float-right" style="margin-top: 25px;">
                                                     <button type="button" id="addUpdatePhoneBookMasterBtn" name="submit"
                                                         class="btn btn-primary">Save</button>
-                                                    <button type="button" name="delete" class="btn btn-danger"
-                                                        onclick="resetFormFields()">Cancel</button>
+                                                    <a href="phonebook-master-list.php"
+                                                        class="btn btn-danger">Cancel</a>
                                                 </div>
                                             </div>
 
