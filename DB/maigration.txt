@@ -21,5 +21,33 @@ RENAME TO  `phone_book_master` ;
 ALTER TABLE `amc_master` 
 ADD COLUMN `customer_card_number` VARCHAR(45) NULL DEFAULT NULL AFTER `modified_at`;
 
-***********query 13-October-2023**********************
+*********** End query 12-October-2023 *************
 
+***********query 15-October-2023**********************
+ALTER TABLE `item_list` 
+ADD COLUMN `landing_cost_tax` DECIMAL(60,5) NULL DEFAULT 0 AFTER `landing_cost`,
+CHANGE COLUMN `opening_stock` `opening_stock` INT NULL DEFAULT 0 ,
+CHANGE COLUMN `minimum_stock_level` `minimum_stock_level` INT NULL DEFAULT 0 ,
+CHANGE COLUMN `purchase_basic_cost` `purchase_basic_cost` DECIMAL(60,5) NULL DEFAULT 0 ,
+CHANGE COLUMN `basic_selling_price` `basic_selling_price` DECIMAL(60,5) NULL DEFAULT 0 ,
+CHANGE COLUMN `landing_cost` `landing_cost` DECIMAL(60,5) NULL DEFAULT 0 ;
+
+
+ALTER TABLE `item_list` 
+ADD COLUMN `basic_selling_tax` DECIMAL(60,5) NULL DEFAULT 0 AFTER `basic_selling_price`,
+CHANGE COLUMN `basic_selling_price` `basic_selling_price` DECIMAL(60,5) NULL DEFAULT '0' ;
+
+
+CREATE TABLE `ims`.`item_user_allocation` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` VARCHAR(45) NULL DEFAULT 0,
+  `item_id` VARCHAR(45) NULL DEFAULT 0,
+  `allocate_qty` DECIMAL(60,5) NULL DEFAULT 0,
+  `created_by` INT(11) NULL DEFAULT 0,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `modified_by` INT(11) NULL DEFAULT 0,
+  `modified_at` TIMESTAMP NULL,
+  PRIMARY KEY (`id`));
+
+
+*********** End query 15-October-2023 *************

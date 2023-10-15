@@ -449,6 +449,8 @@ class Masters extends Config
             $minimumStockLevel = $this->handleSpecialCharacters($_POST['minimumStockLevel']);
             $purchaseBasicCost = $this->handleSpecialCharacters($_POST['purchaseBasicCost']);
             $basicSellingPrice = $this->handleSpecialCharacters($_POST['basicSellingPrice']);
+            $purchaseBasicCostTax = $this->handleSpecialCharacters($_POST['purchaseBasicCostTax']);
+            $basicSellingPriceTax = $this->handleSpecialCharacters($_POST['basicSellingPriceTax']);
             $landingCost = $this->handleSpecialCharacters($_POST['landingCost']);
             $mrp = $this->handleSpecialCharacters($_POST['mrp']);
             $itemId = $this->handleSpecialCharacters($_POST['itemId']);
@@ -456,8 +458,8 @@ class Masters extends Config
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
                 $query = $this::$masterConn->prepare("INSERT INTO `item_list`
-                 (`item_name`,`item_code`,`hsn_code`,`opening_stock`,`minimum_stock_level`,`purchase_basic_cost`,`basic_selling_price`,`landing_cost`,`mrp`,`created_by`) 
-                VALUES ('$itemName', '$itemCode','$hsnCode','$openingStock','$minimumStockLevel','$purchaseBasicCost','$basicSellingPrice', '$landingCost','$mrp','" . $this->userMasterId . "'); ");
+                 (`item_name`,`item_code`,`hsn_code`,`opening_stock`,`minimum_stock_level`,`purchase_basic_cost`,`basic_selling_price`,`basic_selling_tax`,`landing_cost`,`landing_cost_tax`,`mrp`,`created_by`) 
+                VALUES ('$itemName', '$itemCode','$hsnCode','$openingStock','$minimumStockLevel','$purchaseBasicCost','$basicSellingPrice', '$basicSellingPriceTax','$landingCost','$basicSellingPriceTax','$mrp','" . $this->userMasterId . "'); ");
             } elseif ($this->isNotNullOrEmptyOrZero($itemId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
                 $query = $this::$masterConn->prepare("UPDATE `item_list` SET `item_name` = '$itemName',`item_code`='$itemCode',`hsn_code`='$hsnCode',`opening_stock`='$openingStock',`minimum_stock_level`='$minimumStockLevel',`purchase_basic_cost`='$purchaseBasicCost',`basic_selling_price`='$basicSellingPrice',`landing_cost`='$landingCost',`mrp`='$mrp',`modified_by` = '" . $this->userMasterId . "' WHERE `id` ='$itemId'");
             }
