@@ -503,4 +503,38 @@ class Masters extends Config
             $this->exceptionData();
         }
     }
+
+    public function addUpdateItemAllocation()
+    {
+        try {
+            $itemAllocationId = $this->handleSpecialCharacters($_POST['itemAllocationId']);
+            $itemId = $this->handleSpecialCharacters($_POST['itemId']);
+            $userId = $this->handleSpecialCharacters($_POST['userId']);
+            $allocateQty = $this->handleSpecialCharacters($_POST['allocateQty']);
+
+            if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                $query = $this::$masterConn->prepare("INSERT INTO `ims`.`item_user_allocation`
+(
+`user_id`,
+`item_id`,
+`allocate_qty`,
+`created_by`,
+`created_at`)
+VALUES
+(
+'$userId',
+'$itemId',
+'$allocateQty',
+'" . $this->userMasterId . "',
+<{created_at: }>,
+<{modified_by: 0}>,
+<{modified_at: }>);
+");
+            } elseif ($this->isNotNullOrEmptyOrZero($itemAllocationId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
+                // $query = $this::$masterConn->prepare("UPDATE `amc_master` SET `customer_name`='$customerName',`address`='$address',`contact_number`='$contactNumber',`no_of_bathroom`='$noOfBathroom',`start_date`='$startDate',`end_date`='$endDate',`no_service`='$noOfService',`amc_charges`='$amcCharges',`remark`='$remark',`customer_card_number`='$customerCardNumber',`modified_by`='" . $this->userMasterId . "' WHERE id = '$amcMasterId'");
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData();
+        }
+    }
 }

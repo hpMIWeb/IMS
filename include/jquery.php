@@ -45,6 +45,9 @@
 
 
 <script>
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
     function toast_success(msg) {
         console.log(msg)
 

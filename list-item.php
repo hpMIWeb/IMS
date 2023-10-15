@@ -115,101 +115,102 @@ include_once './include/common-constat.php';
     ?>
 
     <script>
-        $(document).ready(function() {
-            getItemDetails();
-            resetDataTable('listItemTable');
-        });
-        // Add a click event handler for the "Delete" buttons
-        $('#listItemTable').on('click', '.delete-item', function(event) {
-            event.preventDefault(); // Prevent the default link behavior
+    $(document).ready(function() {
+        getItemDetails();
+        resetDataTable('listItemTable');
+    });
+    // Add a click event handler for the "Delete" buttons
+    $('#listItemTable').on('click', '.delete-item', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
 
-            const itemId = $(this).data(
-                'items-id'); // Get the item ID from the data attribute
+        const itemId = $(this).data(
+            'items-id'); // Get the item ID from the data attribute
 
-            deleteItems(itemId);
-        });
+        deleteItems(itemId);
+    });
 
 
-        function deleteItems(itemId) {
+    function deleteItems(itemId) {
 
-            let sendApiDataObj = {
-                '<?php echo systemProject ?>': 'Masters',
-                '<?php echo systemModuleFunction ?>': 'deleteItems',
-                'itemId': itemId,
-            };
-            APICallAjax(sendApiDataObj, function(response) {
-                if (response.responseCode == RESULT_OK) {
-                    toast_success(response.message);
-                    getItemDetails();
-                } else {
-                    toast_error(response.message);
-                }
-            });
-        }
-
-        $('#listItemTable').on('click', '.edit-item', function(event) {
-            event.preventDefault(); // Prevent the default link behavior
-            const itemId = $(this).data(
-                'items-id'); // Get the category ID from the data attribute
-            window.location = "create-item.php?id=" +
-                itemId
-        });
-
-        function getItemDetails() {
-
-            let sendApiDataObj = {
-                '<?php echo systemProject ?>': 'Masters',
-                '<?php echo systemModuleFunction ?>': 'getItemDetails',
-
-            };
-            APICallAjax(sendApiDataObj, function(response) {
-                $("#listItemTable").dataTable().fnDestroy();
-                $('#listItemTable tbody').html('');
-                if (response.responseCode == RESULT_OK) {
-
-                    let html = '';
-                    let count = 1;
-
-                    $.each(response.result.itemList, function(index, items) {
-                        html += '<tr>';
-                        html += '<td>' + count + '</td>';
-                        html += '<td>' + items.itemName + '</td>';
-                        html += '<td>' + items.minimumStockLevel + '</td>';
-                        html += '<td>' + items.mrp + '</td>';
-                        html += '<td class="text-center-block py-0 align-middle">';
-                        html += '<div class = "" > ';
-                        html +=
-                            ' <button  class="btn btn-warning btn-sm edit-item" data-items-id="' +
-                            items.id + '">';
-                        html += '<i class = "fas fa-pen" > </i>';
-                        html += '</button>';
-                        html +=
-                            ' <button class="btn btn-danger btn-sm delete-item" data-items-id="' +
-                            items.id + '">';
-                        html += '<i class = "fas fa-trash" > </i>';
-                        html += '</button>';
-                        html += '</div>';
-                        html += '</td > ';
-                        html += '</tr>';
-                        count++;
-
-                    });
-
-                    $('#listItemTable tbody').html(html);
-                    resetDataTable('listItemTable');
-                } else {
-                    resetDataTable('listItemTable');
-                    toast_error(response.message);
-                }
-            });
-            // Function to reset form fields
-            function resetFormFields() {
-                $('#itemName').val('');
-                $('#minimumStockLevel').val('');
-                $('#mrp').val('');
-                $('#action').val('add');
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'deleteItems',
+            'itemId': itemId,
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+                toast_success(response.message);
+                getItemDetails();
+            } else {
+                toast_error(response.message);
             }
-        }
+        });
+    }
+
+    $('#listItemTable').on('click', '.edit-item', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        const itemId = $(this).data(
+            'items-id'); // Get the category ID from the data attribute
+        window.location = "create-item.php?id=" +
+            itemId
+    });
+
+    function getItemDetails() {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getItemDetails',
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            $("#listItemTable").dataTable().fnDestroy();
+            $('#listItemTable tbody').html('');
+            if (response.responseCode == RESULT_OK) {
+
+                let html = '';
+                let count = 1;
+
+                $.each(response.result.itemList, function(index, items) {
+                    html += '<tr>';
+                    html += '<td>' + count + '</td>';
+                    html += '<td>' + items.itemName + '</td>';
+                    html += '<td>' + items.minimumStockLevel + '</td>';
+                    html += '<td>' + items.mrp + '</td>';
+                    html += '<td class="text-center-block py-0 align-middle">';
+                    html += '<div class = "" > ';
+                    html +=
+                        ' <button  class="btn btn-warning btn-sm edit-item" data-items-id="' +
+                        items.id + '">';
+                    html += '<i class = "fas fa-pen" > </i>';
+                    html += '</button>';
+                    html +=
+                        ' <button class="btn btn-danger btn-sm delete-item" data-items-id="' +
+                        items.id + '">';
+                    html += '<i class = "fas fa-trash" > </i>';
+                    html += '</button>';
+                    html += '</div>';
+                    html += '</td > ';
+                    html += '</tr>';
+                    count++;
+
+                });
+
+                $('#listItemTable tbody').html(html);
+                resetDataTable('listItemTable');
+            } else {
+                resetDataTable('listItemTable');
+                toast_error(response.message);
+            }
+        });
+
+    }
+    // Function to reset form fields
+    function resetFormFields() {
+        $('#itemName').val('');
+        $('#minimumStockLevel').val('');
+        $('#mrp').val('');
+        $('#action').val('add');
+    }
     </script>
 </body>
 

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once './include/session-check.php';
+include_once './include/APICALL.php';
 include_once './include/common-constat.php';
 
 
@@ -59,55 +60,45 @@ include_once './include/common-constat.php';
 
                                 <!-- /.row -->
                                 <div class="row">
-
-                                    <div class="col-3">
-                                        <div class="form-group">
-                                            <label>Username</label>
-                                            <select name=" item_name" id="items" class="form-control select2" style="width: 100%; ">
-                                                <option selected="selected">Select username </option>
-                                                <option>user 1</option>
-                                                <option>user 2</option>
-                                                <option>user 3</option>
-                                                <option>user 4</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Item Name</label>
-                                            <select name="item_qty" id="itemsqty" class="form-control select2" style="width: 100%; ">
+                                            <select name="itemId" id="itemId" class="form-control select2">
                                                 <option selected="selected">Select Item</option>
-                                                <option>Item 1</option>
-                                                <option>Item 2</option>
-                                                <option>Item 3</option>
-                                                <option>Item 4</option>
                                             </select>
                                         </div>
-
-
                                     </div>
+
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label>User Name</label>
+                                            <select name="userId" id="userId" class="form-control select2">
+                                                <option selected="selected">Select username </option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <div class="col-2">
                                         <div class="form-group">
                                             <label>Item Qty</label>
-                                            <input type="text" name="item_qty" value="1" disabled class="form-control" placeholder="Enter Qty">
+                                            <input type="text" name="itemQty" id="itemQty" disabled
+                                                class="form-control itemQty" placeholder="Enter Qty">
                                         </div>
-
-
                                     </div>
                                     <div class="col-2">
                                         <div class="form-group">
                                             <label>Total</label>
-                                            <input type="text" name="item_qty" class="form-control" placeholder="Total">
-                                            <span>Qty You have : - 5</span>
+                                            <input type="text" name="allocatedQty" class="form-control allocatedQty"
+                                                placeholder="Total">
+                                            <span>Qty You have : - <p id="userExistingQty"></p></span>
                                         </div>
-
-
                                     </div>
 
                                     <div class="col-1  text-center mt-4 ">
                                         <div class="form-group">
-                                            <button type="button" name=" assign " class="btn btn-primary mt-2">Assign</button>
+                                            <button type="button" name=" assign "
+                                                class="btn btn-primary mt-2">Assign</button>
                                         </div>
 
 
@@ -151,22 +142,77 @@ include_once './include/common-constat.php';
 
     ?>
     <script>
-        function add() {
+    $(document).ready(function() {
+        getItemDetails();
+        getUsers();
+
+    });
+
+    function getItemDetails() {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getItemDetails',
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+
+            if (response.responseCode == RESULT_OK) {
+
+                let html = '<option selected="selected">Select Item</option>';
+
+                $.each(response.result.itemList, function(index, items) {
+                    html += '<option value="' + items.id + '">' + items.itemName + '</option>';
+
+                });
+
+                $('#itemId').html(html)
+            }
+        });
+
+    }
+
+    function getUsers() {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Sessions',
+            '<?php echo systemModuleFunction ?>': 'getUserDetails',
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+
+                let html = '<option selected="selected">Select username </option>';
+                $.each(response.result.user, function(index, user) {
+
+                    html += '<option value="' + user.id + '">' + user.firstName + " " + user.lastName +
+                        '</option>';
+                });
+                $('#userId').html(html)
+            }
+        });
+    }
+
+    $("#itemId").change(function() {
+        let itemId = $(this).val();
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getItemDetails',
+            'itemId': itemId
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+
+            if (response.responseCode == RESULT_OK) {
+                $.each(response.result.itemList, function(index, items) {
+                    console.log(items.openingStock)
+                    $('#itemQty').val(items.openingStock)
+                });
 
 
-            let html = "<tr>"
-            html += "<td>jbjk</td>"
-
-            html +=
-                "<input type='text' class='form-group select 2' id='items' name='items_name' value='' placeholder='Select item' />"
-            html +=
-                "<input type='text' class='form-group select 2' id='itemsqty' name='items_qty' value='' placeholder='Select qty' />"
-            html += "<td>jbjkb</td>"
-            html += "</tr>"
-
-            $('#itemTable tbody').append(html)
-
-        }
+            }
+        });
+    });
     </script>
 </body>
 
