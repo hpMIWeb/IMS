@@ -55,6 +55,8 @@ include_once './include/common-constat.php';
                     <div class="card card-default">
                         <form method="POST" action="">
 
+                            <input type="hidden" id="action" value="add" />
+                            <input type="hidden" id="itemAllocationId" value="" />
                             <!-- /.card-header -->
                             <div class="card-body">
 
@@ -90,14 +92,14 @@ include_once './include/common-constat.php';
                                         <div class="form-group">
                                             <label>Total</label>
                                             <input type="text" name="allocatedQty" class="form-control allocatedQty"
-                                                placeholder="Total">
+                                                placeholder="Total" id="allocatedQty">
                                             <span>Qty You have : - <p id="userExistingQty"></p></span>
                                         </div>
                                     </div>
 
                                     <div class="col-1  text-center mt-4 ">
                                         <div class="form-group">
-                                            <button type="button" name=" assign "
+                                            <button type="button" name="assign" id="assign"
                                                 class="btn btn-primary mt-2">Assign</button>
                                         </div>
 
@@ -193,6 +195,28 @@ include_once './include/common-constat.php';
         });
     }
 
+    function getUserAllocatedItemList() {
+        let itemId = $("$userId").val();
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getItemDetails',
+            'itemId': itemId
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+
+            if (response.responseCode == RESULT_OK) {
+                $.each(response.result.itemList, function(index, items) {
+                    console.log(items.openingStock)
+                    $('#itemQty').val(items.openingStock)
+                });
+
+
+            }
+        });
+
+    }
+
     $("#itemId").change(function() {
         let itemId = $(this).val();
         let sendApiDataObj = {
@@ -212,6 +236,72 @@ include_once './include/common-constat.php';
 
             }
         });
+    });
+
+    $("#allocatedQty").change(function() {
+        let itemQty = parseFloat($("#itemQty").val());
+        if (parseFloat($(this).val()) > itemQty) {
+            toast_error("Enter Qty is Greater than to item Qty Please change it .");
+            $(this).focus();
+            return false;
+        }
+
+    });
+
+    $('#assign').on('click', function(event) {
+        let itemQty = parseFloat($("#itemQty").val());
+        let allocatedQty = parseFloat($("#allocatedQty").val());
+        let userId = $("#userId").val()
+        let itemId = $("#itemId").val()
+
+        if (userId === '') {
+            toast_error("Please select user.");
+            $("#userId").focus();
+            return false;
+
+        }
+
+        if (itemId === '') {
+            toast_error("Please select item.");
+            $("#itemId").focus();
+            return false;
+
+        }
+
+        if (allocatedQty === '' || allocatedQty == '0') {
+            toast_error("Please enter qty.");
+            $("#allocatedQty").focus();
+            return false;
+
+        }
+
+        if (allocatedQty > itemQty) {
+            toast_error("Enter Qty is Greater than to item Qty Please change it .");
+            $(this).focus();
+            return false;
+        }
+
+
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'addUpdateItemAllocation',
+            'itemId': itemId,
+            'userId': userId,
+            'allocatedQty': allocatedQty,
+            'action': $('#action').val(),
+        };
+
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+                toast_success(response.message);
+                //  window.location = "list-item.php";
+                //resetFormFields()
+            } else {
+                toast_error(response.message);
+            }
+        });
+
     });
     </script>
 </body>

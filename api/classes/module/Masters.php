@@ -510,31 +510,78 @@ class Masters extends Config
             $itemAllocationId = $this->handleSpecialCharacters($_POST['itemAllocationId']);
             $itemId = $this->handleSpecialCharacters($_POST['itemId']);
             $userId = $this->handleSpecialCharacters($_POST['userId']);
-            $allocateQty = $this->handleSpecialCharacters($_POST['allocateQty']);
+            $allocateQty = $this->handleSpecialCharacters($_POST['allocatedQty']);
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                $query = $this::$masterConn->prepare("INSERT INTO `ims`.`item_user_allocation`
-(
-`user_id`,
-`item_id`,
-`allocate_qty`,
-`created_by`,
-`created_at`)
-VALUES
-(
-'$userId',
-'$itemId',
-'$allocateQty',
-'" . $this->userMasterId . "',
-<{created_at: }>,
-<{modified_by: 0}>,
-<{modified_at: }>);
-");
+                $query = $this::$masterConn->prepare("INSERT INTO `item_user_allocation` (`user_id`,`item_id`,`allocate_qty`,`created_by`,`created_at`) 
+                VALUES ('$userId','$itemId','$allocateQty','" . $this->userMasterId . "','".$this->getDateTime()."');");
             } elseif ($this->isNotNullOrEmptyOrZero($itemAllocationId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
                 // $query = $this::$masterConn->prepare("UPDATE `amc_master` SET `customer_name`='$customerName',`address`='$address',`contact_number`='$contactNumber',`no_of_bathroom`='$noOfBathroom',`start_date`='$startDate',`end_date`='$endDate',`no_service`='$noOfService',`amc_charges`='$amcCharges',`remark`='$remark',`customer_card_number`='$customerCardNumber',`modified_by`='" . $this->userMasterId . "' WHERE id = '$amcMasterId'");
+             }
+
+             var_dump($query);
+            if ($query->execute()) {
+
+                    $updateItemQty = $this::$masterConn->prepare("UPDATE item_list SET opening_stock = opening_stock - $allocateQty WHERE id = '$itemId';");
+                  var_dump($updateItemQty);
+                    if ($updateItemQty->execute()) {
+                        
+                    }
+                    if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                        $this->successData("Item Assign successfully.");
+                    } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
+                        $this->successData("Item Update successfully.");
+                    }
+            } else {
+                $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
             }
         } catch (PDOException $e) {
-            $this->exceptionData();
+            $this->exceptionData($e);
+        }
+    }
+
+     public function getItemAllocationDetails()
+    {
+        try {
+            $itemAllocationId = $this->handleSpecialCharacters($_POST['itemAllocationId']);
+
+            $itemId = $this->handleSpecialCharacters($_POST['itemId']);
+            $userId = $this->handleSpecialCharacters($_POST['userId']);
+
+
+            $appendQuery = "";
+
+            if($this->isNotNullOrEmptyOrZero($userId)){
+                $appendQuery  = " WHERE user_id = '$userId' ";
+            }
+
+            
+            if($this->isNotNullOrEmptyOrZero($userId) && $this->isNotNullOrEmptyOrZero($itemId)){
+                $appendQuery  = " WHERE user_id = '$userId' AND item_id = '$itemId' ";
+            }
+
+            $query = $this::$masterConn->prepare("SELECT * FROM `item_user_allocation` $appendQuery");
+           if ($query->execute()) {
+                if ($query->rowCount() > 0) {
+                    $this->successData();
+                    foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                        $this->data[] = array(
+                            'id' => $this->convertNullOrEmptyStringToZero($row['id']),
+                            'itemId' => $this->convertNullToEmptyString($row['item_id']),
+                            'userId' => $this->convertNullToEmptyString($row['user_id']),
+                            'allocateQty' => $this->convertNullOrEmptyStringToZero($row['allocate_qty']),
+                            
+                        );
+                    }
+                    $this::$result = array('itemList' => $this->data);
+                } else {
+                    $this->noData("No any Item");
+                }
+            } else {
+                $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData($e);
         }
     }
 }
