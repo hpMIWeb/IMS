@@ -3,11 +3,10 @@ $Base_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 /*============================= Start :Master Database Connection =============================== */
 
 if (!in_array('localhost', explode('/', $Base_link))) {
-
-    $master_servername = "localhost";
-    $master_username = "husfilms_rmpho";
-    $master_password = 'rmpho@2020';
-    $master_db = "husfilms_rmphotoshoot";
+   $master_servername = "localhost";
+    $master_username = "husfilms_IMS";
+    $master_password = 'Um@ng_IMS@2023';
+    $master_db = "husfilms_IMS";
 } else {
 
     // local connection

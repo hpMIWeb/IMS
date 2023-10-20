@@ -17,7 +17,7 @@ class Config
      * 3) TestServer = Test Server Config set
      */
 
-    const currentModeServer = 'Local'; /* Set User Connection*/
+    const currentModeServer = 'Server'; /* Set User Connection*/
     const currentModeServerConfig = array(
         'Local' => array(
             'baseUrl' => 'http://localhost/ims/',
@@ -27,11 +27,11 @@ class Config
             'masterConnDBName' => 'ims'
         ),
         'Server' => array(
-            'baseUrl' => 'http://68.178.170.217/',
+             'baseUrl' => 'https://miwebsolution.com/ims/',
             'masterConnServer' => 'localhost',
-            'masterConnUsername' => 'husfilms_rmpho',
-            'masterConnPassword' => 'rmpho@2020',
-            'masterConnDBName' => 'husfilms_rmphotoshoot'
+            'masterConnUsername' => 'husfilms_IMS',
+            'masterConnPassword' => 'Um@ng_IMS@2023',
+            'masterConnDBName' => 'husfilms_IMS'
         )
     );
 
