@@ -516,14 +516,14 @@ class Masters extends Config
                 $query = $this::$masterConn->prepare("INSERT INTO `item_user_allocation` (`user_id`,`item_id`,`allocate_qty`,`created_by`,`created_at`) 
                 VALUES ('$userId','$itemId','$allocateQty','" . $this->userMasterId . "','".$this->getDateTime()."');");
             } elseif ($this->isNotNullOrEmptyOrZero($itemAllocationId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
-                // $query = $this::$masterConn->prepare("UPDATE `amc_master` SET `customer_name`='$customerName',`address`='$address',`contact_number`='$contactNumber',`no_of_bathroom`='$noOfBathroom',`start_date`='$startDate',`end_date`='$endDate',`no_service`='$noOfService',`amc_charges`='$amcCharges',`remark`='$remark',`customer_card_number`='$customerCardNumber',`modified_by`='" . $this->userMasterId . "' WHERE id = '$amcMasterId'");
+                 $query = $this::$masterConn->prepare("UPDATE `item_user_allocation` SET `allocate_qty`='$allocateQty',`modified_by`='" . $this->userMasterId . "' WHERE id = '$itemAllocationId'");
              }
 
-             var_dump($query);
+//             var_dump($query);
             if ($query->execute()) {
 
                     $updateItemQty = $this::$masterConn->prepare("UPDATE item_list SET opening_stock = opening_stock - $allocateQty WHERE id = '$itemId';");
-                  var_dump($updateItemQty);
+                //  var_dump($updateItemQty);
                     if ($updateItemQty->execute()) {
                         
                     }
@@ -552,23 +552,24 @@ class Masters extends Config
             $appendQuery = "";
 
             if($this->isNotNullOrEmptyOrZero($userId)){
-                $appendQuery  = " WHERE user_id = '$userId' ";
+                $appendQuery  = " WHERE `item_user_allocation`.user_id = '$userId' ";
             }
 
             
             if($this->isNotNullOrEmptyOrZero($userId) && $this->isNotNullOrEmptyOrZero($itemId)){
-                $appendQuery  = " WHERE user_id = '$userId' AND item_id = '$itemId' ";
+                $appendQuery  = " WHERE `item_user_allocation`.user_id = '$userId' AND `item_user_allocation`.item_id = '$itemId' ";
             }
 
-            $query = $this::$masterConn->prepare("SELECT * FROM `item_user_allocation` $appendQuery");
+            $query = $this::$masterConn->prepare("SELECT `item_user_allocation`.*,`item_list`.`item_name` AS itemName FROM `item_user_allocation` LEFT JOIN `item_list` ON `item_list`.id=`item_user_allocation`.item_id $appendQuery");
            if ($query->execute()) {
                 if ($query->rowCount() > 0) {
                     $this->successData();
                     foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
                         $this->data[] = array(
                             'id' => $this->convertNullOrEmptyStringToZero($row['id']),
-                            'itemId' => $this->convertNullToEmptyString($row['item_id']),
-                            'userId' => $this->convertNullToEmptyString($row['user_id']),
+                            'itemId' => $this->convertNullOrEmptyStringToZero($row['item_id']),
+                            'itemName' => $this->convertNullToEmptyString($row['itemName']),
+                            'userId' => $this->convertNullOrEmptyStringToZero($row['user_id']),
                             'allocateQty' => $this->convertNullOrEmptyStringToZero($row['allocate_qty']),
                             
                         );

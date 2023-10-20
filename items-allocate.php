@@ -53,67 +53,73 @@ include_once './include/common-constat.php';
                 <div class="container-fluid">
                     <!-- SELECT2 EXAMPLE -->
                     <div class="card card-default">
-                        <form method="POST" action="">
+                        <input type="hidden" id="action" value="add" />
+                        <input type="hidden" id="itemAllocationId" value="" />
+                        <input type="hidden" id="userQty" value="0" />
+                        <!-- /.card-header -->
+                        <div class="card-body">
 
-                            <input type="hidden" id="action" value="add" />
-                            <input type="hidden" id="itemAllocationId" value="" />
-                            <!-- /.card-header -->
-                            <div class="card-body">
+                            <!-- /.row -->
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>User Name</label>
+                                        <select name="userId" id="userId" class="form-control select2">
+                                            <option selected="selected">Select username </option>
 
-                                <!-- /.row -->
-                                <div class="row">
-                                    <div class="col-3">
-                                        <div class="form-group">
-                                            <label>Item Name</label>
-                                            <select name="itemId" id="itemId" class="form-control select2">
-                                                <option selected="selected">Select Item</option>
-                                            </select>
-                                        </div>
+                                        </select>
                                     </div>
-
-                                    <div class="col-3">
-                                        <div class="form-group">
-                                            <label>User Name</label>
-                                            <select name="userId" id="userId" class="form-control select2">
-                                                <option selected="selected">Select username </option>
-
-                                            </select>
-                                        </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Item Name</label>
+                                        <select name="itemId" id="itemId" class="form-control select2">
+                                            <option selected="selected">Select Item</option>
+                                        </select>
                                     </div>
-
-                                    <div class="col-2">
-                                        <div class="form-group">
-                                            <label>Item Qty</label>
-                                            <input type="text" name="itemQty" id="itemQty" disabled
-                                                class="form-control itemQty" placeholder="Enter Qty">
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="form-group">
-                                            <label>Total</label>
-                                            <input type="text" name="allocatedQty" class="form-control allocatedQty"
-                                                placeholder="Total" id="allocatedQty">
-                                            <span>Qty You have : - <p id="userExistingQty"></p></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-1  text-center mt-4 ">
-                                        <div class="form-group">
-                                            <button type="button" name="assign" id="assign"
-                                                class="btn btn-primary mt-2">Assign</button>
-                                        </div>
-
-
-                                    </div>
-
-
                                 </div>
 
+                                <div class="col-1">
+                                    <div class="form-group">
+                                        <label>Item Qty</label>
+                                        <input type="text" name="itemQty" id="itemQty" disabled
+                                            class="form-control itemQty" placeholder="Item Qty">
+                                    </div>
+                                </div>
+
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label>Total</label>
+                                        <input type="text" name="allocatedQty" class="form-control allocatedQty"
+                                            placeholder="Allocate Qty" id="allocatedQty">
+                                        <span>Qty You have : - <p id="userExistingQty"></p></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-1  text-center mt-4 ">
+                                    <div class="form-group">
+                                        <button type="button" name="assign" id="assign"
+                                            class="btn btn-primary mt-2">Assign</button>
+                                    </div>
+                                </div>
                             </div>
-
-
+                            <hr>
+                            <div class="row">
+                                <div class="col-12">
+                                    <table id="listItemTable" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr. No.</th>
+                                                <th>Item Name</th>
+                                                <th>Item Qty</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    </form>
                 </div>
 
         </div>
@@ -147,7 +153,7 @@ include_once './include/common-constat.php';
     $(document).ready(function() {
         getItemDetails();
         getUsers();
-
+        resetDataTable('listItemTable');
     });
 
     function getItemDetails() {
@@ -196,25 +202,38 @@ include_once './include/common-constat.php';
     }
 
     function getUserAllocatedItemList() {
-        let itemId = $("$userId").val();
+        let userId = $("#userId").val();
         let sendApiDataObj = {
             '<?php echo systemProject ?>': 'Masters',
-            '<?php echo systemModuleFunction ?>': 'getItemDetails',
-            'itemId': itemId
+            '<?php echo systemModuleFunction ?>': 'getItemAllocationDetails',
+            'userId': userId
 
         };
         APICallAjax(sendApiDataObj, function(response) {
-
+            $("#listItemTable").dataTable().fnDestroy();
+            $('#listItemTable tbody').html('');
             if (response.responseCode == RESULT_OK) {
+
+                let html = '';
+                let count = 1;
+
                 $.each(response.result.itemList, function(index, items) {
-                    console.log(items.openingStock)
-                    $('#itemQty').val(items.openingStock)
+                    html += '<tr>';
+                    html += '<td>' + count + '</td>';
+                    html += '<td>' + items.itemName + '</td>';
+                    html += '<td>' + items.allocateQty + '</td>';
+                    html += '</tr>';
+                    count++;
+
                 });
 
-
+                $('#listItemTable tbody').html(html);
+                resetDataTable('listItemTable');
+            } else {
+                resetDataTable('listItemTable');
+                toast_error(response.message);
             }
         });
-
     }
 
     $("#itemId").change(function() {
@@ -236,6 +255,36 @@ include_once './include/common-constat.php';
 
             }
         });
+        getUserItemData();
+    });
+
+    function getUserItemData() {
+        let userId = $("#userId").val();
+        let itemId = $("#itemId").val();
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getItemAllocationDetails',
+            'userId': userId,
+            'itemId': itemId
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+
+            if (response.responseCode == RESULT_OK) {
+
+                $.each(response.result.itemList, function(index, items) {
+                    $("#userQty").val(items.allocateQty);
+                    $("#userExistingQty").html(items.allocateQty);
+                    $("#itemAllocationId").val(items.id);
+                    $("#action").val("edit");
+                });
+            }
+        });
+    }
+    $("#userId").change(function() {
+        if ($(this).val() !== '') {
+            getUserAllocatedItemList()
+        }
     });
 
     $("#allocatedQty").change(function() {
@@ -251,9 +300,16 @@ include_once './include/common-constat.php';
     $('#assign').on('click', function(event) {
         let itemQty = parseFloat($("#itemQty").val());
         let allocatedQty = parseFloat($("#allocatedQty").val());
+        let userQty = parseFloat($("#userQty").val());
         let userId = $("#userId").val()
         let itemId = $("#itemId").val()
+        let action = $("#action").val()
+        let itemAllocationId = $("#itemAllocationId").val()
 
+
+        if (action === 'edit') {
+            allocatedQty = allocatedQty + userQty;
+        }
         if (userId === '') {
             toast_error("Please select user.");
             $("#userId").focus();
@@ -283,6 +339,7 @@ include_once './include/common-constat.php';
 
 
 
+
         let sendApiDataObj = {
             '<?php echo systemProject ?>': 'Masters',
             '<?php echo systemModuleFunction ?>': 'addUpdateItemAllocation',
@@ -290,19 +347,32 @@ include_once './include/common-constat.php';
             'userId': userId,
             'allocatedQty': allocatedQty,
             'action': $('#action').val(),
+            'itemAllocationId': itemAllocationId,
         };
 
         APICallAjax(sendApiDataObj, function(response) {
             if (response.responseCode == RESULT_OK) {
                 toast_success(response.message);
-                //  window.location = "list-item.php";
-                //resetFormFields()
+                getUserAllocatedItemList();
+                resetFormFields()
             } else {
                 toast_error(response.message);
             }
         });
 
     });
+
+    function resetFormFields() {
+        $("#itemId").val('').trigger('change');
+        $("#action").val('add')
+        $("#allocatedQty").val('0')
+        $("#itemAllocationId").val('0')
+        $("#itemQty").val(0);
+        $("#userQty").val(0);
+        $("#userExistingQty").html('');
+        $("#itemAllocationId").val(0);
+
+    }
     </script>
 </body>
 
