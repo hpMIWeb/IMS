@@ -17,7 +17,7 @@ class Config
      * 3) TestServer = Test Server Config set
      */
 
-    const currentModeServer = 'Server'; /* Set User Connection*/
+    const currentModeServer = 'Local'; /* Set User Connection*/
     const currentModeServerConfig = array(
         'Local' => array(
             'baseUrl' => 'http://localhost/ims/',
@@ -44,14 +44,6 @@ class Config
     protected static $responseCode = "0"; /* 0-no record, 1-record, 2-force logout */
     protected static $message = "Fail"; /* response message */
     protected static $result = ""; /* response record */
-    protected static $companyMasterConnServer = "";/* response all data */
-
-    /* firebase fcm */
-    protected static $companyMasterConnUsername = "";
-    protected static $companyMasterConnPassword = "";
-
-    /* base urls */
-    protected static $companyMasterConnDBName = "";
     protected static $companyMasterId = "0";
     protected static $companyMasterKey = "";
     protected static $callFrom = "";
@@ -64,7 +56,6 @@ class Config
     protected $fcmUrl = "";
 
     /* Company Setting */
-    protected $fcmServerKey = ""; //key of firebase
     protected $baseUrlAttachment = self::baseUrl . "assets/attachment/";
     protected $baseUrlProject = self::baseUrl . "project";
     protected $masterConnServer = self::currentModeServerConfig[self::currentModeServer]['masterConnServer'];
@@ -133,7 +124,6 @@ class Config
 
     protected $ignoreSMF = ['login', 'refreshToken', 'forgotPassword', 'resetPassword'];
     protected $isMaster = false;
-    protected $isAdmin = false;
     public function __construct($HEADERS)
     {
 
