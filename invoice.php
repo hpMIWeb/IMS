@@ -73,32 +73,32 @@ include_once './include/common-constat.php';
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Client's Name/Company Name</label>
-                                            <input type="text" name="clientName"  id="clientName" class="form-control"
-                                                placeholder="Enter Name or Company Name"/>
-                                            <input type="hidden" id="action" name="action"/>
-                                            <input type="hidden" id="gstPercentage" name="gstPercentage"/>
-                                            <input type="hidden" id="invoiceId" name="invoiceId"/>
+                                            <input type="text" name="clientName" id="clientName" class="form-control"
+                                                placeholder="Enter Name or Company Name" />
+                                            <input type="hidden" id="action" name="action" />
+                                            <input type="hidden" id="gstPercentage" name="gstPercentage" />
+                                            <input type="hidden" id="invoiceId" name="invoiceId" />
                                         </div>
                                     </div>
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Contact Number</label>
-                                            <input type="text" name="contactNumber" id="contactNumber" class="form-control"
-                                                placeholder="Enter Client's Contact Number">
+                                            <input type="text" name="contactNumber" id="contactNumber"
+                                                class="form-control" placeholder="Enter Client's Contact Number">
                                         </div>
                                     </div>
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Email</label>
-                                            <input type="text" name="email" id="email"
-                                                class="form-control" placeholder="Enter Client's Email Id">
+                                            <input type="text" name="email" id="email" class="form-control"
+                                                placeholder="Enter Client's Email Id">
                                         </div>
 
                                     </div>
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>GST No</label>
-                                            <input type="text" name="clientGST"  id="clientGST" class="form-control"
+                                            <input type="text" name="clientGST" id="clientGST" class="form-control"
                                                 placeholder="Enter GST Number">
                                         </div>
                                     </div>
@@ -189,8 +189,9 @@ include_once './include/common-constat.php';
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label>Total Discount:</label>
-                                                    <input type="text" name="invoiceTotalDiscountAmount" id="invoiceTotalDiscountAmount"
-                                                        class="form-control" placeholder="Discount" disabled>
+                                                    <input type="text" name="invoiceTotalDiscountAmount"
+                                                        id="invoiceTotalDiscountAmount" class="form-control"
+                                                        placeholder="Discount" disabled>
 
                                                 </div>
                                             </div>
@@ -199,7 +200,8 @@ include_once './include/common-constat.php';
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label>Apply GST:</label>
-                                                    <select name="gstType"  id="gstType" class="form-control select2 gstType">
+                                                    <select name="gstType" id="gstType"
+                                                        class="form-control select2 gstType">
                                                         <option value="notApply">Not Apply</option>
                                                         <option value="applyGST">Apply GST</option>
                                                         <option value="applyIGST">Apply IGST</option>
@@ -213,7 +215,7 @@ include_once './include/common-constat.php';
                                                 <div class="form-group">
                                                     <label>GST Amount:</label>
                                                     <input type="text" name="invoiceGSTAmount" id="invoiceGSTAmount"
-                                                        class="form-control" placeholder="GST" disabled >
+                                                        class="form-control" placeholder="GST" disabled>
 
                                                 </div>
                                             </div>
@@ -223,7 +225,7 @@ include_once './include/common-constat.php';
                                                 <div class="form-group">
                                                     <label>Round off:</label>
                                                     <input type="text" name="invoiceRoundOff" id="invoiceRoundOff"
-                                                        class="form-control" placeholder="Round off"  >
+                                                        class="form-control" placeholder="Round off">
 
                                                 </div>
                                             </div>
@@ -243,7 +245,8 @@ include_once './include/common-constat.php';
 
                                 <div class="row">
                                     <div class="col-3">
-                                        <button type="button" name="submit"  id="addUpdateInvoiceBtn" class="btn btn-primary">
+                                        <button type="button" name="submit" id="addUpdateInvoiceBtn"
+                                            class="btn btn-primary">
                                             Save</button>
                                         <button type="button" name="share" class="btn btn-danger">Cancel</button>
                                     </div>
@@ -359,13 +362,13 @@ include_once './include/common-constat.php';
             let qty = parseFloat(row.find('[data-field="qty"]').val()) || 0;
             let discount = parseFloat(row.find('[data-field="discount"]').val()) || 0;
             let total = (rate * qty) - discount;
-            let itemDetails = {
-                "itemsId"=>displayViewAmountDigit(parseFloat(row.find('[data-field="rate"]').val()))
-        }
+            // let itemDetails = {
+            //     "itemsId": displayViewAmountDigit(parseFloat(row.find('[data-field="rate"]').val()))
+            // }
 
             row.find('[data-field="total"]').val(total);
-            totalInvoiceAmount = totalInvoiceAmount+total;
-            totalDiscountAmount = totalDiscountAmount+discount;
+            totalInvoiceAmount = totalInvoiceAmount + total;
+            totalDiscountAmount = totalDiscountAmount + discount;
         });
     });
 
@@ -374,7 +377,7 @@ include_once './include/common-constat.php';
 
         let itemId = $("#itemId").val();
 
-        if(itemId!==''){
+        if (itemId !== '') {
             let sendApiDataObj = {
                 '<?php echo systemProject ?>': 'Masters',
                 '<?php echo systemModuleFunction ?>': 'getItemDetails',
@@ -392,25 +395,35 @@ include_once './include/common-constat.php';
 
                         html += "<tr>";
                         html += "<td>" + srNo + "</td>";
-                        html += "<td>"+item.itemName+"</td>";
+                        html += "<td>" + item.itemName + "</td>";
                         html += "<td>";
                         html += "<input type='text' class='form-control' id='itemsQty" + srNo +
-                            "'  value = '"+displayViewAmountDigit(1)+"' placeholder='Qty' data-field='qty' />"
-                        html += "<input type='hidden' id='itemsId_" + srNo + "' value='"+item.id+"'/>";
+                            "'  value = '" + displayViewAmountDigit(1) +
+                            "' placeholder='Qty' data-field='qty' />"
+                        html += "<input type='hidden' id='itemsId_" + srNo + "' value='" + item.id +
+                            "'/>";
                         html += "</td>";
 
                         html += "<td>";
-                        html += "<input type='text' class='form-control allowOnlyDigit' id='itemsRate_" + srNo +
-                            "' value = '"+displayViewAmountDigit(item.mrp)+"' placeholder = 'Rate'  data-field='rate'/>";
+                        html +=
+                            "<input type='text' class='form-control allowOnlyDigit' id='itemsRate_" +
+                            srNo +
+                            "' value = '" + displayViewAmountDigit(item.mrp) +
+                            "' placeholder = 'Rate'  data-field='rate'/>";
                         html += "</td>";
 
                         html += "<td>";
-                        html += "<input type='text' class='form-control allowOnlyDigit' id='itemsDiscount_" + srNo +
-                            "' value = '"+displayViewAmountDigit(0)+"' placeholder = 'items Discount' data-field='discount' />";
+                        html +=
+                            "<input type='text' class='form-control allowOnlyDigit' id='itemsDiscount_" +
+                            srNo +
+                            "' value = '" + displayViewAmountDigit(0) +
+                            "' placeholder = 'items Discount' data-field='discount' />";
                         html += "</td>";
                         html += "<td>";
-                        html += "<input type='text' class='form-control allowOnlyDigit' id='total_" + srNo +
-                            "' value = ''"+displayViewAmountDigit(1)+"' placeholder = 'items Discount' disabled  data-field='total'/>";
+                        html += "<input type='text' class='form-control allowOnlyDigit' id='total_" +
+                            srNo +
+                            "' value = ''" + displayViewAmountDigit(1) +
+                            "' placeholder = 'items Discount' disabled  data-field='total'/>";
                         html += "</td>";
 
                         html +=
@@ -423,7 +436,7 @@ include_once './include/common-constat.php';
                 }
                 updateTableTotals();
             });
-        }else{
+        } else {
             toast_error("Please select any item.");
         }
         $("#itemId").val("").trigger("change");
@@ -443,7 +456,7 @@ include_once './include/common-constat.php';
     }
 
     function updateTableTotals() {
-        let totalInvoiceAmount =  parseFloat(displayViewAmountDigit(0));
+        let totalInvoiceAmount = parseFloat(displayViewAmountDigit(0));
         let totalDiscountAmount = parseFloat(displayViewAmountDigit(0));
         let invoiceNetAmount = parseFloat(displayViewAmountDigit(0));
         let gstType = $("#gstType").val();
@@ -458,18 +471,19 @@ include_once './include/common-constat.php';
             let total = (rate * qty) - discount;
 
             row.find('[data-field="total"]').val(total);
-            totalInvoiceAmount = totalInvoiceAmount+total;
-            totalDiscountAmount = totalDiscountAmount+discount;
+            totalInvoiceAmount = totalInvoiceAmount + total;
+            totalDiscountAmount = totalDiscountAmount + discount;
         });
 
-        console.log("gstType",gstType)
-        if(gstType!=='notApply'){
-            invoiceGSTAmount = parseFloat(totalInvoiceAmount)*18/100;
-        }else{
+        console.log("gstType", gstType)
+        if (gstType !== 'notApply') {
+            invoiceGSTAmount = parseFloat(totalInvoiceAmount) * 18 / 100;
+        } else {
             invoiceGSTAmount = displayViewAmountDigit(0);
         }
         // calculation of Net Final Amount
-        invoiceNetAmount = parseFloat(totalInvoiceAmount)+parseFloat(invoiceGSTAmount)+parseFloat(invoiceRoundOffAmount);
+        invoiceNetAmount = parseFloat(totalInvoiceAmount) + parseFloat(invoiceGSTAmount) + parseFloat(
+            invoiceRoundOffAmount);
 
         $("#invoiceTotalAmount").val(displayViewAmountDigit(totalInvoiceAmount));
         $("#invoiceTotalDiscountAmount").val(displayViewAmountDigit(totalDiscountAmount));
