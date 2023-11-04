@@ -658,4 +658,72 @@ class Masters extends Config
             $this->exceptionData();
         }
     }
+
+
+    public function addUpdateInvoiceDetails(){
+        try{
+
+            $invoiceId = $this->handleSpecialCharacters($_POST['invoiceId']);
+            $billNo = $this->handleSpecialCharacters($_POST['billNo']);
+            $clientName = $this->handleSpecialCharacters($_POST['clientName']);
+            $contactNumber = $this->handleSpecialCharacters($_POST['contactNumber']);
+            $email = $this->handleSpecialCharacters($_POST['email']);
+            $clientGST = $this->handleSpecialCharacters($_POST['clientGST']);
+            $address = $this->handleSpecialCharacters($_POST['address']);
+            $state = $this->handleSpecialCharacters($_POST['state']);
+            $invoiceTotalAmount = $this->handleSpecialCharacters($_POST['invoiceTotalAmount']);
+            $invoiceTotalDiscountAmount = $this->handleSpecialCharacters($_POST['invoiceTotalDiscountAmount']);
+            $gstType = $this->handleSpecialCharacters($_POST['gstType']);
+            $invoiceGSTAmount = $this->handleSpecialCharacters($_POST['invoiceGSTAmount']);
+            $invoiceRoundOff = $this->handleSpecialCharacters($_POST['invoiceRoundOff']);
+            $invoiceNetAmount = $this->handleSpecialCharacters($_POST['invoiceNetAmount']);
+            $itemArray = json_decode($_POST['itemArray']);
+
+
+            if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                $query = $this::$masterConn->prepare("INSERT INTO 
+    `invoice_master`(`bill_no`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`, `gst_percentage`, `round_off`, `net_amount`, `created_by`) 
+VALUES 
+    ('$billNo','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','18','$invoiceRoundOff','$invoiceNetAmount','".$this->userMasterId."')");
+            } elseif ($this->isNotNullOrEmptyOrZero($invoiceId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
+
+            }
+
+            if ($query->execute()) {
+                if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+
+                    $invoiceId = $this->lastInsertId();
+                    if($this->isNotNullOrEmptyOrZero($itemArray)){
+                        foreach ($itemArray as $key=>$item){
+                            $itemsId = $this->handleSpecialCharacters($_POST['itemsId']);
+                            $itemsQty = $this->handleSpecialCharacters($_POST['itemsQty']);
+                            $itemsRate = $this->handleSpecialCharacters($_POST['itemsRate']);
+                            $itemsDiscount = $this->handleSpecialCharacters($_POST['itemsDiscount']);
+                            $total = $this->handleSpecialCharacters($_POST['total']);
+
+                            $itemInsterQuery = $this::$masterConn->prepare("INSERT INTO 
+    `invoice_details`(`invoice_idi`, `item_id`, `item_qty`, `item_rate`, `item_discount`, `item_total`, `created_by`) 
+                            VALUES ('$invoiceId','$itemsId','$itemsQty','$itemsRate','$itemsDiscount','$total','".$this->userMasterId."')");
+                            $itemInsterQuery->execute();
+
+
+                        }
+                    }
+                    $this->successData("Invoice Created successfully.");
+                } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
+                    $this->successData("Invoice Updated successfully.");
+                }
+            } else {
+                $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+            }
+
+
+
+
+
+
+        }catch (PDOException $e){
+            $this->exceptionData();
+        }
+    }
 }

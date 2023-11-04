@@ -54,13 +54,81 @@ CREATE TABLE `ims`.`item_user_allocation` (
 
 ***********query 03-11-2023**********************
 
-CREATE TABLE `item_defective_master`(
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `user_id` INT(11) DEFAULT 0,
-    `item_id` INT(11) DEFAULT 0,
-    `defective_qty` DECIMAL(60, 5) DEFAULT 0.00000,
-    `created_by` INT(11) DEFAULT 0,
-    `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP(), `modified_by` INT(11) DEFAULT 0, `modified_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(), PRIMARY KEY(`id`)
-    ) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci
+  CREATE TABLE `item_defective_master`(
+      `id` INT(11) NOT NULL AUTO_INCREMENT,
+      `user_id` INT(11) DEFAULT 0,
+      `item_id` INT(11) DEFAULT 0,
+      `defective_qty` DECIMAL(60, 5) DEFAULT 0.00000,
+      `created_by` INT(11) DEFAULT 0,
+      `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP(), `modified_by` INT(11) DEFAULT 0, `modified_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(), PRIMARY KEY(`id`)
+      ) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci
 
 *********** End query 03-11-2023 *************
+
+
+***********query 03-11-2023**********************
+
+CREATE TABLE `invoice_master` (
+    `id` BIGINT(11) NOT NULL AUTO_INCREMENT,
+    `bill_no` VARCHAR(55) NOT NULL,
+    `client_name` VARCHAR(100) NULL DEFAULT NULL,
+    `contact_number` VARCHAR(15) NULL DEFAULT NULL,
+    `email` VARCHAR(100) NULL DEFAULT NULL,
+    `client_gst_number` VARCHAR(55) NULL DEFAULT NULL,
+    `client_address` TEXT NULL DEFAULT NULL,
+    `client_state` VARCHAR(55) NULL DEFAULT NULL,
+    `total_amount` DECIMAL(60,5) NOT NULL DEFAULT '0',
+    `total_discount` DECIMAL(60,5) NOT NULL DEFAULT '0',
+    `gst_type` TINYINT(2) NOT NULL DEFAULT '1' COMMENT '1 = Not Apply\r\n2 = Apply GST\r\n3 = Apply IGST',
+    `gst_amount` DECIMAL(60,5) NOT NULL DEFAULT '0',
+    `gst_percentage` DECIMAL(60,5) NOT NULL DEFAULT '0',
+    `round_off` DECIMAL(60,5) NOT NULL DEFAULT '0',
+    `net_amount` DECIMAL(60,5) NOT NULL,
+    `created_by` BIGINT(11) NOT NULL DEFAULT '0',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_by` BIGINT(11) NOT NULL DEFAULT '0',
+    `modified_at` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
+
+CREATE TABLE `invoice_details` (
+    `id` BIGINT(11) NOT NULL AUTO_INCREMENT,
+    `bill_no` VARCHAR(55) NOT NULL,
+    `client_name` VARCHAR(100) NULL DEFAULT NULL,
+    `contact_number` VARCHAR(15) NULL DEFAULT NULL,
+    `email` VARCHAR(100) NULL DEFAULT NULL,
+    `client_gst_number` VARCHAR(55) NULL DEFAULT NULL,
+    `client_address` TEXT NULL DEFAULT NULL,
+    `client_state` VARCHAR(55) NULL DEFAULT NULL,
+    `total_amount` DECIMAL(60,5) NOT NULL DEFAULT '0',
+    `total_discount` DECIMAL(60,5) NOT NULL DEFAULT '0',
+    `gst_type` TINYINT(2) NOT NULL DEFAULT '1' COMMENT '1 = Not Apply\r\n2 = Apply GST\r\n3 = Apply IGST',
+    `gst_amount` DECIMAL(60,5) NOT NULL DEFAULT '0',
+    `gst_percentage` DECIMAL(60,5) NOT NULL DEFAULT '0',
+    `round_off` DECIMAL(60,5) NOT NULL DEFAULT '0',
+    `net_amount` DECIMAL(60,5) NOT NULL,
+    `created_by` BIGINT(11) NOT NULL DEFAULT '0',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_by` BIGINT(11) NOT NULL DEFAULT '0',
+    `modified_at` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
+CREATE TABLE `invoice_details` (
+ `id` bigint(20) NOT NULL AUTO_INCREMENT,
+ `invoice_idi` bigint(11) NOT NULL DEFAULT 0,
+ `item_id` bigint(11) NOT NULL DEFAULT 0,
+ `item_qty` decimal(60,5) NOT NULL DEFAULT 0.00000,
+ `item_rate` decimal(60,5) NOT NULL DEFAULT 0.00000,
+ `item_discount` decimal(60,5) NOT NULL DEFAULT 0.00000,
+ `item_total` decimal(60,5) NOT NULL DEFAULT 0.00000,
+ `created_by` int(11) NOT NULL DEFAULT 0,
+ `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+ `modified_by` int(11) NOT NULL DEFAULT 0,
+ `modified_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+
+***********END  query 03-11-2023**********************
