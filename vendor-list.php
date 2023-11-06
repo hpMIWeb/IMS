@@ -35,12 +35,12 @@ include_once './include/common-constat.php';
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Vendor-List</h1>
+                            <h1>Vendor List</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">vendor-list</li>
+                                <li class="breadcrumb-item active">Vendor List</li>
                             </ol>
                         </div>
                     </div>
@@ -79,7 +79,7 @@ include_once './include/common-constat.php';
                                             <td class="text-center-block py-0 align-middle">
                                                 <div class="">
                                                     <a href="#" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-eye"></i>
+                                                        <i class="fas fa-pen"></i>
                                                     </a>
                                                     <a href="#" class="btn btn-danger btn-sm">
                                                         <i class="fas fa-trash"></i>
@@ -96,7 +96,7 @@ include_once './include/common-constat.php';
                                             <td class="text-center-block py-0 align-middle">
                                                 <div class="">
                                                     <a href="#" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-eye"></i>
+                                                        <i class="fas fa-pen"></i>
                                                     </a>
                                                     <a href="#" class="btn btn-danger btn-sm">
                                                         <i class="fas fa-trash"></i>

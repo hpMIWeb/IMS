@@ -11,7 +11,7 @@ session_start();
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Create-Vendor</title>
+    <title>Create Vendor</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
@@ -35,12 +35,12 @@ session_start();
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Create-Vendor</h1>
+                            <h1>Create Vendor</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">create-vendor</li>
+                                <li class="breadcrumb-item active">Create Vendor</li>
                             </ol>
                         </div>
                     </div>
@@ -57,72 +57,65 @@ session_start();
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Vendor's Name:</label>
-                                            <input type="text" name="vendor's_name" id="vendor's_name" class="form-control" placeholder="Enter Name:">
+                                            <label>Name:</label>
+                                            <input type="text" name="vendorName" id="vendorName" class="form-control"
+                                                placeholder="Enter Name:">
                                         </div>
-                                        <!-- /.form-group -->
-                                        <div class="form-group">
-                                            <label>Vendor's GST No</label>
-                                            <input type="text" name="vendor's_GSTNo" id="vendor's_GSTNo" class="form-control" placeholder="Enter GST No:">
-                                        </div>
-                                        <!-- /.form-group -->
                                     </div>
-                                    <!-- /.col -->
-                                    <div class="col-md-6">
-
-                                        <!-- /.form-group -->
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>State:</label>
-                                            <select name="state" class="form-control select2" style="width: 100%;">
-                                                <option selected="selected"></option>
-                                                <option>Gujarat</option>
-                                                <option>Maharastra</option>
-                                                <option>Kerala</option>
-                                                <option>Punjab</option>
-                                            </select>
+                                            <label>Contact</label>
+                                            <input type="text" name="contactNumber" id="contactNumber"
+                                                class="form-control" placeholder="Enter Contact Number">
                                         </div>
-                                        <div class="form-group">
-                                            <label>Address</label>
-                                            <textarea name="address" class="form-control" rows="2" placeholder="Enter Address:"></textarea>
-                                        </div>
-                                        <!-- /.form-group -->
                                     </div>
-                                    <!-- /.col -->
-                                </div>
-                                <!-- /.row -->
-
-                                <div class="row">
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label> Contact Number</label>
-                                            <input type="text" name="contact " class="form-control" placeholder="Enter Contact Number">
-                                        </div>
-
-
-                                        <!-- /.form-group -->
-                                    </div>
-                                    <!-- /.col -->
-                                    <div class="col-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label>Alternate Contact Number(if Any):</label>
-                                            <input type="text" name="alt_contact" class="form-control" placeholder="Enter Alternate Contact Number:">
-                                        </div>
-                                        <!-- /.form-group -->
-                                    </div>
-                                    <!-- /.col -->
-                                    <div class="col-12 ">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Email</label>
-                                            <input type="text" name="email" class="form-control" placeholder="Enter Email">
+                                            <input type="text" name="contactEmail" id="contactEmail"
+                                                class="form-control" placeholder="Enter Contact Email">
                                         </div>
-                                        <!-- /.form-group -->
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>GST No</label>
+                                            <input type="text" name="gstNo" id="gstNo" class="form-control"
+                                                placeholder="Enter GST No">
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="form-group">
+                                            <label>Billing Address</label>
+                                            <textarea name="address" class="form-control" rows="2"
+                                                placeholder="Enter Address:"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 mt-5 text-center">
+                                        <div class="form-group">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                                <label class="form-check-label">Same as Billing</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <div class="form-group">
+                                            <label>Shipping Address</label>
+                                            <textarea name="address" class="form-control" rows="2"
+                                                placeholder="Enter Address:"></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
                                 <div class="float-right">
-                                    <button type="submit" name="submit" class="btn btn-primary">Save</button>
-                                    <button type="submit" name="delete" class="btn btn-danger">Cancel</button>
+                                    <button type="button" name="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" name="delete" class="btn btn-danger">Cancel</button>
                                 </div>
 
 

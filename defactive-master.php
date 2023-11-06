@@ -238,7 +238,7 @@ include_once './include/common-constat.php';
                     html += '<td>' + count + '</td>';
                     html += '<td>' + items.itemCode + '</td>';
                     html += '<td>' + items.itemName + '</td>';
-                    html += '<td>' + items.defectiveQty + '</td>';
+                    html += '<td>' + displayViewAmountDigit(items.defectiveQty) + '</td>';
                     html += '</tr>';
                     count++;
 
