@@ -760,4 +760,105 @@ class Masters extends Config
             $this->exceptionData();
         }
     }
+
+    public function addUpdateVendor(){
+        try{
+
+            $vendorId = $this->handleSpecialCharacters($_POST['vendorId']);
+            $vendorName = $this->handleSpecialCharacters($_POST['vendorName']);
+            $contactNumber = $this->handleSpecialCharacters($_POST['contactNumber']);
+            $contactEmail = $this->handleSpecialCharacters($_POST['contactEmail']);
+            $gstNo = $this->handleSpecialCharacters($_POST['gstNo']);
+            $billingAddress = $this->handleSpecialCharacters($_POST['billingAddress']);
+            $shippingAddress = $this->handleSpecialCharacters($_POST['shippingAddress']);
+
+             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                $query = $this::$masterConn->prepare("INSERT INTO `vendor_master`( `vendor_name`, `contact_number`, `email`, `gst_no`, `billing_address`, `shipping_address`,`created_by`) 
+                VALUES ('$vendorName','$contactNumber','$contactEmail','$gstNo','$billingAddress','$shippingAddress','".$this->userMasterId."')");
+            } elseif ($this->isNotNullOrEmptyOrZero($vendorId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
+                $query = $this::$masterConn->prepare("UPDATE `vendor_master`
+                 SET `vendor_name`='$vendorName',`contact_number`='$contactNumber',`email`='$contactEmail',`gst_no`='$gstNo',`billing_address`='$billingAddress',`shipping_address`='$shippingAddress',`modified_by`='".$this->userMasterId."' WHERE id= '$vendorId'");
+            }
+
+            if ($query->execute()) {
+                if ($query->rowCount() > 0) {
+                    if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                        $this->successData("Vendor Add successfully.");
+                    } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
+                        $this->successData("Vendor Update successfully.");
+                    }
+                } else {
+                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+                }
+            } else {
+                $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+            }
+
+            
+        }catch(PDOException $e){
+            $this->exceptionData();
+        }
+    }
+
+    public function getVendorDetails(){
+
+        try{
+
+
+            $vendorId = $this->handleSpecialCharacters($_POST['vendorId']);
+            
+            $appendQuery = "";
+            if($this->isNotNullOrEmptyOrZero($vendorId)){
+                $appendQuery = " WHERE id = '$vendorId' ";
+                
+            }
+            $query = $this::$masterConn->prepare("SELECT * FROM `vendor_master`  $appendQuery ;");
+            if ($query->execute()) {
+                    if ($query->rowCount() > 0) {
+                        $this->successData();
+                        foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                            $this->data[] = array(
+                                'id' => $this->convertNullOrEmptyStringToZero($row['id']),
+                                'vendorName' => $this->convertNullToEmptyString($row['vendor_name']),
+                                'contactNumber' => $this->convertNullToEmptyString($row['contact_number']),
+                                'gstNo' => $this->convertNullToEmptyString($row['gst_no']),
+                                'billingAddress' => $this->convertNullToEmptyString($row['billing_address']),
+                                'shippingAddress' => $this->convertNullToEmptyString($row['shipping_address']),
+                                
+                            );
+                        }
+                        $this::$result = array('vendorList' => $this->data);
+                    } else {
+                        $this->noData("No any Vendor");
+                    }
+                } else {
+                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+                }
+        }catch(PDOException $e){
+                 $this->exceptionData(); 
+        }
+    }
+
+    public function deleteVendor()
+    {
+
+        try {
+            $vendorId = $this->handleSpecialCharacters($_POST['vendorId']);
+
+            if ($this->isNotNullOrEmptyOrZero($vendorId)) {
+
+                $query = $this::$masterConn->prepare("DELETE FROM `vendor_master` WHERE id = '$vendorId'");
+                if ($query->execute()) {
+                    if ($query->rowCount() > 0) {
+                        $this->successData("Vendor Delete successfully.");
+                    }
+                } else {
+                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+                }
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData();
+        }
+    }
+    
 }

@@ -137,4 +137,18 @@ CREATE TABLE `invoice_details` (
 ***********query 06-11-2023**********************
 ALTER TABLE `amc_details` ADD `attendBy` VARCHAR(100) NULL DEFAULT NULL AFTER `contact_number`;
 
+CREATE TABLE `vendor_master`(
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `vendor_name` VARCHAR(100) NULL DEFAULT NULL,
+    `contact_number` VARCHAR(15) NULL DEFAULT NULL,
+    `email` VARCHAR(100) NULL DEFAULT NULL,
+    `gst_no` VARCHAR(50) NULL DEFAULT NULL,
+    `billing_address` TEXT NULL DEFAULT NULL,
+    `shipping_address` TEXT NULL DEFAULT NULL,
+    `create_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `created_by` INT NOT NULL DEFAULT '0',
+    `modified_at` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NULL DEFAULT NULL,
+    `modified_by` INT NOT NULL DEFAULT '0',
+    PRIMARY KEY(`id`)
+) ENGINE = InnoDB;
 ***********END  End query 06-11-2023**********************

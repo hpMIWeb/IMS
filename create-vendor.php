@@ -1,9 +1,8 @@
 <?php
-session_start();
-    include_once './include/session-check.php';
-    include_once './include/common-constat.php';
-
-
+include_once './include/session-check.php';
+include_once './include/common-constat.php';
+include_once './include/APICALL.php';
+$vendorId = isset($_GET['id']) ? $_GET['id'] : 0
 ?>
 <!DOCTYPE html>
 <html>
@@ -57,6 +56,8 @@ session_start();
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <div class="row">
+                                    <input type="hidden" name="vendorId" id="vendorId" value="<?php echo $vendorId; ?>">
+                                    <input type="hidden" name="action" id="action" value="add">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Name:</label>
@@ -90,8 +91,8 @@ session_start();
                                     <div class="col-5">
                                         <div class="form-group">
                                             <label>Billing Address</label>
-                                            <textarea name="address" class="form-control" rows="2"
-                                                placeholder="Enter Address:"></textarea>
+                                            <textarea name="billingAddress" id="billingAddress" class="form-control"
+                                                rows="2" placeholder="Enter Address:"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-2 mt-5 text-center">
@@ -105,7 +106,8 @@ session_start();
                                     <div class="col-5">
                                         <div class="form-group">
                                             <label>Shipping Address</label>
-                                            <textarea name="address" class="form-control" rows="2"
+                                            <textarea name="shippingAddress" id="shippingAddress"
+                                                class="form-control shippingAddress" rows="2"
                                                 placeholder="Enter Address:"></textarea>
                                         </div>
                                     </div>
@@ -114,7 +116,8 @@ session_start();
 
 
                                 <div class="float-right">
-                                    <button type="button" name="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" name="submit" id="addUpdateVendorBtn"
+                                        class="btn btn-primary">Save</button>
                                     <button type="button" name="delete" class="btn btn-danger">Cancel</button>
                                 </div>
 
@@ -152,6 +155,83 @@ session_start();
     include_once("include/jquery.php");
 
     ?>
+
+    <script>
+    $(document).ready(function() {
+        let vendorId = $('#vendorId').val();
+        if (vendorId !== '0') {
+            getVendorDetails(vendorId)
+        }
+
+    });
+
+    function getVendorDetails(vendorId) {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getVendorDetails',
+            'vendorId': vendorId
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+
+                $.each(response.result.vendorList, function(index, vendor) {
+                    $('#action').val('edit');
+                    $('#vendorName').val(vendor.vendorName);
+                    $('#contactNumber').val(vendor.contactNumber);
+                    $('#contactEmail').val(vendor.email);
+                    $('#gstNo').val(vendor.gstNo);
+                    $('#billingAddress').val(vendor.billingAddress);
+                    $('#shippingAddress').val(vendor.shippingAddress);
+
+                });
+            } else {
+                toast_error(response.message);
+            }
+        });
+    }
+
+    $('#addUpdateVendorBtn').on('click', function(event) {
+        let vendorName = $('#vendorName').val();
+        let action = $('#action').val();
+        let vendorId = $('#vendorId').val();
+        let contactNumber = $('#contactNumber').val();
+        let contactEmail = $('#contactEmail').val();
+        let gstNo = $('#gstNo').val();
+        let billingAddress = $('#billingAddress').val();
+        let shippingAddress = $('#shippingAddress').val();
+
+        if (vendorName === '') {
+            toast_error("Please enter name.");
+            $('#vendorName').focus();
+            return false;
+        }
+
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'addUpdateVendor',
+            'vendorId': vendorId,
+            'action': action,
+            'vendorName': vendorName,
+            'contactNumber': contactNumber,
+            'contactEmail': contactEmail,
+            'gstNo': gstNo,
+            'billingAddress': billingAddress,
+            'shippingAddress': shippingAddress,
+        };
+
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+                toast_success(response.message);
+                window.location = "vendor-item.php";
+                resetFormFields()
+            } else {
+                toast_error(response.message);
+            }
+        });
+    });
+    </script>
 </body>
 
 </html>

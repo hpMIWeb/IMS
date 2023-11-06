@@ -1,7 +1,7 @@
 <?php
 session_start();
-
 include_once './include/session-check.php';
+include_once './include/APICALL.php';
 include_once './include/common-constat.php';
 
 ?>
@@ -58,11 +58,11 @@ include_once './include/common-constat.php';
 
                             <div class="card-body">
 
-                                <table id="example2" class="table table-bordered table-hover">
+                                <table id="vendorTable" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="col-1">Id</th>
-                                            <th>Vendor's Name</th>
+                                            <th>Id</th>
+                                            <th>Vendor Name</th>
                                             <th>GST Number</th>
                                             <th>Contact Number</th>
                                             <th>Action</th>
@@ -70,40 +70,7 @@ include_once './include/common-constat.php';
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Vendor 1</td>
-                                            <td>1234</td>
-                                            <td>1234567890</td>
 
-                                            <td class="text-center-block py-0 align-middle">
-                                                <div class="">
-                                                    <a href="#" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-pen"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-danger btn-sm">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Vendor 2</td>
-                                            <td>1234</td>
-                                            <td>1234567890</td>
-                                            <td class="text-center-block py-0 align-middle">
-                                                <div class="">
-                                                    <a href="#" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-pen"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-danger btn-sm">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
                                     </tbody>
 
 
@@ -140,6 +107,98 @@ include_once './include/common-constat.php';
     include_once("include/jquery.php");
 
     ?>
+    <script>
+    $(document).ready(function() {
+        getVendorDetails();
+        resetDataTable('vendorTable');
+    });
+    // Add a click event handler for the "Delete" buttons
+    $('#vendorTable').on('click', '.delete-vendor', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+
+        const vendorId = $(this).data(
+            'vendor-id'); // Get the item ID from the data attribute
+
+        deleteVendor(vendorId);
+    });
+
+
+    function deleteVendor(vendorId) {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'deleteVendor',
+            'vendorId': vendorId,
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+                toast_success(response.message);
+                getVendorDetails();
+            } else {
+                toast_error(response.message);
+            }
+        });
+    }
+
+    $('#vendorTable').on('click', '.edit-vendor', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        const vendorId = $(this).data(
+            'vendor-id'); // Get the category ID from the data attribute
+        window.location = "create-vendor.php?id=" +
+            vendorId
+    });
+
+    function getVendorDetails() {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getVendorDetails',
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            $("#vendorTable").dataTable().fnDestroy();
+            $('#vendorTable tbody').html('');
+            if (response.responseCode == RESULT_OK) {
+
+                let html = '';
+                let count = 1;
+
+                $.each(response.result.vendorList, function(index, vendor) {
+                    html += '<tr>';
+                    html += '<td>' + count + '</td>';
+                    html += '<td>' + vendor.vendorName + '</td>';
+                    html += '<td>' + vendor.gstNo + '</td>';
+                    html += '<td>' + vendor.contactNumber + '</td>';
+
+                    html += '<td class="text-center-block py-0 align-middle">';
+                    html += '<div class = "" > ';
+                    html +=
+                        ' <button  class="btn btn-warning btn-sm edit-vendor" data-vendor-id="' +
+                        vendor.id + '">';
+                    html += '<i class = "fas fa-pen" > </i>';
+                    html += '</button>';
+                    html +=
+                        ' <button class="btn btn-danger btn-sm delete-vendor" data-vendor-id="' +
+                        vendor.id + '">';
+                    html += '<i class = "fas fa-trash" > </i>';
+                    html += '</button>';
+                    html += '</div>';
+                    html += '</td > ';
+                    html += '</tr>';
+                    count++;
+
+                });
+
+                $('#vendorTable tbody').html(html);
+                resetDataTable('vendorTable');
+            } else {
+                resetDataTable('vendorTable');
+                toast_error(response.message);
+            }
+        });
+
+    }
+    </script>
 </body>
 
 </html>
