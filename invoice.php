@@ -55,15 +55,29 @@ include_once './include/common-constat.php';
                             <!-- /.card-header -->
                             <div class="card-header">
                                 <div class="row">
-                                    <div class="col-9">
+                                    <div class="col-6">
 
                                     </div>
 
                                     <div class="col-3">
                                         <div class="form-group">
+                                            <label>Date:</label>
+                                            <div class="input-group date" id="reservationdate"
+                                                data-target-input="nearest">
+                                                <input type="text" class="form-control datetimepicker-input "
+                                                    data-target="#reservationdate">
+                                                <div class="input-group-append" data-target="#reservationdate"
+                                                    data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
                                             <label>Bill No</label>
                                             <input type="text" name="billNo" id="billNo" class="form-control"
-                                                placeholder="Enter GST Number" value="B-123">
+                                                placeholder="Enter GST Number" value="">
                                         </div>
                                     </div>
                                 </div>
@@ -129,7 +143,7 @@ include_once './include/common-constat.php';
                                 </div>
 
                                 <hr>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-3">
                                         <div class="form-group">
                                             <label>Item:</label>
@@ -143,20 +157,22 @@ include_once './include/common-constat.php';
                                     <div class="col-3 mt-4">
                                         <div class="form-group">
                                             <button type="button" name=" add" class="btn btn-primary mt-2"
-                                                onclick="addNewItem()">ADD ITEM</button>
+                                                onclick="addNewItemRow()">ADD ITEM</button>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="row">
                                     <div class="col-12">
                                         <table id="itemTable" class="table table-bordered table-hover">
                                             <thead>
                                                 <tr>
                                                     <th style="width: 3%;">Sr. No.</th>
-                                                    <th style="width: 25%;">Item Name</th>
+                                                    <th style="width: 10%;">Item Code</th>
+                                                    <th style="width: 12%;">HSN Code</th>
                                                     <th style="width: 5%;">Qty</th>
                                                     <th style="width: 5%;">Rate</th>
                                                     <th style="width: 5%;">Discount</th>
+                                                    <th style="width: 5%;">Discount Amount</th>
                                                     <th style="width: 5%;">Total</th>
                                                     <th style="width: 2%;">Action</th>
                                                 </tr>
@@ -196,7 +212,7 @@ include_once './include/common-constat.php';
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <!-- <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label>Apply GST:</label>
@@ -209,7 +225,7 @@ include_once './include/common-constat.php';
 
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group">
@@ -287,7 +303,14 @@ include_once './include/common-constat.php';
 
     ?>
     <script>
+    //Date picker
+    $('#reservationdate').datetimepicker({
+        format: 'L'
+    });
+    let itemList = []
     $(document).ready(function() {
+
+        addNewItemRow();
 
         $("#invoiceTotalAmount").val(displayViewAmountDigit(0));
         $("#invoiceTotalDiscountAmount").val(displayViewAmountDigit(0));
@@ -318,8 +341,9 @@ include_once './include/common-constat.php';
                     html += '<option value="' + items.id + '">' + items.itemName + '</option>';
 
                 });
+                itemList = response.result.itemList
 
-                $('#itemId').html(html)
+                $('.itemId').html(html)
             }
         });
 
@@ -392,70 +416,69 @@ include_once './include/common-constat.php';
 
     });
 
-    function addNewItem() {
-        let itemId = $("#itemId").val();
+
+
+    function addNewItemRow() {
+        let rowNumber = $('#itemTable tbody tr').length + 1;
+        let html = "<tr>";
+        html += "<td>" + rowNumber + "</td>";
+        html += "<td><select name='itemId' class='form-control select2 itemId'></select></td>";
+        html += "<td><span data-field='hsn'></span></td>";
+        html += "<td>";
+        html += "<input type='text' class='form-control' name='itemsQty" + rowNumber +
+            "' value='" + displayViewAmountDigit(1) + "' placeholder='Qty' data-field='qty' />";
+        html += "<input type='hidden' name='itemsId' value='' data-field='itemid'/>";
+        html += "</td>";
+        html += "<td>";
+        html += "<input type='text' class='form-control' name='itemsRate" + rowNumber +
+            "' value='" + displayViewAmountDigit(0) + "' placeholder='Rate' data-field='rate'/>";
+        html += "</td>";
+        html += "<td>";
+        html += "<input type='text' class='form-control allowOnlyDigit' name='itemsDiscount" + rowNumber +
+            "' value='" + displayViewAmountDigit(0) + "' placeholder='Item Discount' data-field='discount' />";
+        html += "</td>";
+        html += "<td>";
+        html += "<input type='text' class='form-control allowOnlyDigit' name='itemsDiscount" + rowNumber +
+            "' value='" + displayViewAmountDigit(0) + "' placeholder='Item Discount' data-field='discount' disabled/>";
+        html += "</td>";
+        html += "<td>";
+        html += "<input type='text' class='form-control' name='total" + rowNumber +
+            "' value='" + displayViewAmountDigit(1) + "' placeholder='Item Total' disabled data-field='total'/>";
+        html += "</td>";
+        html +=
+            "<td><button type='button' class='btn btn-sm btn-danger delete-item'><i class='fas fa-trash'></i></button></td>";
+        html += "</tr>";
+
+        $('#itemTable tbody').append(html);
+
+    }
+
+    $(document).on('change', '.itemId', function() {
+        let itemId = $(this).val();
+        let row = $(this).closest('tr'); // Get the row of the selected item
 
         if (itemId) {
-            let sendApiDataObj = {
-                '<?php echo systemProject ?>': 'Masters',
-                '<?php echo systemModuleFunction ?>': 'getItemDetails',
-                'itemId': itemId,
-            };
+            let selectedItem = itemList.find(item => item.id == itemId);
 
-            APICallAjax(sendApiDataObj, function(response) {
-                if (response.responseCode == RESULT_OK) {
-                    let html = '';
-                    $.each(response.result.itemList, function(index, item) {
-                        let srNo = $("#itemTable tbody tr").length + 1;
+            console.log("selectedItem", selectedItem)
+            if (selectedItem) {
+                // Set the values in the table fields based on the selected item
+                row.find('[data-field="qty"]').val(displayViewAmountDigit(1));
+                row.find('[data-field="rate"]').val(displayViewAmountDigit(selectedItem.mrp));
+                row.find('[data-field="discount"]').val(displayViewAmountDigit(1));
+                row.find('[data-field="total"]').val(displayViewAmountDigit(1));
 
-                        html += "<tr>";
-                        html += "<td>" + srNo + "</td>";
-                        html += "<td>" + item.itemName + "</td>";
-                        html += "<td>";
-                        html += "<input type='text' class='form-control' id='itemsQty" + srNo +
-                            "' value='" + displayViewAmountDigit(1) +
-                            "' placeholder='Qty' data-field='qty' />";
-                        html += "<input type='hidden' id='itemsId_" + srNo + "' value='" + item.id +
-                            "' data-field='itemid'/>";
-                        html += "</td>";
-
-                        html += "<td>";
-                        html +=
-                            "<input type='text' class='form-control allowOnlyDigit' id='itemsRate_" +
-                            srNo +
-                            "' value='" + displayViewAmountDigit(item.mrp) +
-                            "' placeholder='Rate' data-field='rate'/>";
-                        html += "</td>";
-
-                        html += "<td>";
-                        html +=
-                            "<input type='text' class='form-control allowOnlyDigit' id='itemsDiscount_" +
-                            srNo +
-                            "' value='" + displayViewAmountDigit(0) +
-                            "' placeholder='Item Discount' data-field='discount' />";
-                        html += "</td>";
-
-                        html += "<td>";
-                        html += "<input type='text' class='form-control' id='total_" +
-                            srNo +
-                            "' value='" + displayViewAmountDigit(1) +
-                            "' placeholder='Item Total' disabled data-field='total'/>";
-                        html += "</td>";
-
-                        html +=
-                            "<td><button type='button' class='btn btn-sm btn-danger delete-item' id='delete' value='' ><i class='fas fa-trash'></i></button></td>";
-                        html += "</tr>";
-                    });
-
-                    $('#itemTable tbody').append(html)
-                }
-                itemAmountCalculation();
-            });
-        } else {
-            toast_error("Please select an item.");
+                // Set the HSN code as text content in the label
+                row.find('[data-field="hsn"]').text(selectedItem.hsnCode);
+            }
         }
-        $("#itemId").val("").trigger("change");
-    }
+        addNewItemRow();
+        reassignInputIds();
+    });
+
+
+
+
 
     // Add an event listener for changes in input fields
     $('#itemTable tbody').on('change', 'input', function() {
