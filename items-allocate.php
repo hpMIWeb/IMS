@@ -36,12 +36,12 @@ include_once './include/common-constat.php';
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Items-Allocate</h1>
+                            <h1>NEW ITEM ISSUE</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">item-allocate</li>
+                                <li class="breadcrumb-item active">New Item Issue</li>
                             </ol>
                         </div>
                     </div>
@@ -166,18 +166,15 @@ include_once './include/common-constat.php';
         APICallAjax(sendApiDataObj, function(response) {
 
             if (response.responseCode == RESULT_OK) {
-
                 let html = '<option selected="selected">Select Item</option>';
-
                 $.each(response.result.itemList, function(index, items) {
-                    html += '<option value="' + items.id + '">' + items.itemName + '</option>';
-
+                    html += '<option value="' + items.id + '">' + items.itemName + ' (' + items
+                        .itemCode +
+                        ')</option>';
                 });
-
                 $('#itemId').html(html)
             }
         });
-
     }
 
     function getUsers() {

@@ -132,3 +132,9 @@ CREATE TABLE `invoice_details` (
 
 
 ***********END  query 03-11-2023**********************
+
+
+***********query 06-11-2023**********************
+ALTER TABLE `amc_details` ADD `attendBy` VARCHAR(100) NULL DEFAULT NULL AFTER `contact_number`;
+
+***********END  End query 06-11-2023**********************

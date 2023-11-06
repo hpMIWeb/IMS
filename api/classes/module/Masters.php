@@ -251,7 +251,7 @@ class Masters extends Config
     }
 
 
-    public function addUpdateAmcMaster()
+    public function ccMaster()
     {
 
         try {
@@ -343,7 +343,7 @@ class Masters extends Config
                             'visitDate' => $this->convertNullToEmptyString($row['visit_date']),
                             'visitDateDisplay' => $this->convertNullToEmptyString($this->formatDateTime('d-m-Y', $row['visit_date'])),
                             'workDetails' => $this->convertNullToEmptyString($row['work_details']),
-                            'amcAttendPerson' => $this->convertNullToEmptyString($row['amcAttendPerson']),
+                            'attendBy' => $this->convertNullToEmptyString($row['attendBy']),
                         );
                     }
                     $this::$result = array('amcDetails' => $this->data);
@@ -367,11 +367,12 @@ class Masters extends Config
             $customerName = $this->handleSpecialCharacters($_POST['customerName']);
             $workDetails = $this->handleSpecialCharacters($_POST['workDetails']);
             $contactNumber = $this->handleSpecialCharacters($_POST['contactNumber']);
+            $attendBy = $this->handleSpecialCharacters($_POST['attendBy']);
             $visitDate =  $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['visitDate'], true, false));;
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                $query = $this::$masterConn->prepare("INSERT INTO `amc_details`( `amc_master_id`, `customer_name`, `visit_date`, `work_details`, `contact_number`, `created_by`) 
-                VALUES ('$amcMasterId','$customerName','$visitDate','$workDetails','$contactNumber','" . $this->userMasterId . "')");
+                $query = $this::$masterConn->prepare("INSERT INTO `amc_details`( `amc_master_id`, `customer_name`, `visit_date`, `work_details`, `contact_number`,`attendBy`, `created_by`) 
+                VALUES ('$amcMasterId','$customerName','$visitDate','$workDetails','$contactNumber','$attendBy','" . $this->userMasterId . "')");
             }
 
 
@@ -633,7 +634,7 @@ class Masters extends Config
                 $appendQuery  = " WHERE `item_defective_master`.user_id = '$userId' AND `item_defective_master`.item_id = '$itemId' ";
             }
 
-            $query = $this::$masterConn->prepare("SELECT `item_defective_master`.*,`item_list`.`item_name` AS itemName FROM `item_defective_master` LEFT JOIN `item_list` ON `item_list`.id=`item_defective_master`.item_id $appendQuery");
+           $query = $this::$masterConn->prepare("SELECT `item_defective_master`.*,`item_list`.`item_name` AS itemName FROM `item_defective_master` LEFT JOIN `item_list` ON `item_list`.id=`item_defective_master`.item_id $appendQuery");
            if ($query->execute()) {
                 if ($query->rowCount() > 0) {
                     $this->successData();
@@ -677,35 +678,31 @@ class Masters extends Config
             $invoiceGSTAmount = $this->handleSpecialCharacters($_POST['invoiceGSTAmount']);
             $invoiceRoundOff = $this->handleSpecialCharacters($_POST['invoiceRoundOff']);
             $invoiceNetAmount = $this->handleSpecialCharacters($_POST['invoiceNetAmount']);
-            $itemArray = json_decode($_POST['itemArray']);
+            $itemArray = json_decode($_POST['itemArray'],true);
 
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                $query = $this::$masterConn->prepare("INSERT INTO 
-    `invoice_master`(`bill_no`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`, `gst_percentage`, `round_off`, `net_amount`, `created_by`) 
-VALUES 
-    ('$billNo','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','18','$invoiceRoundOff','$invoiceNetAmount','".$this->userMasterId."')");
-            } elseif ($this->isNotNullOrEmptyOrZero($invoiceId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
-
+                $query = $this::$masterConn->prepare("INSERT INTO `invoice_master`(`bill_no`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`, `gst_percentage`, `round_off`, `net_amount`, `created_by`) 
+                        VALUES  ('$billNo','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','18','$invoiceRoundOff','$invoiceNetAmount','".$this->userMasterId."')");
             }
 
             if ($query->execute()) {
                 if ($this->equals($this->action, $this->arrayAllAction['add'])) {
 
-                    $invoiceId = $this->lastInsertId();
-                    if($this->isNotNullOrEmptyOrZero($itemArray)){
-                        foreach ($itemArray as $key=>$item){
-                            $itemsId = $this->handleSpecialCharacters($_POST['itemsId']);
-                            $itemsQty = $this->handleSpecialCharacters($_POST['itemsQty']);
-                            $itemsRate = $this->handleSpecialCharacters($_POST['itemsRate']);
-                            $itemsDiscount = $this->handleSpecialCharacters($_POST['itemsDiscount']);
-                            $total = $this->handleSpecialCharacters($_POST['total']);
+                     $invoiceId = $this::$masterConn->lastInsertId();
+                    if($this->isNotNullOrEmptyOrZero($invoiceId) && $this->isNotNullOrEmptyOrZero($itemArray)){
+                        foreach ($itemArray as $item){
+                       
+                            $itemsId = $this->handleSpecialCharacters($item['itemId']);
+                            $itemsQty = $this->handleSpecialCharacters($item['itemQty']);
+                            $itemsRate = $this->handleSpecialCharacters($item['itemRate']);
+                            $itemsDiscount = $this->handleSpecialCharacters($item['itemDiscount']);
+                            $total = $this->handleSpecialCharacters($item['total']);
 
-                            $itemInsterQuery = $this::$masterConn->prepare("INSERT INTO 
-    `invoice_details`(`invoice_idi`, `item_id`, `item_qty`, `item_rate`, `item_discount`, `item_total`, `created_by`) 
+                            $itemInsertQuery = $this::$masterConn->prepare("INSERT INTO  `invoice_details`(`invoice_idi`, `item_id`, `item_qty`, `item_rate`, `item_discount`, `item_total`, `created_by`) 
                             VALUES ('$invoiceId','$itemsId','$itemsQty','$itemsRate','$itemsDiscount','$total','".$this->userMasterId."')");
-                            $itemInsterQuery->execute();
-
+     
+                            $itemInsertQuery->execute();
 
                         }
                     }
@@ -717,12 +714,40 @@ VALUES
                 $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
             }
 
-
-
-
-
-
         }catch (PDOException $e){
+            $this->exceptionData();
+        }
+    }
+
+    public function getInvoiceDetails(){
+        try{
+
+            $invoiceId = $this->handleSpecialCharacters($_POST['invoiceId']);
+           
+            $query = $this::$masterConn->prepare("SELECT `item_defective_master`.*,`item_list`.`item_name` AS itemName FROM `item_defective_master` LEFT JOIN `item_list` ON `item_list`.id=`item_defective_master`.item_id $appendQuery");
+            if ($query->execute()) {
+                    if ($query->rowCount() > 0) {
+                        $this->successData();
+                        foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                            $this->data[] = array(
+                                'id' => $this->convertNullOrEmptyStringToZero($row['id']),
+                                'itemId' => $this->convertNullOrEmptyStringToZero($row['item_id']),
+                                'itemName' => $this->convertNullToEmptyString($row['itemName']),
+                                'userId' => $this->convertNullOrEmptyStringToZero($row['user_id']),
+                                'defectiveQty' => $this->convertNullOrEmptyStringToZero($row['defective_qty']),
+                                
+                            );
+                        }
+                        $this::$result = array('itemList' => $this->data);
+                    } else {
+                        $this->noData("No any Item");
+                    }
+                } else {
+                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+                }
+
+
+        }catch(PDOException $e){
             $this->exceptionData();
         }
     }

@@ -70,11 +70,12 @@ include_once './include/common-constat.php';
                                     <table id="listItemTable" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Sr. No.</th>
+                                                <th style="width: 10%;">Sr. No.</th>
+                                                <th>Item Code</th>
                                                 <th>Item Name</th>
                                                 <th>Item Qty</th>
                                                 <th>Item Rate</th>
-                                                <th>Action</th>
+                                                <th style="width: 10%;">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -174,8 +175,9 @@ include_once './include/common-constat.php';
                     html += '<tr>';
                     html += '<td>' + count + '</td>';
                     html += '<td>' + items.itemName + '</td>';
-                    html += '<td>' + items.minimumStockLevel + '</td>';
-                    html += '<td>' + items.mrp + '</td>';
+                    html += '<td>' + items.itemCode + '</td>';
+                    html += '<td>' + displayViewAmountDigit(items.minimumStockLevel) + '</td>';
+                    html += '<td>' + displayIndianRupeeCurrency(items.mrp) + '</td>';
                     html += '<td class="text-center-block py-0 align-middle">';
                     html += '<div class = "" > ';
                     html +=
