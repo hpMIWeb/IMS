@@ -33,12 +33,12 @@ $amcMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>List</h1>
+                            <h1>Customer AMC List</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Customer AMC list</li>
+                                <li class="breadcrumb-item active">Customer AMC List</li>
                             </ol>
                         </div>
                     </div>

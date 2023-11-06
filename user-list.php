@@ -12,7 +12,7 @@ include_once './include/common-constat.php';
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>List</title>
+    <title>User List</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
@@ -41,7 +41,7 @@ include_once './include/common-constat.php';
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">user list</li>
+                                <li class="breadcrumb-item active">User List</li>
                             </ol>
                         </div>
                     </div>

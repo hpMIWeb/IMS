@@ -36,7 +36,7 @@ include_once './include/common-constat.php';
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>DEFECTIVE ITEM RETURN</h1>
+                            <h1>Defective Item Return</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -72,7 +72,7 @@ include_once './include/common-constat.php';
                                 </div>
                                 <div class="col-3">
                                     <div class="form-group">
-                                        <label>Item Name</label>
+                                        <label>Item Name (Item Code)</label>
                                         <select name="itemId" id="itemId" class="form-control select2">
                                             <option selected="selected">Select Item</option>
                                         </select>
@@ -101,6 +101,7 @@ include_once './include/common-constat.php';
                                         <thead>
                                             <tr>
                                                 <th>Sr. No.</th>
+                                                <th>Item Code</th>
                                                 <th>Item Name</th>
                                                 <th>Item Qty</th>
                                             </tr>
@@ -192,12 +193,36 @@ include_once './include/common-constat.php';
         });
     }
 
+
+    $("#itemId").change(function() {
+        let itemId = $(this).val();
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getItemDetails',
+            'itemId': itemId
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+
+            if (response.responseCode == RESULT_OK) {
+                $.each(response.result.itemList, function(index, items) {
+                    console.log(items.openingStock)
+                    $('#itemQty').val(items.openingStock)
+                });
+
+
+            }
+        });
+        getUserDefectiveItemList();
+    });
+
     function getUserDefectiveItemList() {
         let userId = $("#userId").val();
+        let itemId = $("#itemId").val();
         let sendApiDataObj = {
             '<?php echo systemProject ?>': 'Masters',
             '<?php echo systemModuleFunction ?>': 'getItemDefectiveDetails',
-            'userId': userId
+            'userId': userId,
 
         };
         APICallAjax(sendApiDataObj, function(response) {
@@ -211,6 +236,7 @@ include_once './include/common-constat.php';
                 $.each(response.result.itemList, function(index, items) {
                     html += '<tr>';
                     html += '<td>' + count + '</td>';
+                    html += '<td>' + items.itemCode + '</td>';
                     html += '<td>' + items.itemName + '</td>';
                     html += '<td>' + items.defectiveQty + '</td>';
                     html += '</tr>';
@@ -227,6 +253,13 @@ include_once './include/common-constat.php';
         });
     }
 
+
+
+    $("#userId").change(function() {
+        if ($(this).val() !== '') {
+            getUserDefectiveItemList()
+        }
+    });
 
     $('#assign').on('click', function(event) {
         let itemQty = parseFloat($("#itemQty").val());

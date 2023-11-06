@@ -559,7 +559,7 @@ class Masters extends Config
                 $appendQuery  = " WHERE `item_user_allocation`.user_id = '$userId' AND `item_user_allocation`.item_id = '$itemId' ";
             }
 
-            $query = $this::$masterConn->prepare("SELECT `item_user_allocation`.*,`item_list`.`item_name` AS itemName FROM `item_user_allocation` LEFT JOIN `item_list` ON `item_list`.id=`item_user_allocation`.item_id $appendQuery");
+            $query = $this::$masterConn->prepare("SELECT `item_user_allocation`.*,`item_list`.`item_name` AS itemName,`item_list`.`item_code` AS itemCode FROM `item_user_allocation` LEFT JOIN `item_list` ON `item_list`.id=`item_user_allocation`.item_id $appendQuery");
            if ($query->execute()) {
                 if ($query->rowCount() > 0) {
                     $this->successData();
@@ -567,6 +567,7 @@ class Masters extends Config
                         $this->data[] = array(
                             'id' => $this->convertNullOrEmptyStringToZero($row['id']),
                             'itemId' => $this->convertNullOrEmptyStringToZero($row['item_id']),
+                            'itemCode' => $this->convertNullToEmptyString($row['itemCode']),
                             'itemName' => $this->convertNullToEmptyString($row['itemName']),
                             'userId' => $this->convertNullOrEmptyStringToZero($row['user_id']),
                             'allocateQty' => $this->convertNullOrEmptyStringToZero($row['allocate_qty']),
@@ -634,7 +635,7 @@ class Masters extends Config
                 $appendQuery  = " WHERE `item_defective_master`.user_id = '$userId' AND `item_defective_master`.item_id = '$itemId' ";
             }
 
-           $query = $this::$masterConn->prepare("SELECT `item_defective_master`.*,`item_list`.`item_name` AS itemName FROM `item_defective_master` LEFT JOIN `item_list` ON `item_list`.id=`item_defective_master`.item_id $appendQuery");
+           $query = $this::$masterConn->prepare("SELECT `item_defective_master`.*,`item_list`.`item_name` AS itemName,`item_list`.`item_code` AS itemCode FROM `item_defective_master` LEFT JOIN `item_list` ON `item_list`.id=`item_defective_master`.item_id $appendQuery");
            if ($query->execute()) {
                 if ($query->rowCount() > 0) {
                     $this->successData();
@@ -643,6 +644,7 @@ class Masters extends Config
                             'id' => $this->convertNullOrEmptyStringToZero($row['id']),
                             'itemId' => $this->convertNullOrEmptyStringToZero($row['item_id']),
                             'itemName' => $this->convertNullToEmptyString($row['itemName']),
+                            'itemCode' => $this->convertNullToEmptyString($row['itemCode']),
                             'userId' => $this->convertNullOrEmptyStringToZero($row['user_id']),
                             'defectiveQty' => $this->convertNullOrEmptyStringToZero($row['defective_qty']),
                             

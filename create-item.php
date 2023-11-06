@@ -36,12 +36,12 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Item</h1>
+                            <h1>Item Create</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">item</li>
+                                <li class="breadcrumb-item active">Item Create</li>
                             </ol>
                         </div>
                     </div>
@@ -61,19 +61,22 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label>Item Name:</label>
-                                        <input type="text" name="itemName" id="itemName" class="form-control" placeholder="Enter Item Name">
+                                        <input type="text" name="itemName" id="itemName" class="form-control"
+                                            placeholder="Enter Item Name">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label>Item Code</label>
-                                        <input type="text" name="itemCode" id="itemCode" class="form-control" placeholder="Enter Item Code">
+                                        <input type="text" name="itemCode" id="itemCode" class="form-control"
+                                            placeholder="Enter Item Code">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label>Hsn Code</label>
-                                        <input type="text" name="hsnCode" id="hsnCode" class="form-control" placeholder="Enter Hsn Code">
+                                        <input type="text" name="hsnCode" id="hsnCode" class="form-control"
+                                            placeholder="Enter Hsn Code">
                                     </div>
                                 </div>
                             </div>
@@ -81,14 +84,18 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label>Opening Stock</label>
-                                        <input type="text" name="openingStock" id="openingStock" class="form-control allowOnlyDigit openingStock" placeholder="Enter Opening Stock">
+                                        <input type="text" name="openingStock" id="openingStock"
+                                            class="form-control allowOnlyDigit openingStock"
+                                            placeholder="Enter Opening Stock">
                                     </div>
 
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label>Minimum Stock Level</label>
-                                        <input type="text" name="minimumStockLevel" id="minimumStockLevel" class="form-control allowOnlyDigit minimumStockLevel" placeholder="Enter Minimum Stock Level">
+                                        <input type="text" name="minimumStockLevel" id="minimumStockLevel"
+                                            class="form-control allowOnlyDigit minimumStockLevel"
+                                            placeholder="Enter Minimum Stock Level">
                                     </div>
 
                                 </div>
@@ -98,19 +105,25 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label>Purchase Basic Cost</label>
-                                        <input type="text" name="purchaseBasicCost" id="purchaseBasicCost" class="form-control allowOnlyDigit purchaseBasicCost" placeholder="Enter Purchase Basic Cost">
+                                        <input type="text" name="purchaseBasicCost" id="purchaseBasicCost"
+                                            class="form-control allowOnlyDigit purchaseBasicCost"
+                                            placeholder="Enter Purchase Basic Cost">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label>Tax</label>
-                                        <input type="text" name="purchaseBasicCostTax" id="purchaseBasicCostTax" class="form-control allowOnlyDigit purchaseBasicCostTax" placeholder="Enter Tax">
+                                        <input type="text" name="purchaseBasicCostTax" id="purchaseBasicCostTax"
+                                            class="form-control allowOnlyDigit purchaseBasicCostTax"
+                                            placeholder="Enter Tax">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label>Landing Cost</label>
-                                        <input type="text" name="landingCost" id="landingCost" class="form-control allowOnlyDigit landingCost" placeholder="Enter Lending Cost">
+                                        <input type="text" name="landingCost" id="landingCost"
+                                            class="form-control allowOnlyDigit landingCost"
+                                            placeholder="Enter Lending Cost">
                                     </div>
                                 </div>
                             </div>
@@ -118,26 +131,32 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label>Basic Selling Cost </label>
-                                        <input type="text" name="basicSellingPrice" id="basicSellingPrice" class="form-control allowOnlyDigit basicSellingPrice" placeholder="Enter Basic Selling Price">
+                                        <input type="text" name="basicSellingPrice" id="basicSellingPrice"
+                                            class="form-control allowOnlyDigit basicSellingPrice"
+                                            placeholder="Enter Basic Selling Price">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label>Tax</label>
-                                        <input type="text" name="basicSellingPriceTax" id="basicSellingPriceTax" class="form-control allowOnlyDigit basicSellingPriceTax" placeholder="Enter Tax">
+                                        <input type="text" name="basicSellingPriceTax" id="basicSellingPriceTax"
+                                            class="form-control allowOnlyDigit basicSellingPriceTax"
+                                            placeholder="Enter Tax">
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label>MRP</label>
-                                        <input type="text" name="mrp" id="mrp" class="form-control allowOnlyDigit mrp" placeholder="Enter MRP">
+                                        <input type="text" name="mrp" id="mrp" class="form-control allowOnlyDigit mrp"
+                                            placeholder="Enter MRP">
                                     </div>
 
                                 </div>
 
                             </div>
                             <div class="float-right">
-                                <button type="button" id="addUpdateItemButton" name="submit" class="btn btn-primary">Save</button>
+                                <button type="button" id="addUpdateItemButton" name="submit"
+                                    class="btn btn-primary">Save</button>
                                 <a href="list-item.php" type="button" name="delete" class="btn btn-danger">Cancel</a>
                             </div>
 
@@ -166,153 +185,153 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
     ?>
 
     <script>
-        $(document).ready(function() {
-            let itemId = $('#itemId').val();
-            if (itemId !== '0') {
-                getItemDetails(itemId)
-            }
+    $(document).ready(function() {
+        let itemId = $('#itemId').val();
+        if (itemId !== '0') {
+            getItemDetails(itemId)
+        }
 
+    });
+
+    function getItemDetails(itemId) {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getItemDetails',
+            'itemId': itemId
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+
+                $.each(response.result.itemList, function(index, item) {
+                    $('#itemName').val(item.itemName);
+                    $('#itemCode').val(item.itemCode);
+                    $('#hsnCode').val(item.hsnCode);
+                    $('#openingStock').val(item.openingStock);
+                    $('#minimumStockLevel').val(item.minimumStockLevel);
+                    $('#basicSellingPrice').val(item.basicSellingPrice);
+                    $('#landingCost').val(item.landingCost);
+                    $('#purchaseBasicCost').val(item.purchaseBasicCost);
+                    $('#mrp').val(item.mrp);
+                    $('#action').val('edit');
+
+                });
+            } else {
+                toast_error(response.message);
+            }
         });
+    }
 
-        function getItemDetails(itemId) {
 
-            let sendApiDataObj = {
-                '<?php echo systemProject ?>': 'Masters',
-                '<?php echo systemModuleFunction ?>': 'getItemDetails',
-                'itemId': itemId
-            };
-            APICallAjax(sendApiDataObj, function(response) {
-                if (response.responseCode == RESULT_OK) {
-
-                    $.each(response.result.itemList, function(index, item) {
-                        $('#itemName').val(item.itemName);
-                        $('#itemCode').val(item.itemCode);
-                        $('#hsnCode').val(item.hsnCode);
-                        $('#openingStock').val(item.openingStock);
-                        $('#minimumStockLevel').val(item.minimumStockLevel);
-                        $('#basicSellingPrice').val(item.basicSellingPrice);
-                        $('#landingCost').val(item.landingCost);
-                        $('#purchaseBasicCost').val(item.purchaseBasicCost);
-                        $('#mrp').val(item.mrp);
-                        $('#action').val('edit');
-
-                    });
-                } else {
-                    toast_error(response.message);
-                }
-            });
+    //find Basic Selling Cost calculation
+    function updateBasicSellingCost() {
+        let mrp = parseFloat($("#mrp").val());
+        let basicSellingPriceTax = parseFloat($("#basicSellingPriceTax").val());
+        let basicSellingPrice = parseFloat($("#basicSellingPrice").val());
+        let taxAmount = 0
+        if (!isNaN(mrp) && !isNaN(basicSellingPriceTax)) {
+            taxAmount = (mrp * basicSellingPriceTax) / 100;
         }
 
+        $("#basicSellingPrice").val(displayViewAmountDigit((mrp - taxAmount)));
 
-        //find Basic Selling Cost calculation
-        function updateBasicSellingCost() {
-            let mrp = parseFloat($("#mrp").val());
-            let basicSellingPriceTax = parseFloat($("#basicSellingPriceTax").val());
-            let basicSellingPrice = parseFloat($("#basicSellingPrice").val());
-            let taxAmount = 0
-            if (!isNaN(mrp) && !isNaN(basicSellingPriceTax)) {
-                taxAmount = (mrp * basicSellingPriceTax) / 100;
-            }
+    }
+    $('#mrp').on('change', updateBasicSellingCost);
 
-            $("#basicSellingPrice").val(displayViewAmountDigit((mrp - taxAmount)));
+    //find landing cost calculation
+    function updateLandingCost() {
+        let purchaseBasicCost = parseFloat($("#purchaseBasicCost").val());
+        let purchaseBasicCostTax = parseFloat($("#purchaseBasicCostTax").val());
+        let landingCost = parseFloat($("#landingCost").val());
+        let taxAmount = 0
 
-        }
-        $('#mrp').on('change', updateBasicSellingCost);
-
-        //find landing cost calculation
-        function updateLandingCost() {
-            let purchaseBasicCost = parseFloat($("#purchaseBasicCost").val());
-            let purchaseBasicCostTax = parseFloat($("#purchaseBasicCostTax").val());
-            let landingCost = parseFloat($("#landingCost").val());
-            let taxAmount = 0
-
-            if (!isNaN(purchaseBasicCost) && !isNaN(purchaseBasicCostTax)) {
-                $("#basicSellingPriceTax").val((purchaseBasicCostTax))
-                taxAmount = (purchaseBasicCost * purchaseBasicCostTax) / 100;
-            }
-
-            $("#landingCost").val(displayViewAmountDigit((purchaseBasicCost + taxAmount)));
+        if (!isNaN(purchaseBasicCost) && !isNaN(purchaseBasicCostTax)) {
+            $("#basicSellingPriceTax").val((purchaseBasicCostTax))
+            taxAmount = (purchaseBasicCost * purchaseBasicCostTax) / 100;
         }
 
-
-        $('#purchaseBasicCost').on('change', updateLandingCost);
-        $('#purchaseBasicCostTax').on('change', updateLandingCost);
-        $('#landingCost').on('change', updateLandingCost);
+        $("#landingCost").val(displayViewAmountDigit((purchaseBasicCost + taxAmount)));
+    }
 
 
-        $('#addUpdateItemButton').on('click', function(event) {
-            let itemName = $('#itemName').val();
-            let itemCode = $('#itemCode').val();
-            let hsnCode = $('#hsnCode').val();
-            let openingStock = $('#openingStock').val();
-            let minimumStockLevel = $('#minimumStockLevel').val();
-            let purchaseBasicCost = $('#purchaseBasicCost').val();
-            let basicSellingPrice = $('#basicSellingPrice').val();
-            let purchaseBasicCostTax = parseFloat($("#purchaseBasicCostTax").val());
-            let basicSellingPriceTax = parseFloat($("#basicSellingPriceTax").val());
-            let landingCost = $('#landingCost').val();
-            let mrp = $('#mrp').val();
-            let action = $('#action').val();
-            let itemId = $('#itemId').val();
+    $('#purchaseBasicCost').on('change', updateLandingCost);
+    $('#purchaseBasicCostTax').on('change', updateLandingCost);
+    $('#landingCost').on('change', updateLandingCost);
 
-            if (itemName === '') {
-                toast_error("Please enter item name.");
-                $('#itemName').focus();
-                return false;
+
+    $('#addUpdateItemButton').on('click', function(event) {
+        let itemName = $('#itemName').val();
+        let itemCode = $('#itemCode').val();
+        let hsnCode = $('#hsnCode').val();
+        let openingStock = $('#openingStock').val();
+        let minimumStockLevel = $('#minimumStockLevel').val();
+        let purchaseBasicCost = $('#purchaseBasicCost').val();
+        let basicSellingPrice = $('#basicSellingPrice').val();
+        let purchaseBasicCostTax = parseFloat($("#purchaseBasicCostTax").val());
+        let basicSellingPriceTax = parseFloat($("#basicSellingPriceTax").val());
+        let landingCost = $('#landingCost').val();
+        let mrp = $('#mrp').val();
+        let action = $('#action').val();
+        let itemId = $('#itemId').val();
+
+        if (itemName === '') {
+            toast_error("Please enter item name.");
+            $('#itemName').focus();
+            return false;
+        }
+        if (itemCode === '') {
+            toast_error("Please enter item code.");
+            $('#itemCode').focus();
+            return false;
+        }
+        if (hsnCode === '') {
+            toast_error("Please enter item hsn code.");
+            $('#hsnCode').focus();
+            return false;
+        }
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'addUpdateItem',
+            'itemId': itemId,
+            'itemName': itemName,
+            'itemCode': itemCode,
+            'hsnCode': hsnCode,
+            'openingStock': openingStock,
+            'minimumStockLevel': minimumStockLevel,
+            'purchaseBasicCost': purchaseBasicCost,
+            'purchaseBasicCostTax': purchaseBasicCostTax,
+            'basicSellingPriceTax': basicSellingPriceTax,
+            'basicSellingPrice': basicSellingPrice,
+            'landingCost': landingCost,
+            'mrp': mrp,
+            'action': action,
+        };
+
+        APICallAjax(sendApiDataObj, function(response) {
+            if (response.responseCode == RESULT_OK) {
+                toast_success(response.message);
+                window.location = "list-item.php";
+                resetFormFields()
+            } else {
+                toast_error(response.message);
             }
-            if (itemCode === '') {
-                toast_error("Please enter item code.");
-                $('#itemCode').focus();
-                return false;
-            }
-            if (hsnCode === '') {
-                toast_error("Please enter item hsn code.");
-                $('#hsnCode').focus();
-                return false;
-            }
-
-            let sendApiDataObj = {
-                '<?php echo systemProject ?>': 'Masters',
-                '<?php echo systemModuleFunction ?>': 'addUpdateItem',
-                'itemId': itemId,
-                'itemName': itemName,
-                'itemCode': itemCode,
-                'hsnCode': hsnCode,
-                'openingStock': openingStock,
-                'minimumStockLevel': minimumStockLevel,
-                'purchaseBasicCost': purchaseBasicCost,
-                'purchaseBasicCostTax': purchaseBasicCostTax,
-                'basicSellingPriceTax': basicSellingPriceTax,
-                'basicSellingPrice': basicSellingPrice,
-                'landingCost': landingCost,
-                'mrp': mrp,
-                'action': action,
-            };
-
-            APICallAjax(sendApiDataObj, function(response) {
-                if (response.responseCode == RESULT_OK) {
-                    toast_success(response.message);
-                    window.location = "list-item.php";
-                    resetFormFields()
-                } else {
-                    toast_error(response.message);
-                }
-            });
         });
+    });
 
-        // Function to reset form fields
-        function resetFormFields() {
-            $('#itemName').val('');
-            $('#lastName').val('');
-            $('#userName').val('');
-            $('#address').val('');
-            $('#state').val('');
-            $('#mobile').val('');
-            $('#password').val('');
-            $('#email').val('');
-            $('#action').val('add');
-            $('#itemId').val();
-        }
+    // Function to reset form fields
+    function resetFormFields() {
+        $('#itemName').val('');
+        $('#lastName').val('');
+        $('#userName').val('');
+        $('#address').val('');
+        $('#state').val('');
+        $('#mobile').val('');
+        $('#password').val('');
+        $('#email').val('');
+        $('#action').val('add');
+        $('#itemId').val();
+    }
     </script>
 </body>
 

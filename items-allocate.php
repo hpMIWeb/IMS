@@ -36,7 +36,7 @@ include_once './include/common-constat.php';
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>NEW ITEM ISSUE</h1>
+                            <h1>New Item Issue</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -72,7 +72,7 @@ include_once './include/common-constat.php';
                                 </div>
                                 <div class="col-3">
                                     <div class="form-group">
-                                        <label>Item Name</label>
+                                        <label>Item Name (Item Code)</label>
                                         <select name="itemId" id="itemId" class="form-control select2">
                                             <option selected="selected">Select Item</option>
                                         </select>
@@ -110,6 +110,7 @@ include_once './include/common-constat.php';
                                         <thead>
                                             <tr>
                                                 <th>Sr. No.</th>
+                                                <th>Item Code</th>
                                                 <th>Item Name</th>
                                                 <th>Item Qty</th>
                                             </tr>
@@ -166,7 +167,7 @@ include_once './include/common-constat.php';
         APICallAjax(sendApiDataObj, function(response) {
 
             if (response.responseCode == RESULT_OK) {
-                let html = '<option selected="selected">Select Item</option>';
+                let html = '<option  value="" selected="selected">Select Item</option>';
                 $.each(response.result.itemList, function(index, items) {
                     html += '<option value="' + items.id + '">' + items.itemName + ' (' + items
                         .itemCode +
@@ -187,7 +188,7 @@ include_once './include/common-constat.php';
         APICallAjax(sendApiDataObj, function(response) {
             if (response.responseCode == RESULT_OK) {
 
-                let html = '<option selected="selected">Select username </option>';
+                let html = '<option value="" selected="selected">Select username </option>';
                 $.each(response.result.user, function(index, user) {
 
                     html += '<option value="' + user.id + '">' + user.firstName + " " + user.lastName +
@@ -217,6 +218,7 @@ include_once './include/common-constat.php';
                 $.each(response.result.itemList, function(index, items) {
                     html += '<tr>';
                     html += '<td>' + count + '</td>';
+                    html += '<td>' + items.itemCode + '</td>';
                     html += '<td>' + items.itemName + '</td>';
                     html += '<td>' + items.allocateQty + '</td>';
                     html += '</tr>';
@@ -278,6 +280,7 @@ include_once './include/common-constat.php';
             }
         });
     }
+
     $("#userId").change(function() {
         if ($(this).val() !== '') {
             getUserAllocatedItemList()

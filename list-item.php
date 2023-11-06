@@ -12,7 +12,7 @@ include_once './include/common-constat.php';
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>List</title>
+    <title>Item List</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
@@ -33,15 +33,15 @@ include_once './include/common-constat.php';
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">
-                <div class="container-fl">
+                <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>List</h1>
+                            <h1>Item List</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">list</li>
+                                <li class="breadcrumb-item active">Item List</li>
                             </ol>
                         </div>
                     </div>
@@ -174,8 +174,8 @@ include_once './include/common-constat.php';
                 $.each(response.result.itemList, function(index, items) {
                     html += '<tr>';
                     html += '<td>' + count + '</td>';
-                    html += '<td>' + items.itemName + '</td>';
                     html += '<td>' + items.itemCode + '</td>';
+                    html += '<td>' + items.itemName + '</td>';
                     html += '<td>' + displayViewAmountDigit(items.minimumStockLevel) + '</td>';
                     html += '<td>' + displayIndianRupeeCurrency(items.mrp) + '</td>';
                     html += '<td class="text-center-block py-0 align-middle">';
