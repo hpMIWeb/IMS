@@ -159,7 +159,7 @@ include_once './include/common-constat.php';
 
             if (response.responseCode == RESULT_OK) {
 
-                let html = '<option selected="selected">Select Item</option>';
+                let html = '<option value="" selected="selected">Select Item</option>';
 
                 $.each(response.result.itemList, function(index, items) {
                     html += '<option value="' + items.id + '">' + items.itemName + ' (' + items
@@ -182,7 +182,7 @@ include_once './include/common-constat.php';
         APICallAjax(sendApiDataObj, function(response) {
             if (response.responseCode == RESULT_OK) {
 
-                let html = '<option selected="selected">Select username </option>';
+                let html = '<option value="" selected="selected">Select username </option>';
                 $.each(response.result.user, function(index, user) {
 
                     html += '<option value="' + user.id + '">' + user.firstName + " " + user.lastName +
@@ -270,10 +270,6 @@ include_once './include/common-constat.php';
         let action = $("#action").val()
         let itemAllocationId = $("#itemAllocationId").val()
 
-
-        if (action === 'edit') {
-            defectiveQty = defectiveQty + userQty;
-        }
         if (userId === '') {
             toast_error("Please select user.");
             $("#userId").focus();

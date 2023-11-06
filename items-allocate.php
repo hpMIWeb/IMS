@@ -307,9 +307,13 @@ include_once './include/common-constat.php';
         let itemAllocationId = $("#itemAllocationId").val()
 
 
-        if (action === 'edit') {
-            allocatedQty = allocatedQty + userQty;
+        console.log(allocatedQty > itemQty)
+        if (allocatedQty > itemQty) {
+            toast_error("Enter Qty is Greater than to item Qty Please change it .");
+            $(this).focus();
+            return false;
         }
+
         if (userId === '') {
             toast_error("Please select user.");
             $("#userId").focus();
@@ -331,11 +335,9 @@ include_once './include/common-constat.php';
 
         }
 
-        if (allocatedQty > itemQty) {
-            toast_error("Enter Qty is Greater than to item Qty Please change it .");
-            $(this).focus();
-            return false;
-        }
+        console.log("allocatedQty", allocatedQty);
+        console.log("itemQty", itemQty);
+
 
 
 

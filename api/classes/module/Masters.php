@@ -517,7 +517,7 @@ class Masters extends Config
                 $query = $this::$masterConn->prepare("INSERT INTO `item_user_allocation` (`user_id`,`item_id`,`allocate_qty`,`created_by`,`created_at`) 
                 VALUES ('$userId','$itemId','$allocateQty','" . $this->userMasterId . "','".$this->getDateTime()."');");
             } elseif ($this->isNotNullOrEmptyOrZero($itemAllocationId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
-                 $query = $this::$masterConn->prepare("UPDATE `item_user_allocation` SET `allocate_qty`='$allocateQty',`modified_by`='" . $this->userMasterId . "' WHERE id = '$itemAllocationId'");
+                 $query = $this::$masterConn->prepare("UPDATE `item_user_allocation` SET `allocate_qty`=allocate_qty + $allocateQty,`modified_by`='" . $this->userMasterId . "' WHERE id = '$itemAllocationId'");
              }
 
             if ($query->execute()) {
@@ -598,7 +598,7 @@ class Masters extends Config
                 $query = $this::$masterConn->prepare("INSERT INTO `item_defective_master` (`user_id`,`item_id`,`defective_qty`,`created_by`,`created_at`) 
                 VALUES ('$userId','$itemId','$defectiveQty','" . $this->userMasterId . "','".$this->getDateTime()."');");
             } elseif ($this->isNotNullOrEmptyOrZero($itemAllocationId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
-                 $query = $this::$masterConn->prepare("UPDATE `item_defective_master` SET `defective_qty`='$defectiveQty',`modified_by`='" . $this->userMasterId . "' WHERE id = '$itemAllocationId'");
+                 $query = $this::$masterConn->prepare("UPDATE `item_defective_master` SET `defective_qty`= defective_qty+ $defectiveQty,`modified_by`='" . $this->userMasterId . "' WHERE id = '$itemAllocationId'");
              }
 
             if ($query->execute()) {
@@ -726,7 +726,14 @@ class Masters extends Config
 
             $invoiceId = $this->handleSpecialCharacters($_POST['invoiceId']);
            
-            $query = $this::$masterConn->prepare("SELECT `item_defective_master`.*,`item_list`.`item_name` AS itemName FROM `item_defective_master` LEFT JOIN `item_list` ON `item_list`.id=`item_defective_master`.item_id $appendQuery");
+            $appendQuery = "";
+
+            $listQuery = "SELECT `item_defective_master`.*,`item_list`.`item_name` AS itemName
+                            FROM `item_defective_master`  
+                            LEFT JOIN `item_list` ON `item_list`.id=`item_defective_master`.item_id 
+                            $appendQuery";
+
+            $query = $this::$masterConn->prepare($listQuery);
             if ($query->execute()) {
                     if ($query->rowCount() > 0) {
                         $this->successData();
