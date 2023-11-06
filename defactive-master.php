@@ -161,10 +161,10 @@ include_once './include/common-constat.php';
                 let html = '<option selected="selected">Select Item</option>';
 
                 $.each(response.result.itemList, function(index, items) {
-                    html += '<option value="' + items.id + '">' + items.itemName + '</option>';
-
+                    html += '<option value="' + items.id + '">' + items.itemName + ' (' + items
+                        .itemCode +
+                        ')</option>';
                 });
-
                 $('#itemId').html(html)
             }
         });
