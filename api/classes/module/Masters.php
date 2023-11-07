@@ -422,6 +422,7 @@ class Masters extends Config
                             'openingStock' => $this->convertNullOrEmptyStringToZero($row['opening_stock']),
                             'purchaseBasicCost' => $this->convertNullOrEmptyStringToZero($row['purchase_basic_cost']),
                             'basicSellingPrice' => $this->convertNullOrEmptyStringToZero($row['basic_selling_price']),
+                            'basicSellingTax' => $this->convertNullOrEmptyStringToZero($row['basic_selling_tax']),
                             'landingCost' => $this->convertNullOrEmptyStringToZero($row['landing_cost']),
                             'mrp' => $this->convertNullOrEmptyStringToZero($row['mrp']),
                         );
@@ -443,6 +444,8 @@ class Masters extends Config
 
         try {
 
+            $itemId = $this->handleSpecialCharacters($_POST['itemId']);
+            $invoiceDate = $this->handleSpecialCharacters($_POST['invoiceDate']);
             $itemName = $this->handleSpecialCharacters($_POST['itemName']);
             $itemCode = $this->handleSpecialCharacters($_POST['itemCode']);
             $hsnCode = $this->handleSpecialCharacters($_POST['hsnCode']);
@@ -454,7 +457,6 @@ class Masters extends Config
             $basicSellingPriceTax = $this->handleSpecialCharacters($_POST['basicSellingPriceTax']);
             $landingCost = $this->handleSpecialCharacters($_POST['landingCost']);
             $mrp = $this->handleSpecialCharacters($_POST['mrp']);
-            $itemId = $this->handleSpecialCharacters($_POST['itemId']);
 
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
@@ -667,6 +669,8 @@ class Masters extends Config
         try{
 
             $invoiceId = $this->handleSpecialCharacters($_POST['invoiceId']);
+            $displayNumber = $this->handleSpecialCharacters($_POST['displayNumber']);
+            $invoiceDate = $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['invoiceDate'], true, false));
             $billNo = $this->handleSpecialCharacters($_POST['billNo']);
             $clientName = $this->handleSpecialCharacters($_POST['clientName']);
             $contactNumber = $this->handleSpecialCharacters($_POST['contactNumber']);
@@ -684,8 +688,8 @@ class Masters extends Config
 
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                $query = $this::$masterConn->prepare("INSERT INTO `invoice_master`(`bill_no`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`, `gst_percentage`, `round_off`, `net_amount`, `created_by`) 
-                        VALUES  ('$billNo','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','18','$invoiceRoundOff','$invoiceNetAmount','".$this->userMasterId."')");
+                $query = $this::$masterConn->prepare("INSERT INTO `invoice_master`(`display_number`,`invoice_date`,`bill_no`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`,  `round_off`, `net_amount`, `created_by`) 
+                        VALUES  ('$displayNumber','$invoiceDate','$billNo','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','$invoiceRoundOff','$invoiceNetAmount','".$this->userMasterId."')");
             }
 
             if ($query->execute()) {
@@ -699,10 +703,13 @@ class Masters extends Config
                             $itemsQty = $this->handleSpecialCharacters($item['itemQty']);
                             $itemsRate = $this->handleSpecialCharacters($item['itemRate']);
                             $itemsDiscount = $this->handleSpecialCharacters($item['itemDiscount']);
+                            $itemDiscountAmount = $this->handleSpecialCharacters($item['itemDiscountAmount']);
+                            $itemGST = $this->handleSpecialCharacters($item['itemGST']);
+                            $itemGSTAmount = $this->handleSpecialCharacters($item['itemGSTAmount']);
                             $total = $this->handleSpecialCharacters($item['total']);
 
-                            $itemInsertQuery = $this::$masterConn->prepare("INSERT INTO  `invoice_details`(`invoice_idi`, `item_id`, `item_qty`, `item_rate`, `item_discount`, `item_total`, `created_by`) 
-                            VALUES ('$invoiceId','$itemsId','$itemsQty','$itemsRate','$itemsDiscount','$total','".$this->userMasterId."')");
+                            $itemInsertQuery = $this::$masterConn->prepare("INSERT INTO  `invoice_details`(`invoice_idi`, `item_id`, `item_qty`, `item_rate`, `item_discount`, `item_discount_amount`,`item_gst`,`item_gst_amount`,`item_total`,`created_by`) 
+                            VALUES ('$invoiceId','$itemsId','$itemsQty','$itemsRate','$itemsDiscount','$itemDiscountAmount','$itemGST','$itemGSTAmount','$total','".$this->userMasterId."')");
      
                             $itemInsertQuery->execute();
 
@@ -728,10 +735,7 @@ class Masters extends Config
            
             $appendQuery = "";
 
-            $listQuery = "SELECT `item_defective_master`.*,`item_list`.`item_name` AS itemName
-                            FROM `item_defective_master`  
-                            LEFT JOIN `item_list` ON `item_list`.id=`item_defective_master`.item_id 
-                            $appendQuery";
+            $listQuery = "SELECT * FROM `invoice_master` ORDER BY id DESC";
 
             $query = $this::$masterConn->prepare($listQuery);
             if ($query->execute()) {
@@ -740,16 +744,19 @@ class Masters extends Config
                         foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
                             $this->data[] = array(
                                 'id' => $this->convertNullOrEmptyStringToZero($row['id']),
-                                'itemId' => $this->convertNullOrEmptyStringToZero($row['item_id']),
-                                'itemName' => $this->convertNullToEmptyString($row['itemName']),
-                                'userId' => $this->convertNullOrEmptyStringToZero($row['user_id']),
-                                'defectiveQty' => $this->convertNullOrEmptyStringToZero($row['defective_qty']),
+                                'displayNumber' => $this->convertNullOrEmptyStringToZero($row['display_number']),
+                                'billNo' => $this->convertNullToEmptyString($row['bill_no']),
+                                'clientName' => $this->convertNullToEmptyString($row['client_name']),
+                                'contactNumber' => $this->convertNullToEmptyString($row['contact_number']),
+                                'invoiceDate' => $this->convertNullToEmptyString($row['invoice_date']),
+                                'startDateDisplay' => $this->convertNullToEmptyString($this->formatDateTime('d-m-Y', $row['invoice_date'])),
+                                'netAmount' => $this->convertNullOrEmptyStringToZero($row['net_amount']),
                                 
                             );
                         }
-                        $this::$result = array('itemList' => $this->data);
+                        $this::$result = array('invoiceList' => $this->data);
                     } else {
-                        $this->noData("No any Item");
+                        $this->noData("No any Invoice");
                     }
                 } else {
                     $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
@@ -884,10 +891,10 @@ class Masters extends Config
                     foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
                         $this->data[] = array(
                             'id' => $this->convertNullOrEmptyStringToZero($row['itemId']),
-                            'itemName' => $this->convertDateTimeZeroToString($row['itemName']),
-                            'itemCode' => $this->convertDateTimeZeroToString($row['itemCode']),
-                            'itemHSNCode' => $this->convertDateTimeZeroToString($row['itemHSNCode']),
-                            'itemStock' => $this->convertDateTimeZeroToString($row['itemStock']),
+                            'itemName' => $this->convertNullToEmptyString($row['itemName']),
+                            'itemCode' => $this->convertNullToEmptyString($row['itemCode']),
+                            'itemHSNCode' => $this->convertNullToEmptyString($row['itemHSNCode']),
+                            'itemStock' => $this->convertNullOrEmptyStringToZero($row['itemStock']),
                            
                         );
                     }
@@ -899,8 +906,46 @@ class Masters extends Config
                 $this->failureData();
             }
 
-    } catch (PDOException $e) {
+        } catch (PDOException $e) {
             $this->exceptionData();
+        }
+    }
+
+    public function getLastDisplayNumber(){
+
+        $invoiceDate = $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['invoiceDate'], true, false));
+        $financialYearDates  = $this->getFinancialYearDates($invoiceDate);
+        $startDate = $financialYearDates['startDate'];
+        $endDate = $financialYearDates['endDate'];
+        //     $query = $this::$masterConn->prepare("
+        //     SELECT
+        //         MAX(display_number) AS maxDisplayNumber
+        //     FROM invoice_master
+        //     // WHERE invoice_date >= '$startDate'
+        //     // AND invoice_date <= '$endDate';
+        // ");  
+
+        $query = $this::$masterConn->prepare("
+            SELECT
+                MAX(display_number) AS maxDisplayNumber
+            FROM invoice_master
+            
+        ");
+
+        $maxDisplayNumber = 1;
+        if ($query->execute()) {
+            if ($query->rowCount() > 0) {
+                foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
+
+                    $maxDisplayNumber =$row['maxDisplayNumber']+1;
+                }
+            } else {
+                    $maxDisplayNumber = 1;
+            }
+            $this->successData();
+            $this::$result = array('maxDisplayNumber' => $maxDisplayNumber);
+        } else {
+            $this->failureData();
         }
     }
     

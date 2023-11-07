@@ -387,6 +387,25 @@ trait CommonFunction
         return str_replace($searchKeyWord, $replaceKeyWord, $string);
     }
 
+
+
+    public function getFinancialYearDates($inputDate) {
+        // Get the year of the input date
+        $inputYear = date('Y', strtotime($inputDate));
+
+        // Calculate the start date of the financial year (April 1 of the previous year)
+        $financialYearStart = ($inputYear - 1) . '-04-01';
+
+        // Calculate the end date of the financial year (March 31 of the current year)
+        $financialYearEnd = $inputYear . '-03-31';
+
+        // Return the start and end dates of the financial year in an associative array
+        return array(
+            'startDate' => $financialYearStart,
+            'endDate' => $financialYearEnd
+        );
+    }
+
 }
 
 ?>

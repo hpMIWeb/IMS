@@ -77,7 +77,7 @@ include_once './include/common-constat.php';
                                         <div class="form-group">
                                             <label>Bill No</label>
                                             <input type="text" name="billNo" id="billNo" class="form-control"
-                                                placeholder="Enter GST Number" value="">
+                                                placeholder="Enter GST Number" value="" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -90,8 +90,8 @@ include_once './include/common-constat.php';
                                             <input type="text" name="clientName" id="clientName" class="form-control"
                                                 placeholder="Enter Name or Company Name" />
                                             <input type="hidden" id="action" name="action" value="add" />
-                                            <input type="hidden" id="gstPercentage" name="gstPercentage" value="18" />
                                             <input type="hidden" id="invoiceId" name="invoiceId" />
+                                            <input type="hidden" id="displayNumber" name="displayNumber" />
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -166,15 +166,17 @@ include_once './include/common-constat.php';
                                         <table id="itemTable" class="table table-bordered table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 3%;">Sr. No.</th>
+                                                    <th style="width: 2%;">Sr. No.</th>
                                                     <th style="width: 10%;">Item Code</th>
-                                                    <th style="width: 12%;">HSN Code</th>
-                                                    <th style="width: 5%;">Qty</th>
-                                                    <th style="width: 5%;">Rate</th>
-                                                    <th style="width: 5%;">Discount</th>
-                                                    <th style="width: 5%;">Discount Amount</th>
-                                                    <th style="width: 5%;">Total</th>
-                                                    <th style="width: 2%;">Action</th>
+                                                    <th style="width: 10%;">HSN Code</th>
+                                                    <th style="width: 7%;">Qty</th>
+                                                    <th style="width: 7%;">Rate</th>
+                                                    <th style="width: 7%;">Discount</th>
+                                                    <th style="width: 10%;">Discount Amount</th>
+                                                    <th style="width: 10%;">GST</th>
+                                                    <th style="width: 10%;">GST Amount</th>
+                                                    <th style="width: 10%;">Total</th>
+                                                    <th style="width: 10%;">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -227,10 +229,18 @@ include_once './include/common-constat.php';
                                             </div>
                                         </div> -->
                                         <div class="row">
-                                            <div class="col-12">
+                                            <div class="col-6">
                                                 <div class="form-group">
-                                                    <label>GST Amount:</label>
-                                                    <input type="text" name="invoiceGSTAmount" id="invoiceGSTAmount"
+                                                    <label>CGST:</label>
+                                                    <input type="text" name="invoiceCGSTAmount" id="invoiceCGSTAmount"
+                                                        class="form-control" placeholder="GST" disabled>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label>IGST:</label>
+                                                    <input type="text" name="invoiceSGSTAmount" id="invoiceSGSTAmount"
                                                         class="form-control" placeholder="GST" disabled>
 
                                                 </div>
@@ -264,7 +274,7 @@ include_once './include/common-constat.php';
                                         <button type="button" name="submit" id="addUpdateInvoiceBtn"
                                             class="btn btn-primary">
                                             Save</button>
-                                        <button type="button" name="share" class="btn btn-danger">Cancel</button>
+                                        <a href="invoice-list.php" class="btn btn-danger">Cancel</a>
                                     </div>
                                 </div>
                             </div>
@@ -305,11 +315,13 @@ include_once './include/common-constat.php';
     <script>
     //Date picker
     $('#reservationdate').datetimepicker({
-        format: 'L'
+        format: 'DD-MM-YYYY', // Use 'DD-MM-YYYY' for the desired format
+        defaultDate: new Date() // Set the default date to today
     });
     let itemList = []
     $(document).ready(function() {
 
+        getLastDisplayNumber()
         getItemDetails();
         addNewItemRow();
 
@@ -334,8 +346,25 @@ include_once './include/common-constat.php';
 
             if (response.responseCode == RESULT_OK) {
 
-                console.log("response.result.itemList", response.result.itemList)
                 itemList = response.result.itemList
+            }
+        });
+
+    }
+
+    function getLastDisplayNumber() {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getLastDisplayNumber',
+            'invoiceDate': $("#invoiceDate").val()
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+
+            if (response.responseCode == RESULT_OK) {
+                $('#billNo').val("INV-" + response.result.maxDisplayNumber)
+                $('#displayNumber').val(response.result.maxDisplayNumber)
             }
         });
 
@@ -362,7 +391,9 @@ include_once './include/common-constat.php';
 
     $('#addUpdateInvoiceBtn').on('click', function() {
         let action = $("#action").val();
-        let gstPercentage = $("#gstPercentage").val();
+        let invoiceDate = $("#invoiceDate").val();
+        let displayNumber = $("#displayNumber").val();
+        let invoiceType = $("#invoiceType").val();
         let billNo = $("#billNo").val();
         let invoiceId = $("#invoiceId").val();
         let clientName = $("#clientName").val();
@@ -386,10 +417,17 @@ include_once './include/common-constat.php';
                 itemQty: parseFloat(row.find('[data-field="qty"]').val()) || 0,
                 itemRate: parseFloat(row.find('[data-field="rate"]').val()) || 0,
                 itemDiscount: parseFloat(row.find('[data-field="discount"]').val()) || 0,
+                itemDiscountAmount: parseFloat(row.find('[data-field="itemsDiscountAmount"]')
+                    .val()) || 0,
+                itemGST: parseFloat(row.find('[data-field="itemsGSTPer"]')
+                    .val()) || 0,
+                itemGSTAmount: parseFloat(row.find('[data-field="itemsGSTAmount"]')
+                    .val()) || 0,
                 total: parseFloat(row.find('[data-field="total"]').val()) || 0
             };
             itemsData.push(item);
         });
+
 
         let jsonData = JSON.stringify(itemsData);
 
@@ -397,9 +435,11 @@ include_once './include/common-constat.php';
             '<?php echo systemProject ?>': 'Masters',
             '<?php echo systemModuleFunction ?>': 'addUpdateInvoiceDetails',
             'action': action,
-            'gstPercentage': gstPercentage,
-            'billNo': billNo,
             'invoiceId': invoiceId,
+            'invoiceDate': invoiceDate,
+            'invoiceType': invoiceType,
+            'displayNumber': displayNumber,
+            'billNo': billNo,
             'clientName': clientName,
             'contactNumber': contactNumber,
             'email': email,
@@ -418,6 +458,7 @@ include_once './include/common-constat.php';
 
             if (response.responseCode == RESULT_OK) {
                 toast_success(response.messages)
+                window.location = "invoice-list.php";
             } else {
                 toast_error(response.messages)
             }
@@ -447,20 +488,32 @@ include_once './include/common-constat.php';
             "' value='" + displayViewAmountDigit(0) + "' placeholder='Item Discount' data-field='discount' />";
         html += "</td>";
         html += "<td>";
-        html += "<input type='text' class='form-control allowOnlyDigit' name='itemsDiscount" + rowNumber +
-            "' value='" + displayViewAmountDigit(0) + "' placeholder='Item Discount' data-field='discount' disabled/>";
+        html += "<input type='text' class='form-control allowOnlyDigit' name='itemsDiscountAmount" + rowNumber +
+            "' value='" + displayViewAmountDigit(0) +
+            "' placeholder='Item Discount' data-field='itemsDiscountAmount' disabled/>";
+        html += "</td>";
+        html += "<td>";
+        html += "<input type='text' class='form-control allowOnlyDigit' name='itemsGSTPer" + rowNumber +
+            "' value='" + displayViewAmountDigit(0) +
+            "' placeholder='Item Discount' data-field='itemsGSTPer' disabled/>";
+        html += "</td>";
+        html += "<td>";
+        html += "<input type='text' class='form-control allowOnlyDigit' name='itemsGSTAmount" + rowNumber +
+            "' value='" + displayViewAmountDigit(0) +
+            "' placeholder='Item Discount' data-field='itemsGSTAmount' disabled/>";
         html += "</td>";
         html += "<td>";
         html += "<input type='text' class='form-control' name='total" + rowNumber +
-            "' value='" + displayViewAmountDigit(1) + "' placeholder='Item Total' disabled data-field='total'/>";
+            "' value='" + displayViewAmountDigit(0) + "' placeholder='Item Total' disabled data-field='total'/>";
         html += "</td>";
         html +=
-            "<td><button type='button' class='btn btn-sm btn-danger delete-item'><i class='fas fa-trash'></i></button></td>";
+            "<td><button type='button' class='btn btn-sm btn-danger delete-item'><i class='fas fa-trash'></i></button> <button type='button' class='btn btn-sm btn-primary add-item'><i class='fas fa-plus'></i></button></td>";
         html += "</tr>";
 
         $('#itemTable tbody').append(html);
         $('.select2').select2();
         reassignInputIds();
+        itemAmountCalculation();
 
     }
 
@@ -470,21 +523,29 @@ include_once './include/common-constat.php';
 
         if (itemId) {
             let selectedItem = itemList.find(item => item.id == itemId);
+            let itemRate = parseFloat(selectedItem.mrp);
+            let gstPercentage = parseFloat(selectedItem.basicSellingTax);
+            let itemGSTAmount = 0;
+            if (gstPercentage > 0) {
+                itemGSTAmount = itemRate * gstPercentage / 100;
+            }
 
-            console.log("selectedItem", selectedItem)
             if (selectedItem) {
                 // Set the values in the table fields based on the selected item
                 row.find('[data-field="qty"]').val(displayViewAmountDigit(1));
                 row.find('[data-field="rate"]').val(displayViewAmountDigit(selectedItem.mrp));
-                row.find('[data-field="discount"]').val(displayViewAmountDigit(1));
-                row.find('[data-field="total"]').val(displayViewAmountDigit(1));
+                row.find('[data-field="discount"]').val(displayViewAmountDigit(0));
+                row.find('[data-field="total"]').val(displayViewAmountDigit(1 * itemRate));
+                row.find('[data-field="itemsGSTPer"]').val(displayViewAmountDigit(selectedItem
+                    .basicSellingTax));
+                row.find('[data-field="itemsGSTAmount"]').val(displayViewAmountDigit(itemGSTAmount));
 
-                // Set the HSN code as text content in the label
                 row.find('[data-field="hsn"]').text(selectedItem.hsnCode);
             }
         }
-        addNewItemRow();
+        // addNewItemRow();
         reassignInputIds();
+        itemAmountCalculation()
     });
 
 
@@ -502,6 +563,11 @@ include_once './include/common-constat.php';
         // Reassign input IDs and recalculate totals
         reassignInputIds();
         itemAmountCalculation();
+    });
+    $('#itemTable tbody').on('click', '.add-item', function() {
+        addNewItemRow();
+        reassignInputIds();
+        itemAmountCalculation()
     });
 
     $('#gstType, #invoiceRoundOff').on('change', function() {
@@ -528,32 +594,44 @@ include_once './include/common-constat.php';
         let gstType = $("#gstType").val();
         let invoiceRoundOffAmount = displayViewAmountDigit($("#invoiceRoundOff").val());
         let invoiceGSTAmount = parseFloat(displayViewAmountDigit(0));
+        let discountAmount = parseFloat(displayViewAmountDigit(0));
+        let totalGSTAmount = parseFloat(displayViewAmountDigit(0));
 
         $('#itemTable tbody tr').each(function() {
             let row = $(this);
             let rate = parseFloat(row.find('[data-field="rate"]').val()) || 0;
             let qty = parseFloat(row.find('[data-field="qty"]').val()) || 0;
             let discount = parseFloat(row.find('[data-field="discount"]').val()) || 0;
-            let total = (rate * qty) - discount;
+            let total = (rate * qty);
+            let gstPercentage = parseFloat(row.find('[data-field="itemsGSTPer"]').val()) || 0;
+            let gstAmount = parseFloat(row.find('[data-field="itemsGSTAmount"]').val()) || 0;
 
+            if (discount > 0) {
+                discountAmount = total * discount / 100;
+            }
+
+            total = total - discountAmount;
+            if (gstPercentage > 0) {
+                gstAmount = total * gstPercentage / 100;
+                totalGSTAmount = totalGSTAmount + gstAmount;
+                total = total + gstAmount;
+            }
+            row.find('[data-field="itemsDiscountAmount"]').val(discountAmount);
+            row.find('[data-field="itemsGSTAmount"]').val(gstAmount);
             row.find('[data-field="total"]').val(total);
+
             totalInvoiceAmount = totalInvoiceAmount + total;
-            totalDiscountAmount = totalDiscountAmount + discount;
+            totalDiscountAmount = totalDiscountAmount + discountAmount;
         });
 
-        console.log("gstType", gstType)
-        if (gstType !== 'notApply') {
-            invoiceGSTAmount = parseFloat(totalInvoiceAmount) * 18 / 100;
-        } else {
-            invoiceGSTAmount = displayViewAmountDigit(0);
-        }
         // calculation of Net Final Amount
         invoiceNetAmount = parseFloat(totalInvoiceAmount) + parseFloat(invoiceGSTAmount) + parseFloat(
             invoiceRoundOffAmount);
 
         $("#invoiceTotalAmount").val(displayViewAmountDigit(totalInvoiceAmount));
         $("#invoiceTotalDiscountAmount").val(displayViewAmountDigit(totalDiscountAmount));
-        $("#invoiceGSTAmount").val(displayViewAmountDigit(invoiceGSTAmount));
+        $("#invoiceCGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
+        $("#invoiceSGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
         $("#invoiceNetAmount").val(displayViewAmountDigit(invoiceNetAmount));
     }
     </script>
