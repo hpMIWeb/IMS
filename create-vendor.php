@@ -224,7 +224,7 @@ $vendorId = isset($_GET['id']) ? $_GET['id'] : 0
         APICallAjax(sendApiDataObj, function(response) {
             if (response.responseCode == RESULT_OK) {
                 toast_success(response.message);
-                window.location = "vendor-item.php";
+                window.location = "vendor-list.php";
                 resetFormFields()
             } else {
                 toast_error(response.message);
