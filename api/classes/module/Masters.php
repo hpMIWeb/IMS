@@ -860,5 +860,48 @@ class Masters extends Config
             $this->exceptionData();
         }
     }
+
+    public function getItemStock(){
+        try{
+
+            $stockType = $this->handleSpecialCharacters($_POST['stockType']);   
+
+            $stockQuery = "";
+            if($this->equals('live',$this->arrayStockType[$stockType])){
+                $stockQuery = "SELECT id AS itemId,item_name AS itemName,item_code AS itemCode,hsn_code AS itemHSNCode,opening_stock AS itemStock FROM `item_list`;";
+            }elseif($this->equals('defective',$this->arrayStockType[$stockType])){
+                $stockQuery = "SELECT SUM(`item_defective_master`.`defective_qty`)  AS itemStock,`item_list`.`item_name` AS itemName,`item_list`.`item_code` AS itemCode ,`item_list`.`hsn_code` AS itemHSNCode
+                FROM `item_defective_master` 
+                LEFT JOIN `item_list` ON `item_list`.id=`item_defective_master`.item_id 
+                GROUP BY `item_list`.`id`";
+            }
+           
+            $query = $this::$masterConn->prepare($stockQuery);
+
+            if ($query->execute()) {
+                if ($query->rowCount() > 0) {
+                    $this->successData();
+                    foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                        $this->data[] = array(
+                            'id' => $this->convertNullOrEmptyStringToZero($row['itemId']),
+                            'itemName' => $this->convertDateTimeZeroToString($row['itemName']),
+                            'itemCode' => $this->convertDateTimeZeroToString($row['itemCode']),
+                            'itemHSNCode' => $this->convertDateTimeZeroToString($row['itemHSNCode']),
+                            'itemStock' => $this->convertDateTimeZeroToString($row['itemStock']),
+                           
+                        );
+                    }
+                    $this::$result = array('stockList' => $this->data);
+                } else {
+                    $this->noData("No any Stock");
+                }
+            } else {
+                $this->failureData();
+            }
+
+    } catch (PDOException $e) {
+            $this->exceptionData();
+        }
+    }
     
 }

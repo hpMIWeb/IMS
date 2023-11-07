@@ -33,6 +33,12 @@ trait ProjectCommon
         "edit" => "edit",
     );
 
+    protected $arrayStockType = array(
+        "live" =>"live",
+        "defective" =>"defective",
+        "company" =>"company"
+    );
+
     protected $filePrefixName = array(
         'portfolio' => "portfolio_",
         'users' => "users_",

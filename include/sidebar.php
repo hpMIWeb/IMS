@@ -12,6 +12,14 @@ $superAdminMenu = array(
         "isHasSubMenu" => false,
         "submenuArray" => array(),
         "icon" => "nav-icon fas fa-tachometer-alt"
+        
+    ),
+    array(
+        "displayName" => "Stock",
+        "redirectPage" => "./stock.php",
+        "isHasSubMenu" => false,
+        "submenuArray" => array(),
+        "icon" => "nav-icon fas fa-clipboard"
     ),
     array(
         "displayName" => "Add Item",

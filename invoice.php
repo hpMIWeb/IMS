@@ -310,6 +310,7 @@ include_once './include/common-constat.php';
     let itemList = []
     $(document).ready(function() {
 
+        getItemDetails();
         addNewItemRow();
 
         $("#invoiceTotalAmount").val(displayViewAmountDigit(0));
@@ -318,8 +319,6 @@ include_once './include/common-constat.php';
         $("#invoiceRoundOff").val(displayViewAmountDigit(0));
         $("#invoiceNetAmount").val(displayViewAmountDigit(0));
 
-
-        getItemDetails();
     });
 
 
@@ -335,17 +334,28 @@ include_once './include/common-constat.php';
 
             if (response.responseCode == RESULT_OK) {
 
-                let html = '<option  value="" selected="selected">Select Item</option>';
-
-                $.each(response.result.itemList, function(index, items) {
-                    html += '<option value="' + items.id + '">' + items.itemName + '</option>';
-
-                });
+                console.log("response.result.itemList", response.result.itemList)
                 itemList = response.result.itemList
-
-                $('.itemId').html(html)
             }
         });
+
+    }
+
+    function prepareItemDropDown() {
+
+        let html = "<select name='itemId' class='form-control select2 itemId' style='width:100%'  data-field='itemid'>";
+        html += "<option  value=''>Select Item</option>";
+
+        $.each(itemList, function(index, items) {
+            html += '<option value="' + items.id + '">' + items.itemName + ' (' + items.itemCode +
+                ')   </option>';
+
+        });
+        html += "</select>";
+
+        console.log("html", html)
+
+        return html;
 
     }
 
@@ -422,12 +432,11 @@ include_once './include/common-constat.php';
         let rowNumber = $('#itemTable tbody tr').length + 1;
         let html = "<tr>";
         html += "<td>" + rowNumber + "</td>";
-        html += "<td><select name='itemId' class='form-control select2 itemId'></select></td>";
+        html += "<td>" + prepareItemDropDown() + "</td>";
         html += "<td><span data-field='hsn'></span></td>";
         html += "<td>";
         html += "<input type='text' class='form-control' name='itemsQty" + rowNumber +
             "' value='" + displayViewAmountDigit(1) + "' placeholder='Qty' data-field='qty' />";
-        html += "<input type='hidden' name='itemsId' value='' data-field='itemid'/>";
         html += "</td>";
         html += "<td>";
         html += "<input type='text' class='form-control' name='itemsRate" + rowNumber +
@@ -450,6 +459,8 @@ include_once './include/common-constat.php';
         html += "</tr>";
 
         $('#itemTable tbody').append(html);
+        $('.select2').select2();
+        reassignInputIds();
 
     }
 
