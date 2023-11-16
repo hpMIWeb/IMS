@@ -153,7 +153,7 @@ CREATE TABLE `vendor_master`(
 ) ENGINE = InnoDB;
 ***********END  End query 06-11-2023**********************
 
-***********END   query 07-11-2023**********************
+***********   query 07-11-2023**********************
 ALTER TABLE `invoice_master` ADD `display_number` INT NOT NULL AFTER `id`;
 ALTER TABLE `invoice_master` ADD `invoice_date` DATETIME NULL DEFAULT NULL AFTER `bill_no`;
 ALTER TABLE `invoice_master` ADD `invoice_type` TINYINT(2) NOT NULL DEFAULT '1' COMMENT '1 = Cash Memo\r\n2 = GST Invoice' AFTER `bill_no`;
@@ -162,3 +162,20 @@ ALTER TABLE `invoice_details` ADD `item_discount_amount` DECIMAL(60,5) NOT NULL 
 ALTER TABLE `invoice_details` ADD `item_gst` DECIMAL(60,5) NOT NULL DEFAULT '0' AFTER `item_discount_amount`, ADD `item_gst_amount` DECIMAL(60,5) NOT NULL DEFAULT '0' AFTER `item_gst`;
 ALTER TABLE `invoice_details` CHANGE `item_discount` `item_discount` DECIMAL(60,5) NOT NULL DEFAULT '0.00000' COMMENT 'Discount in Percentage';
 ***********END  End query 06-11-2023**********************
+
+
+***********   query 16-11-2023**********************
+
+CREATE TABLE `item_company_store` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `user_id` int(11) DEFAULT 0,
+ `item_id` int(11) DEFAULT 0,
+ `qty` decimal(60,5) DEFAULT 0.00000,
+ `created_by` int(11) DEFAULT 0,
+ `created_at` timestamp NULL DEFAULT current_timestamp(),
+ `modified_by` int(11) DEFAULT 0,
+ `modified_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
+***********End   query 16-11-2023**********************

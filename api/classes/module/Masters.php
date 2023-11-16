@@ -881,6 +881,11 @@ class Masters extends Config
                 FROM `item_defective_master` 
                 LEFT JOIN `item_list` ON `item_list`.id=`item_defective_master`.item_id 
                 GROUP BY `item_list`.`id`";
+            }elseif($this->equals('company',$this->arrayStockType[$stockType])){
+                $stockQuery = "SELECT SUM(`item_company_store`.`qty`)  AS itemStock,`item_list`.`item_name` AS itemName,`item_list`.`item_code` AS itemCode ,`item_list`.`hsn_code` AS itemHSNCode
+                FROM `item_company_store` 
+                LEFT JOIN `item_list` ON `item_list`.id=`item_company_store`.item_id 
+                GROUP BY `item_list`.`id`";
             }
            
             $query = $this::$masterConn->prepare($stockQuery);
@@ -937,7 +942,7 @@ class Masters extends Config
             if ($query->rowCount() > 0) {
                 foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
 
-                    $maxDisplayNumber =$row['maxDisplayNumber']+1;
+                    $maxDisplayNumber = $row['maxDisplayNumber']+1;
                 }
             } else {
                     $maxDisplayNumber = 1;
@@ -946,6 +951,82 @@ class Masters extends Config
             $this::$result = array('maxDisplayNumber' => $maxDisplayNumber);
         } else {
             $this->failureData();
+        }
+    }
+
+    public function addUpdateItemCompanyStore()
+    {
+        try {
+            $itemAllocationId = $this->handleSpecialCharacters($_POST['itemAllocationId']);
+            $itemId = $this->handleSpecialCharacters($_POST['itemId']);
+            $userId = $this->handleSpecialCharacters($_POST['userId']);
+            $defectiveQty = $this->handleSpecialCharacters($_POST['defectiveQty']);
+
+            if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                $query = $this::$masterConn->prepare("INSERT INTO `item_company_store` (`user_id`,`item_id`,`qty`,`created_by`,`created_at`) 
+                VALUES ('$userId','$itemId','$defectiveQty','" . $this->userMasterId . "','".$this->getDateTime()."');");
+            } elseif ($this->isNotNullOrEmptyOrZero($itemAllocationId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
+                 $query = $this::$masterConn->prepare("UPDATE `item_company_store` SET `qty`= qty+ $defectiveQty,`modified_by`='" . $this->userMasterId . "' WHERE id = '$itemAllocationId'");
+             }
+
+            if ($query->execute()) {
+                    if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                        $this->successData("Item Defective successfully.");
+                    } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
+                        $this->successData("Item Defective successfully.");
+                    }
+            } else {
+                $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData($e);
+        }
+    }
+
+    public function getItemCompanyStoreDetails()
+    {
+        try {
+            $itemDefectiveId = $this->handleSpecialCharacters($_POST['itemDefectiveId']);
+
+            $itemId = $this->handleSpecialCharacters($_POST['itemId']);
+            $userId = $this->handleSpecialCharacters($_POST['userId']);
+
+
+            $appendQuery = "";
+
+            if($this->isNotNullOrEmptyOrZero($userId)){
+                $appendQuery  = " WHERE `item_company_store`.user_id = '$userId' ";
+            }
+
+            
+            if($this->isNotNullOrEmptyOrZero($userId) && $this->isNotNullOrEmptyOrZero($itemId)){
+                $appendQuery  = " WHERE `item_company_store`.user_id = '$userId' AND `item_company_store`.item_id = '$itemId' ";
+            }
+
+           $query = $this::$masterConn->prepare("SELECT `item_company_store`.*,`item_list`.`item_name` AS itemName,`item_list`.`item_code` AS itemCode FROM `item_company_store` LEFT JOIN `item_list` ON `item_list`.id=`item_defective_master`.item_id $appendQuery");
+           if ($query->execute()) {
+                if ($query->rowCount() > 0) {
+                    $this->successData();
+                    foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                        $this->data[] = array(
+                            'id' => $this->convertNullOrEmptyStringToZero($row['id']),
+                            'itemId' => $this->convertNullOrEmptyStringToZero($row['item_id']),
+                            'itemName' => $this->convertNullToEmptyString($row['itemName']),
+                            'itemCode' => $this->convertNullToEmptyString($row['itemCode']),
+                            'userId' => $this->convertNullOrEmptyStringToZero($row['user_id']),
+                            'qty' => $this->convertNullOrEmptyStringToZero($row['qty']),
+                            
+                        );
+                    }
+                    $this::$result = array('itemList' => $this->data);
+                } else {
+                    $this->noData("No any Item");
+                }
+            } else {
+                $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData();
         }
     }
     

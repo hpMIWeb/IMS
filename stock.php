@@ -13,7 +13,6 @@ include_once './include/common-constat.php';
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Item Stock</title>
-    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
     include_once("include\commoncss.php");
@@ -72,7 +71,21 @@ include_once './include/common-constat.php';
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <table id="listItemTable" class="table table-bordered table-striped">
+
+                                    <table id="listItemTable" class="table table-bordered table-striped ">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10%;">Sr. No.</th>
+                                                <th>Item Code</th>
+                                                <th>Item Name</th>
+                                                <th>Item Qty</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+
+                                    <table id="listItemTableWithAction"
+                                        class="table table-bordered table-striped d-none listItemTableWithAction">
                                         <thead>
                                             <tr>
                                                 <th style="width: 10%;">Sr. No.</th>
@@ -90,83 +103,125 @@ include_once './include/common-constat.php';
                     </div>
 
                 </div>
-
+            </section>
         </div>
-
-    </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-    </div>
-    <?php
+        <?php
 
     include_once("include/footer.php");
 
     ?>
 
-    <!-- Control Sidebar -->
-    <aside class=" control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
 
-    <!-- jQuery -->
-
-    <?php
+        <?php
 
     include_once("include/jquery.php");
 
     ?>
 
-    <script>
-    $(document).ready(function() {
-        resetDataTable('listItemTable');
-    });
-
-
-
-    $(document).on('change', '#stockType', function() {
-        if ($(this).val() === '') {
-            toast_error("Please select valid stock type");
-            $(this).focus();
-            return false;
-        }
-        let sendApiDataObj = {
-            '<?php echo systemProject ?>': 'Masters',
-            '<?php echo systemModuleFunction ?>': 'getItemStock',
-            'stockType': $(this).val(),
-
-        };
-        APICallAjax(sendApiDataObj, function(response) {
-            $("#listItemTable").dataTable().fnDestroy();
-            $('#listItemTable tbody').html('');
-            if (response.responseCode == RESULT_OK) {
-
-                let html = '';
-                let count = 1;
-
-                $.each(response.result.stockList, function(index, items) {
-                    html += '<tr>';
-                    html += '<td>' + count + '</td>';
-                    html += '<td>' + items.itemCode + '</td>';
-                    html += '<td>' + items.itemName + '</td>';
-                    html += '<td>' + displayViewAmountDigit(items.itemStock) + '</td>';
-                    html += '<td></td>';
-                    html += '</tr>';
-                    count++;
-
-                });
-
-                $('#listItemTable tbody').html(html);
-                resetDataTable('listItemTable');
-            } else {
-                resetDataTable('listItemTable');
-                toast_error(response.message);
-            }
+        <script>
+        $(document).ready(function() {
+            resetDataTable('listItemTable');
         });
-    });
-    </script>
+
+
+
+        $(document).on('change', '#stockType', function() {
+            let stockType = $(this).val();
+
+            if (stockType === '') {
+                toast_error("Please select valid stock type");
+                $(this).focus();
+                return false;
+            }
+
+            let sendApiDataObj = {
+                '<?php echo systemProject ?>': 'Masters',
+                '<?php echo systemModuleFunction ?>': 'getItemStock',
+                'stockType': stockType,
+
+            };
+
+            APICallAjax(sendApiDataObj, function(response) {
+                if (stockType !== 'live') {
+                    $('#listItemTable').addClass('d-none');
+                    $('#listItemTableWithAction').removeClass('d-none');
+
+                    $("#listItemTableWithAction").dataTable().fnDestroy();
+                    $('#listItemTableWithAction tbody').html('');
+                    $("#listItemTable").dataTable().fnDestroy();
+                    $('#listItemTable tbody').html('');
+
+                } else {
+                    $('#listItemTable').removeClass('d-none');
+                    $('#listItemTableWithAction').addClass('d-none');
+
+                    $("#listItemTableWithAction").dataTable().fnDestroy();
+                    $('#listItemTableWithAction tbody').html('');
+                    $("#listItemTable").dataTable().fnDestroy();
+                    $('#listItemTable tbody').html('');
+
+                }
+
+                if (response.responseCode == RESULT_OK) {
+
+                    let html = '';
+                    let count = 1;
+
+                    $.each(response.result.stockList, function(index, items) {
+
+
+                        html += '<tr>';
+                        html += '<td>' + count + '</td>';
+                        html += '<td>' + items.itemCode + '</td>';
+                        html += '<td>' + items.itemName + '</td>';
+                        html += '<td>' + displayViewAmountDigit(items.itemStock) + '</td>';
+                        if (stockType !== 'live') {
+                            html += '<td><div class="input-group mb-3">';
+                            html +=
+                                '<input type="text" class="form-control" placeholder="Qty" >';
+                            html +=
+                                '<button class="btn btn-warning qtyTransferBtn" type ="button" id="button-addon2" data-items-id="' +
+                                items.id + '"> <i class="fa fa-edit"></i> </button>';
+                            html += '</div>';
+                            html += '</td>';
+                        }
+                        html += '</tr>';
+                        count++;
+
+                    });
+
+                    if (stockType !== 'live') {
+                        $('#listItemTableWithAction tbody').html(html);
+                        resetDataTable('listItemTableWithAction');
+                    } else {
+                        $('#listItemTable tbody').html(html);
+                        resetDataTable('listItemTable');
+                    }
+
+
+                } else {
+                    if (stockType !== 'live') {
+                        $('#listItemTableWithAction tbody').html(html);
+                        resetDataTable('listItemTableWithAction');
+                    } else {
+                        $('#listItemTable tbody').html(html);
+                        resetDataTable('listItemTable');
+                    }
+                    toast_error(response.message);
+                }
+            });
+
+
+        });
+
+
+        $(document).on('click', '.qtyTransferBtn', function() {
+            const itemId = $(this).data('items-id');
+
+
+
+        });
+        </script>
 </body>
 
 </html>
