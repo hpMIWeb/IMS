@@ -393,8 +393,6 @@ include_once './include/common-constat.php';
         });
         html += "</select>";
 
-        console.log("html", html)
-
         return html;
 
     }

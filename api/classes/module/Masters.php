@@ -330,7 +330,7 @@ class Masters extends Config
             }
             $query = $this::$masterConn->prepare("SELECT `amc_details`.*,`user_master`.username AS amcAttendPerson FROM `amc_details` 
             LEFT JOIN `user_master` ON  `user_master`.id = `amc_details`.created_by
-            $appendQuery ORDER BY `amc_details`.id DESC");
+            $appendQuery ");
             if ($query->execute()) {
                 if ($query->rowCount() > 0) {
                     $this->successData();
@@ -774,6 +774,7 @@ class Masters extends Config
 
             $vendorId = $this->handleSpecialCharacters($_POST['vendorId']);
             $vendorName = $this->handleSpecialCharacters($_POST['vendorName']);
+            $contactName = $this->handleSpecialCharacters($_POST['contactName']);
             $contactNumber = $this->handleSpecialCharacters($_POST['contactNumber']);
             $contactEmail = $this->handleSpecialCharacters($_POST['contactEmail']);
             $gstNo = $this->handleSpecialCharacters($_POST['gstNo']);
@@ -781,11 +782,11 @@ class Masters extends Config
             $shippingAddress = $this->handleSpecialCharacters($_POST['shippingAddress']);
 
              if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                $query = $this::$masterConn->prepare("INSERT INTO `vendor_master`( `vendor_name`, `contact_number`, `email`, `gst_no`, `billing_address`, `shipping_address`,`created_by`) 
-                VALUES ('$vendorName','$contactNumber','$contactEmail','$gstNo','$billingAddress','$shippingAddress','".$this->userMasterId."')");
+                $query = $this::$masterConn->prepare("INSERT INTO `vendor_master`( `vendor_name`, `contact_number`, `contact_name`,`email`, `gst_no`, `billing_address`, `shipping_address`,`created_by`) 
+                VALUES ('$vendorName','$contactNumber','$contactName','$contactEmail','$gstNo','$billingAddress','$shippingAddress','".$this->userMasterId."')");
             } elseif ($this->isNotNullOrEmptyOrZero($vendorId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
                 $query = $this::$masterConn->prepare("UPDATE `vendor_master`
-                 SET `vendor_name`='$vendorName',`contact_number`='$contactNumber',`email`='$contactEmail',`gst_no`='$gstNo',`billing_address`='$billingAddress',`shipping_address`='$shippingAddress',`modified_by`='".$this->userMasterId."' WHERE id= '$vendorId'");
+                 SET `vendor_name`='$vendorName',`contact_number`='$contactNumber',`email`='$contactEmail',`contact_name`='$contactName',`gst_no`='$gstNo',`billing_address`='$billingAddress',`shipping_address`='$shippingAddress',`modified_by`='".$this->userMasterId."' WHERE id= '$vendorId'");
             }
 
             if ($query->execute()) {
@@ -829,6 +830,7 @@ class Masters extends Config
                                 'id' => $this->convertNullOrEmptyStringToZero($row['id']),
                                 'vendorName' => $this->convertNullToEmptyString($row['vendor_name']),
                                 'contactNumber' => $this->convertNullToEmptyString($row['contact_number']),
+                                'contactName' => $this->convertNullToEmptyString($row['contact_name']),
                                 'gstNo' => $this->convertNullToEmptyString($row['gst_no']),
                                 'billingAddress' => $this->convertNullToEmptyString($row['billing_address']),
                                 'shippingAddress' => $this->convertNullToEmptyString($row['shipping_address']),

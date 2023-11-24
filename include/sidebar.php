@@ -37,7 +37,7 @@ $superAdminMenu = array(
     ),
     array(
         "displayName" => "New Item Return",
-        "redirectPage" => "items-allocate.php",
+        "redirectPage" => "items-return.php",
         "icon" => "nav-icon fas fa-tag",
         "isHasSubMenu" => false,
         "submenuArray" => array(),

@@ -79,9 +79,9 @@ include_once './include/common-constat.php';
                                     </div>
                                 </div>
 
-                                <div class="col-1">
+                                <div class="col-2">
                                     <div class="form-group">
-                                        <label>Item Qty</label>
+                                        <label>Item Qty(USER’S STORE)</label>
                                         <input type="text" name="itemQty" id="itemQty" disabled
                                             class="form-control itemQty" placeholder="Item Qty">
                                     </div>
@@ -92,7 +92,7 @@ include_once './include/common-constat.php';
                                         <label>Total</label>
                                         <input type="text" name="allocatedQty" class="form-control allocatedQty"
                                             placeholder="Allocate Qty" id="allocatedQty">
-                                        <span>Qty You have : - <p id="userExistingQty"></p></span>
+                                        <span>Qty You have (LIVE STORE) : - <p id="userExistingQty"></p></span>
                                     </div>
                                 </div>
 

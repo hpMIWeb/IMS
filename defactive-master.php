@@ -90,7 +90,7 @@ include_once './include/common-constat.php';
                                 <div class="col-1  text-center mt-4 ">
                                     <div class="form-group">
                                         <button type="button" name="assign" id="assign"
-                                            class="btn btn-primary mt-2">Assign</button>
+                                            class="btn btn-primary mt-2">Return</button>
                                     </div>
                                 </div>
                             </div>

@@ -269,6 +269,12 @@ $amcMasterId = isset($_GET['id']) ? $_GET['id'] : 0
             'visitDate': $('#visitDate').val(),
             'action': action,
         };
+
+        if ($('#visitDate').val() === '') {
+            $('#visitDate').focus()
+            toast_error("Please Enter valid Date.");
+            return false;
+        }
         APICallAjax(sendApiDataObj, function(response) {
             if (response.responseCode == RESULT_OK) {
                 toast_success(response.message);

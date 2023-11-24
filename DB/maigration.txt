@@ -181,3 +181,9 @@ CREATE TABLE `item_company_store` (
 ALTER TABLE `invoice_master` ADD `remark` TEXT NULL DEFAULT NULL AFTER `net_amount`;
 
 ***********End   query 16-11-2023**********************
+
+***********   query 24-11-2023**********************
+
+ALTER TABLE `vendor_master` ADD `contact_name` VARCHAR(100) NULL DEFAULT NULL AFTER `contact_number`;
+
+***********End   query 24-11-2023**********************

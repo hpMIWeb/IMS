@@ -58,32 +58,42 @@ $vendorId = isset($_GET['id']) ? $_GET['id'] : 0
                                 <div class="row">
                                     <input type="hidden" name="vendorId" id="vendorId" value="<?php echo $vendorId; ?>">
                                     <input type="hidden" name="action" id="action" value="add">
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Name:</label>
                                             <input type="text" name="vendorName" id="vendorName" class="form-control"
                                                 placeholder="Enter Name:">
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Contact</label>
-                                            <input type="text" name="contactNumber" id="contactNumber"
-                                                class="form-control" placeholder="Enter Contact Number">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
+
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Email</label>
                                             <input type="text" name="contactEmail" id="contactEmail"
                                                 class="form-control" placeholder="Enter Contact Email">
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label>GST No</label>
                                             <input type="text" name="gstNo" id="gstNo" class="form-control"
                                                 placeholder="Enter GST No">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Contact Name</label>
+                                            <input type="text" name="contactName" id="contactName" class="form-control"
+                                                placeholder="Enter Contact Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>ContactNumber </label>
+                                            <input type="text" name="contactNumber" id="contactNumber"
+                                                class="form-control" placeholder="Enter Contact Number">
                                         </div>
                                     </div>
                                 </div>
@@ -179,6 +189,7 @@ $vendorId = isset($_GET['id']) ? $_GET['id'] : 0
                     $('#action').val('edit');
                     $('#vendorName').val(vendor.vendorName);
                     $('#contactNumber').val(vendor.contactNumber);
+                    $('#contactName').val(vendor.contactName);
                     $('#contactEmail').val(vendor.email);
                     $('#gstNo').val(vendor.gstNo);
                     $('#billingAddress').val(vendor.billingAddress);
@@ -196,6 +207,7 @@ $vendorId = isset($_GET['id']) ? $_GET['id'] : 0
         let action = $('#action').val();
         let vendorId = $('#vendorId').val();
         let contactNumber = $('#contactNumber').val();
+        let contactName = $('#contactName').val();
         let contactEmail = $('#contactEmail').val();
         let gstNo = $('#gstNo').val();
         let billingAddress = $('#billingAddress').val();
@@ -215,6 +227,7 @@ $vendorId = isset($_GET['id']) ? $_GET['id'] : 0
             'action': action,
             'vendorName': vendorName,
             'contactNumber': contactNumber,
+            'contactName': contactName,
             'contactEmail': contactEmail,
             'gstNo': gstNo,
             'billingAddress': billingAddress,
