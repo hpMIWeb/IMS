@@ -56,7 +56,14 @@ include_once './include/common-constat.php';
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-3">
+                                        <div class="form-group">
+                                            <label>Client:</label>
+                                            <select name="Client" id="clientId" class="form-control select2"
+                                                style="width: 100%; ">
+                                                <option value="0"> Select Client Type</option>
 
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-3">
                                         <div class="form-group">
@@ -315,7 +322,7 @@ include_once './include/common-constat.php';
         getLastDisplayNumber()
         getItemDetails();
         addNewItemRow();
-
+        getClientDetails();
         $("#invoiceTotalAmount").val(displayViewAmountDigit(0));
         $("#invoiceTotalDiscountAmount").val(displayViewAmountDigit(0));
         $("#invoiceGSTAmount").val(displayViewAmountDigit(0));
@@ -340,6 +347,30 @@ include_once './include/common-constat.php';
 
                 itemList = response.result.itemList
             }
+        });
+
+    }
+
+    function getClientDetails() {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getPhoneBookMasterDetails',
+
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+
+            let html = '<option value="">Select Client</option>';
+            if (response.responseCode == RESULT_OK) {
+
+                $.each(response.result.phoneBookMaster, function(index, phoneBookMaster) {
+                    html += '<option value="' + phoneBookMaster.id + '">' + phoneBookMaster
+                        .companyName + '  </option>';
+                });
+            }
+
+            $('#clientId').html(html);
         });
 
     }
@@ -424,10 +455,6 @@ include_once './include/common-constat.php';
             itemsData.push(item);
         });
 
-        if (itemsData.length > 0) {
-            toast_error("Please Add Invoice Item");
-            return false;
-        }
 
 
         let jsonData = JSON.stringify(itemsData);
