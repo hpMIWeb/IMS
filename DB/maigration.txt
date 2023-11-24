@@ -176,6 +176,8 @@ CREATE TABLE `item_company_store` (
  `modified_by` int(11) DEFAULT 0,
  `modified_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `invoice_master` ADD `remark` TEXT NULL DEFAULT NULL AFTER `net_amount`;
 
 ***********End   query 16-11-2023**********************

@@ -684,12 +684,13 @@ class Masters extends Config
             $invoiceGSTAmount = $this->handleSpecialCharacters($_POST['invoiceGSTAmount']);
             $invoiceRoundOff = $this->handleSpecialCharacters($_POST['invoiceRoundOff']);
             $invoiceNetAmount = $this->handleSpecialCharacters($_POST['invoiceNetAmount']);
+            $remark = $this->handleSpecialCharacters($_POST['remark']);
             $itemArray = json_decode($_POST['itemArray'],true);
 
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                $query = $this::$masterConn->prepare("INSERT INTO `invoice_master`(`display_number`,`invoice_date`,`bill_no`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`,  `round_off`, `net_amount`, `created_by`) 
-                        VALUES  ('$displayNumber','$invoiceDate','$billNo','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','$invoiceRoundOff','$invoiceNetAmount','".$this->userMasterId."')");
+                $query = $this::$masterConn->prepare("INSERT INTO `invoice_master`(`display_number`,`invoice_date`,`bill_no`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`,  `round_off`, `net_amount`, `remark`,`created_by`) 
+                        VALUES  ('$displayNumber','$invoiceDate','$billNo','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','$invoiceRoundOff','$invoiceNetAmount','$remark','".$this->userMasterId."')");
             }
 
             if ($query->execute()) {
@@ -724,7 +725,7 @@ class Masters extends Config
             }
 
         }catch (PDOException $e){
-            $this->exceptionData();
+            $this->exceptionData($e);
         }
     }
 

@@ -191,7 +191,18 @@ include_once './include/common-constat.php';
 
                                 <hr>
                                 <div class="row">
-                                    <div class="col-9"></div>
+                                    <div class="col-9">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label>Remark:</label>
+                                                    <textarea rows="2" name="remark" id="remark" class="form-control"
+                                                        placeholder="Remark"></textarea>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-3">
                                         <div class="row">
                                             <div class="col-12">
@@ -407,6 +418,7 @@ include_once './include/common-constat.php';
         let gstType = $("#gstType").val();
         let invoiceGSTAmount = $("#invoiceGSTAmount").val();
         let invoiceNetAmount = $("#invoiceNetAmount").val();
+        let remark = $("#remark").val();
 
         let itemsData = [];
 
@@ -451,6 +463,7 @@ include_once './include/common-constat.php';
             'gstType': gstType,
             'invoiceGSTAmount': invoiceGSTAmount,
             'invoiceNetAmount': invoiceNetAmount,
+            'remark': remark,
             'itemArray': JSON.stringify(itemsData),
 
         };
