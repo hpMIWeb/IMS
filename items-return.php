@@ -89,7 +89,7 @@ include_once './include/common-constat.php';
 
                                 <div class="col-2">
                                     <div class="form-group">
-                                        <label>Total</label>
+                                        <label>Return Qty</label>
                                         <input type="text" name="allocatedQty" class="form-control allocatedQty"
                                             placeholder="Allocate Qty" id="allocatedQty">
                                         <span>Qty You have : - <p id="userExistingQty"></p></span>

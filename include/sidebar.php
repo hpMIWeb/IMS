@@ -55,6 +55,12 @@ $superAdminMenu = array(
         "isHasSubMenu" => false,
         "icon" => "nav-icon fas fa-file-invoice",
         "submenuArray" => array(),
+    ), array(
+        "displayName" => "Purchase Bill",
+        "redirectPage" => "purchase-invoice-list.php",
+        "isHasSubMenu" => false,
+        "icon" => "nav-icon fas fa-file-invoice",
+        "submenuArray" => array(),
     ),
     array(
         "displayName" => "AMC Management",

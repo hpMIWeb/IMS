@@ -672,6 +672,7 @@ class Masters extends Config
             $displayNumber = $this->handleSpecialCharacters($_POST['displayNumber']);
             $invoiceDate = $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['invoiceDate'], true, false));
             $billNo = $this->handleSpecialCharacters($_POST['billNo']);
+            $invoiceType = $this->handleSpecialCharacters($_POST['invoiceType']);
             $clientName = $this->handleSpecialCharacters($_POST['clientName']);
             $contactNumber = $this->handleSpecialCharacters($_POST['contactNumber']);
             $email = $this->handleSpecialCharacters($_POST['email']);
@@ -689,8 +690,8 @@ class Masters extends Config
 
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                $query = $this::$masterConn->prepare("INSERT INTO `invoice_master`(`display_number`,`invoice_date`,`bill_no`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`,  `round_off`, `net_amount`, `remark`,`created_by`) 
-                        VALUES  ('$displayNumber','$invoiceDate','$billNo','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','$invoiceRoundOff','$invoiceNetAmount','$remark','".$this->userMasterId."')");
+                $query = $this::$masterConn->prepare("INSERT INTO `invoice_master`(`display_number`,`invoice_date`,`bill_no`,`invoice_type`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`,  `round_off`, `net_amount`, `remark`,`created_by`) 
+                        VALUES  ('$displayNumber','$invoiceDate','$billNo','$invoiceType','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','$invoiceRoundOff','$invoiceNetAmount','$remark','".$this->userMasterId."')");
             }
 
             if ($query->execute()) {
@@ -766,6 +767,112 @@ class Masters extends Config
 
         }catch(PDOException $e){
             $this->exceptionData();
+        }
+    }
+
+    public function getPurchaseInvoiceDetails(){
+        try{
+
+            $invoiceId = $this->handleSpecialCharacters($_POST['invoiceId']);
+           
+            $appendQuery = "";
+
+            $listQuery = "SELECT * FROM `purchase_invoice_master` ORDER BY id DESC";
+
+            $query = $this::$masterConn->prepare($listQuery);
+            if ($query->execute()) {
+                    if ($query->rowCount() > 0) {
+                        $this->successData();
+                        foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                            $this->data[] = array(
+                                'id' => $this->convertNullOrEmptyStringToZero($row['id']),
+                                'displayNumber' => $this->convertNullOrEmptyStringToZero($row['display_number']),
+                                'billNo' => $this->convertNullToEmptyString($row['bill_no']),
+                                'clientName' => $this->convertNullToEmptyString($row['client_name']),
+                                'contactNumber' => $this->convertNullToEmptyString($row['contact_number']),
+                                'invoiceDate' => $this->convertNullToEmptyString($row['invoice_date']),
+                                'startDateDisplay' => $this->convertNullToEmptyString($this->formatDateTime('d-m-Y', $row['invoice_date'])),
+                                'netAmount' => $this->convertNullOrEmptyStringToZero($row['net_amount']),
+                                
+                            );
+                        }
+                        $this::$result = array('invoiceList' => $this->data);
+                    } else {
+                        $this->noData("No any Invoice");
+                    }
+                } else {
+                    $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+                }
+
+
+        }catch(PDOException $e){
+            $this->exceptionData();
+        }
+    }
+
+
+    public function addUpdatePurchaseInvoiceDetails(){
+        try{
+
+            $invoiceId = $this->handleSpecialCharacters($_POST['invoiceId']);
+            $displayNumber = $this->handleSpecialCharacters($_POST['displayNumber']);
+            $invoiceDate = $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['invoiceDate'], true, false));
+            $billNo = $this->handleSpecialCharacters($_POST['billNo']);
+            $invoiceType = $this->handleSpecialCharacters($_POST['invoiceType']);
+            $clientName = $this->handleSpecialCharacters($_POST['clientName']);
+            $contactNumber = $this->handleSpecialCharacters($_POST['contactNumber']);
+            $email = $this->handleSpecialCharacters($_POST['email']);
+            $clientGST = $this->handleSpecialCharacters($_POST['clientGST']);
+            $address = $this->handleSpecialCharacters($_POST['address']);
+            $state = $this->handleSpecialCharacters($_POST['state']);
+            $invoiceTotalAmount = $this->handleSpecialCharacters($_POST['invoiceTotalAmount']);
+            $invoiceTotalDiscountAmount = $this->handleSpecialCharacters($_POST['invoiceTotalDiscountAmount']);
+            $gstType = $this->handleSpecialCharacters($_POST['gstType']);
+            $invoiceGSTAmount = $this->handleSpecialCharacters($_POST['invoiceGSTAmount']);
+            $invoiceRoundOff = $this->handleSpecialCharacters($_POST['invoiceRoundOff']);
+            $invoiceNetAmount = $this->handleSpecialCharacters($_POST['invoiceNetAmount']);
+            $remark = $this->handleSpecialCharacters($_POST['remark']);
+            $itemArray = json_decode($_POST['itemArray'],true);
+
+
+            if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                $query = $this::$masterConn->prepare("INSERT INTO `purchase_invoice_master`(`display_number`,`invoice_date`,`bill_no`,`invoice_type`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`,  `round_off`, `net_amount`, `remark`,`created_by`) 
+                        VALUES  ('$displayNumber','$invoiceDate','$billNo','$invoiceType','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','$invoiceRoundOff','$invoiceNetAmount','$remark','".$this->userMasterId."')");
+            }
+
+            if ($query->execute()) {
+                if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+
+                     $invoiceId = $this::$masterConn->lastInsertId();
+                    if($this->isNotNullOrEmptyOrZero($invoiceId) && $this->isNotNullOrEmptyOrZero($itemArray)){
+                        foreach ($itemArray as $item){
+                       
+                            $itemsId = $this->handleSpecialCharacters($item['itemId']);
+                            $itemsQty = $this->handleSpecialCharacters($item['itemQty']);
+                            $itemsRate = $this->handleSpecialCharacters($item['itemRate']);
+                            $itemsDiscount = $this->handleSpecialCharacters($item['itemDiscount']);
+                            $itemDiscountAmount = $this->handleSpecialCharacters($item['itemDiscountAmount']);
+                            $itemGST = $this->handleSpecialCharacters($item['itemGST']);
+                            $itemGSTAmount = $this->handleSpecialCharacters($item['itemGSTAmount']);
+                            $total = $this->handleSpecialCharacters($item['total']);
+
+                            $itemInsertQuery = $this::$masterConn->prepare("INSERT INTO  `purchase_invoice_details`(`invoice_id`, `item_id`, `item_qty`, `item_rate`, `item_discount`, `item_discount_amount`,`item_gst`,`item_gst_amount`,`item_total`,`created_by`) 
+                            VALUES ('$invoiceId','$itemsId','$itemsQty','$itemsRate','$itemsDiscount','$itemDiscountAmount','$itemGST','$itemGSTAmount','$total','".$this->userMasterId."')");
+     
+                            $itemInsertQuery->execute();
+
+                        }
+                    }
+                    $this->successData("Invoice Created successfully.");
+                } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
+                    $this->successData("Invoice Updated successfully.");
+                }
+            } else {
+                $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+            }
+
+        }catch (PDOException $e){
+            $this->exceptionData($e);
         }
     }
 

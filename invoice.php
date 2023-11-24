@@ -55,8 +55,19 @@ include_once './include/common-constat.php';
                             <!-- /.card-header -->
                             <div class="card-header">
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-3">
 
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label>Invoice Type:</label>
+                                            <select name="invoiceType" id="invoiceType" class="form-control select2"
+                                                style="width: 100%; ">
+                                                <option value="0"> Select Invoice Type</option>
+                                                <option value="1">Cash Memo</option>
+                                                <option value="2">GST Invoice</option>
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <div class="col-3">
@@ -131,7 +142,7 @@ include_once './include/common-constat.php';
                                             <label>State:</label>
                                             <select name="state" id="state" class="form-control select2"
                                                 style="width: 100%; ">
-                                                <option selected="selected"></option>
+                                                <option selected="selected"> Select State</option>
                                                 <option>Gujarat</option>
                                                 <option>Maharastra</option>
                                                 <option>Kerala</option>
@@ -143,24 +154,6 @@ include_once './include/common-constat.php';
                                 </div>
 
                                 <hr>
-                                <!-- <div class="row">
-                                    <div class="col-3">
-                                        <div class="form-group">
-                                            <label>Item:</label>
-                                            <select name="itemId" id="itemId" class="form-control select2 itemId"
-                                                style="width: 100%; ">
-
-                                            </select>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-3 mt-4">
-                                        <div class="form-group">
-                                            <button type="button" name=" add" class="btn btn-primary mt-2"
-                                                onclick="addNewItemRow()">ADD ITEM</button>
-                                        </div>
-                                    </div>
-                                </div> -->
                                 <div class="row">
                                     <div class="col-12">
                                         <table id="itemTable" class="table table-bordered table-hover">
@@ -225,20 +218,7 @@ include_once './include/common-constat.php';
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label>Apply GST:</label>
-                                                    <select name="gstType" id="gstType"
-                                                        class="form-control select2 gstType">
-                                                        <option value="notApply">Not Apply</option>
-                                                        <option value="applyGST">Apply GST</option>
-                                                        <option value="applyIGST">Apply IGST</option>
-                                                    </select>
 
-                                                </div>
-                                            </div>
-                                        </div> -->
                                         <div class="row">
                                             <div class="col-6">
                                                 <div class="form-group">
@@ -341,6 +321,7 @@ include_once './include/common-constat.php';
         $("#invoiceGSTAmount").val(displayViewAmountDigit(0));
         $("#invoiceRoundOff").val(displayViewAmountDigit(0));
         $("#invoiceNetAmount").val(displayViewAmountDigit(0));
+        $("#invoiceType").val(0).select2();
 
     });
 
@@ -418,6 +399,11 @@ include_once './include/common-constat.php';
         let invoiceNetAmount = $("#invoiceNetAmount").val();
         let remark = $("#remark").val();
 
+        if (invoiceType == 0) {
+            toast_error("Please Select Invoice Type");
+            $("#invoiceType").focus()
+            return false;
+        }
         let itemsData = [];
 
         $('#itemTable tbody tr').each(function(index) {
@@ -437,6 +423,11 @@ include_once './include/common-constat.php';
             };
             itemsData.push(item);
         });
+
+        if (itemsData.length > 0) {
+            toast_error("Please Add Invoice Item");
+            return false;
+        }
 
 
         let jsonData = JSON.stringify(itemsData);
