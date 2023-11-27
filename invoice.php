@@ -162,16 +162,17 @@ include_once './include/common-constat.php';
 
                                 <hr>
                                 <div class="row">
-                                    <div class="col-12">
-                                        <table id="itemTable" class="table table-bordered table-hover">
+                                    <div class="col">
+                                        <table id="itemTable" class="table table-bordered table-hover table-responsive"
+                                            style="overflow-x: auto;">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 2%;">Sr. No.</th>
+                                                    <th style="width: 3%;">Sr. No.</th>
                                                     <th style="width: 10%;">Item Code</th>
                                                     <th style="width: 10%;">HSN Code</th>
-                                                    <th style="width: 7%;">Qty</th>
-                                                    <th style="width: 7%;">Rate</th>
-                                                    <th style="width: 7%;">Discount</th>
+                                                    <th style="width: 10%;">Qty</th>
+                                                    <th style="width: 10%;">Rate</th>
+                                                    <th style="width: 10%;">Discount</th>
                                                     <th style="width: 10%;">Discount Amount</th>
                                                     <th style="width: 10%;">GST</th>
                                                     <th style="width: 10%;">GST Amount</th>
@@ -402,7 +403,7 @@ include_once './include/common-constat.php';
 
     function prepareItemDropDown() {
 
-        let html = "<select name='itemId' class='form-control select2 itemId' style='width:100%'  data-field='itemid'>";
+        let html = "<select name='itemId' class='form-control select2 itemId'  data-field='itemid'>";
         html += "<option  value=''>Select Item</option>";
 
         $.each(itemList, function(index, items) {
@@ -433,9 +434,11 @@ include_once './include/common-constat.php';
         let invoiceTotalAmount = $("#invoiceTotalAmount").val();
         let invoiceTotalDiscountAmount = $("#invoiceTotalDiscountAmount").val();
         let gstType = $("#gstType").val();
-        let invoiceGSTAmount = $("#invoiceGSTAmount").val();
+        let invoiceGSTAmount = parseFloat($("#invoiceCGSTAmount").val()) + parseFloat($("#invoiceSGSTAmount")
+            .val());
         let invoiceNetAmount = $("#invoiceNetAmount").val();
         let remark = $("#remark").val();
+        let invoiceRoundOff = $('#invoiceRoundOff').val()
 
         if (invoiceType == 0) {
             toast_error("Please Select Invoice Type");
@@ -488,6 +491,7 @@ include_once './include/common-constat.php';
             'invoiceNetAmount': invoiceNetAmount,
             'remark': remark,
             'itemArray': JSON.stringify(itemsData),
+            'invoiceRoundOff': invoiceRoundOff
 
         };
         APICallAjax(sendApiDataObj, function(response) {
@@ -590,6 +594,7 @@ include_once './include/common-constat.php';
 
     // Add an event listener for changes in input fields
     $('#itemTable tbody').on('change', 'input', function() {
+        console.log("ccd")
         itemAmountCalculation();
     });
 
@@ -617,6 +622,7 @@ include_once './include/common-constat.php';
             row.find('[data-field="qty"]').attr('id', 'itemsQty' + (index + 1));
             row.find('[data-field="rate"]').attr('id', 'itemsRate_' + (index + 1));
             row.find('[data-field="discount"]').attr('id', 'itemsDiscount_' + (index + 1));
+            row.find('[data-field="itemsDiscountAmount"]').attr('id', 'itemsDiscountAmount_' + (index + 1));
             row.find('[data-field="total"]').attr('id', 'total_' + (index + 1));
             // Optionally, you can also update the item ID input if needed
             row.find('[data-field="itemid"]').attr('id', 'itemsId_' + (index + 1));
@@ -630,7 +636,7 @@ include_once './include/common-constat.php';
         let gstType = $("#gstType").val();
         let invoiceRoundOffAmount = displayViewAmountDigit($("#invoiceRoundOff").val());
         let invoiceGSTAmount = parseFloat(displayViewAmountDigit(0));
-        let discountAmount = parseFloat(displayViewAmountDigit(0));
+
         let totalGSTAmount = parseFloat(displayViewAmountDigit(0));
 
         $('#itemTable tbody tr').each(function() {
@@ -641,6 +647,7 @@ include_once './include/common-constat.php';
             let total = (rate * qty);
             let gstPercentage = parseFloat(row.find('[data-field="itemsGSTPer"]').val()) || 0;
             let gstAmount = parseFloat(row.find('[data-field="itemsGSTAmount"]').val()) || 0;
+            let discountAmount = parseFloat(displayViewAmountDigit(0));
 
             if (discount > 0) {
                 discountAmount = total * discount / 100;
@@ -652,9 +659,9 @@ include_once './include/common-constat.php';
                 totalGSTAmount = totalGSTAmount + gstAmount;
                 total = total + gstAmount;
             }
-            row.find('[data-field="itemsDiscountAmount"]').val(discountAmount);
-            row.find('[data-field="itemsGSTAmount"]').val(gstAmount);
-            row.find('[data-field="total"]').val(total);
+            row.find('[data-field="itemsDiscountAmount"]').val(displayViewAmountDigit(discountAmount));
+            row.find('[data-field="itemsGSTAmount"]').val(displayViewAmountDigit(gstAmount));
+            row.find('[data-field="total"]').val(displayViewAmountDigit(total));
 
             totalInvoiceAmount = totalInvoiceAmount + total;
             totalDiscountAmount = totalDiscountAmount + discountAmount;

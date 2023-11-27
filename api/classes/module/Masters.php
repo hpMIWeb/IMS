@@ -681,7 +681,7 @@ class Masters extends Config
             $state = $this->handleSpecialCharacters($_POST['state']);
             $invoiceTotalAmount = $this->handleSpecialCharacters($_POST['invoiceTotalAmount']);
             $invoiceTotalDiscountAmount = $this->handleSpecialCharacters($_POST['invoiceTotalDiscountAmount']);
-            $gstType = $this->handleSpecialCharacters($_POST['gstType']);
+            $gstType = 0;
             $invoiceGSTAmount = $this->handleSpecialCharacters($_POST['invoiceGSTAmount']);
             $invoiceRoundOff = $this->handleSpecialCharacters($_POST['invoiceRoundOff']);
             $invoiceNetAmount = $this->handleSpecialCharacters($_POST['invoiceNetAmount']);
@@ -716,7 +716,20 @@ class Masters extends Config
                             $itemInsertQuery->execute();
 
                         }
-                    }
+
+                        if($this->isNotNullOrEmptyOrZero($contactNumber)) {
+
+                                $query = $this::$masterConn->prepare("SELECT * FROM phone_book_master WHERE contact_number ='$contactNumber'");
+                                if ($query->execute()) {
+                                        if ($query->rowCount() > 0) {
+                                            $itemInsertQuery = $this::$masterConn->prepare("INSERT INTO `phone_book_master` (`category`,`name`,`address`,`contact_number`,`designation`,`company_name`,`remark`,`created_by`)
+VALUES (0,'$clientName','$address','$contactNumber','','$clientName','','".$this->userMasterId."');");
+                    
+                                            $itemInsertQuery->execute();
+                                        }
+                                }
+                        }
+                     }
                     $this->successData("Invoice Created successfully.");
                 } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
                     $this->successData("Invoice Updated successfully.");

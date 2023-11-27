@@ -147,7 +147,7 @@ include_once './include/common-constat.php';
                     html += '<td>' + invoice.contactNumber + '</td>';
                     html += '<td>' + displayIndianRupeeCurrency(invoice.netAmount) + '</td>';
                     html +=
-                        '<td><a href="invoice-print.php"><i class="fa fa-file-pdf"></i></a></td>';
+                        '<td><a href="invoice-print.php" target="_black"><i class="fa fa-file-pdf"></i></a></td>';
                     html += '</tr>';
                     count++;
 
