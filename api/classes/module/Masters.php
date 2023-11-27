@@ -1029,21 +1029,16 @@ class Masters extends Config
     public function getLastDisplayNumber(){
 
         $invoiceDate = $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['invoiceDate'], true, false));
+        $invoiceType = $this->handleSpecialCharacters($_POST['invoiceType']);
         $financialYearDates  = $this->getFinancialYearDates($invoiceDate);
         $startDate = $financialYearDates['startDate'];
         $endDate = $financialYearDates['endDate'];
-        //     $query = $this::$masterConn->prepare("
-        //     SELECT
-        //         MAX(display_number) AS maxDisplayNumber
-        //     FROM invoice_master
-        //     // WHERE invoice_date >= '$startDate'
-        //     // AND invoice_date <= '$endDate';
-        // ");  
+        
 
         $query = $this::$masterConn->prepare("
             SELECT
                 MAX(display_number) AS maxDisplayNumber
-            FROM invoice_master
+            FROM invoice_master WHERE invoice_type ='$invoiceType'
             
         ");
 

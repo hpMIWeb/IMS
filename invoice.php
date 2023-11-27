@@ -319,6 +319,8 @@ include_once './include/common-constat.php';
     let itemList = []
     $(document).ready(function() {
 
+
+        $("#invoiceType").val(1).select2();
         getLastDisplayNumber()
         getItemDetails();
         addNewItemRow();
@@ -328,11 +330,15 @@ include_once './include/common-constat.php';
         $("#invoiceGSTAmount").val(displayViewAmountDigit(0));
         $("#invoiceRoundOff").val(displayViewAmountDigit(0));
         $("#invoiceNetAmount").val(displayViewAmountDigit(0));
-        $("#invoiceType").val(0).select2();
+
 
     });
 
 
+    // Add an event listener for changes in input fields
+    $('#invoiceType').on('change', function() {
+        getLastDisplayNumber()
+    });
 
     function getItemDetails() {
 
@@ -380,7 +386,8 @@ include_once './include/common-constat.php';
         let sendApiDataObj = {
             '<?php echo systemProject ?>': 'Masters',
             '<?php echo systemModuleFunction ?>': 'getLastDisplayNumber',
-            'invoiceDate': $("#invoiceDate").val()
+            'invoiceDate': $("#invoiceDate").val(),
+            'invoiceType': $("#invoiceType").val()
 
         };
         APICallAjax(sendApiDataObj, function(response) {
