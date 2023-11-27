@@ -60,7 +60,7 @@ $vendorId = isset($_GET['id']) ? $_GET['id'] : 0
                                     <input type="hidden" name="action" id="action" value="add">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Name:</label>
+                                            <label>Company Name:</label>
                                             <input type="text" name="vendorName" id="vendorName" class="form-control"
                                                 placeholder="Enter Name:">
                                         </div>
