@@ -368,10 +368,8 @@ class Masters extends Config
             $workDetails = $this->handleSpecialCharacters($_POST['workDetails']);
             $contactNumber = $this->handleSpecialCharacters($_POST['contactNumber']);
             $attendBy = $this->handleSpecialCharacters($_POST['attendBy']);
-             $visitDate =  $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['visitDate'], true, false));;
+            $visitDate =  $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['visitDate'], true, false));;
 
-
-        //  die;
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
                 $query = $this::$masterConn->prepare("INSERT INTO `amc_details`( `amc_master_id`, `customer_name`, `visit_date`, `work_details`, `contact_number`,`attendBy`, `created_by`) 
                 VALUES ('$amcMasterId','$customerName','$visitDate','$workDetails','$contactNumber','$attendBy','" . $this->userMasterId . "')");
