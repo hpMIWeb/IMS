@@ -114,9 +114,10 @@ trait ProjectCommon
                 $getTime = explode(" ", $getDateTimeValue);
 
                 if ($this->isNotNullOrEmptyOrZero($getTime) || $getTime[1] == "00:00:00") {
-                    $getDateTimeValue = $getTime[0] . '' . date('H:i:s');
+                    $getDateTimeValue = $getTime[0] . ' ' . date('H:i:s');
                 }
-                return date($expectedDateTimeFormat, strtotime($getDateTimeValue));
+                
+                return date($expectedDateTimeFormat, strtotime(str_replace("/", "-", "$getDateTimeValue")));
             } else {
                 return date($expectedDateTimeFormat);
             }

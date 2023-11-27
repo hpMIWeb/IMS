@@ -23,7 +23,7 @@ class Config
             'baseUrl' => 'http://localhost/ims/',
             'masterConnServer' => 'localhost',
             'masterConnUsername' => 'root',
-            'masterConnPassword' => '',
+            'masterConnPassword' => 'Admin@123',
             'masterConnDBName' => 'ims'
         ),
         'Server' => array(
