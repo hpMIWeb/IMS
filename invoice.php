@@ -14,18 +14,18 @@ include_once './include/common-constat.php';
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
-    include_once("include\commoncss.php");
-    ?>
+include_once "include\commoncss.php";
+?>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <?php
-        include_once("include/header.php");
-        include_once("include/sidebar.php");
+include_once "include/header.php";
+include_once "include/sidebar.php";
 
-        ?>
+?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -150,10 +150,13 @@ include_once './include/common-constat.php';
                                             <select name="state" id="state" class="form-control select2"
                                                 style="width: 100%; ">
                                                 <option selected="selected"> Select State</option>
-                                                <option>Gujarat</option>
-                                                <option>Maharastra</option>
-                                                <option>Kerala</option>
-                                                <option>Punjab</option>
+                                                <?php
+foreach ($indian_states as $key => $name) {?>
+                                                <option value="<?php echo $key; ?>"> <?php echo $name; ?>
+                                                </option>
+
+                                                <?php }?>
+
                                             </select>
 
                                         </div>
@@ -292,9 +295,9 @@ include_once './include/common-constat.php';
     </div>
     <?php
 
-    include_once("include/footer.php");
+include_once "include/footer.php";
 
-    ?>
+?>
 
     <!-- Control Sidebar -->
     <aside class=" control-sidebar control-sidebar-dark">
@@ -308,9 +311,9 @@ include_once './include/common-constat.php';
 
     <?php
 
-    include_once("include/jquery.php");
+include_once "include/jquery.php";
 
-    ?>
+?>
     <script>
     //Date picker
     $('#reservationdate').datetimepicker({
@@ -320,6 +323,16 @@ include_once './include/common-constat.php';
     let itemList = []
     $(document).ready(function() {
 
+
+
+        let stateDropDown = '<option value="">Select State</option>';
+
+        console.log("IndiaStateArray", IndiaStateArray)
+        $.each(IndiaStateArray, function(index, phoneBookMaster) {
+            stateDropDown += '<option value="' + phoneBookMaster + '">' + phoneBookMaster +
+                '  </option>';
+        });
+        $('#stated').html(stateDropDown);
 
         $("#invoiceType").val(1).select2();
         getLastDisplayNumber()
@@ -331,6 +344,9 @@ include_once './include/common-constat.php';
         $("#invoiceGSTAmount").val(displayViewAmountDigit(0));
         $("#invoiceRoundOff").val(displayViewAmountDigit(0));
         $("#invoiceNetAmount").val(displayViewAmountDigit(0));
+
+
+
 
 
     });

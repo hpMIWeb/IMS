@@ -14,18 +14,18 @@ include_once './include/common-constat.php';
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
-    include_once("include\commoncss.php");
-    ?>
+include_once "include\commoncss.php";
+?>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <?php
-        include_once("include/header.php");
-        include_once("include/sidebar.php");
+include_once "include/header.php";
+include_once "include/sidebar.php";
 
-        ?>
+?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -132,10 +132,13 @@ include_once './include/common-constat.php';
                                             <select name="state" id="state" class="form-control select2"
                                                 style="width: 100%; ">
                                                 <option selected="selected"> Select State</option>
-                                                <option>Gujarat</option>
-                                                <option>Maharastra</option>
-                                                <option>Kerala</option>
-                                                <option>Punjab</option>
+                                                <?php
+foreach ($indian_states as $key => $name) {?>
+                                                <option value="<?php echo $key; ?>"> <?php echo $name; ?>
+                                                </option>
+
+                                                <?php }?>
+
                                             </select>
 
                                         </div>
@@ -273,9 +276,9 @@ include_once './include/common-constat.php';
     </div>
     <?php
 
-    include_once("include/footer.php");
+include_once "include/footer.php";
 
-    ?>
+?>
 
     <!-- Control Sidebar -->
     <aside class=" control-sidebar control-sidebar-dark">
@@ -289,9 +292,9 @@ include_once './include/common-constat.php';
 
     <?php
 
-    include_once("include/jquery.php");
+include_once "include/jquery.php";
 
-    ?>
+?>
     <script>
     //Date picker
     $('#reservationdate').datetimepicker({
@@ -301,7 +304,6 @@ include_once './include/common-constat.php';
     let itemList = []
     $(document).ready(function() {
 
-        getLastDisplayNumber()
         getItemDetails();
         addNewItemRow();
 
@@ -333,27 +335,12 @@ include_once './include/common-constat.php';
 
     }
 
-    function getLastDisplayNumber() {
 
-        let sendApiDataObj = {
-            '<?php echo systemProject ?>': 'Masters',
-            '<?php echo systemModuleFunction ?>': 'getLastDisplayNumber',
-            'invoiceDate': $("#invoiceDate").val()
-
-        };
-        APICallAjax(sendApiDataObj, function(response) {
-
-            if (response.responseCode == RESULT_OK) {
-                $('#billNo').val("INV-" + response.result.maxDisplayNumber)
-                $('#displayNumber').val(response.result.maxDisplayNumber)
-            }
-        });
-
-    }
 
     function prepareItemDropDown() {
 
-        let html = "<select name='itemId' class='form-control select2 itemId' style='width:100%'  data-field='itemid'>";
+        let html =
+            "<select name='itemId' class='form-control select2 itemId' style='width:100%'  data-field='itemid'>";
         html += "<option  value=''>Select Item</option>";
 
         $.each(itemList, function(index, items) {
@@ -503,6 +490,7 @@ include_once './include/common-constat.php';
 
         if (itemId) {
             let selectedItem = itemList.find(item => item.id == itemId);
+            console.log("selectedItem", selectedItem)
             let itemRate = parseFloat(selectedItem.mrp);
             let gstPercentage = parseFloat(selectedItem.basicSellingTax);
             let itemGSTAmount = 0;
@@ -513,7 +501,7 @@ include_once './include/common-constat.php';
             if (selectedItem) {
                 // Set the values in the table fields based on the selected item
                 row.find('[data-field="qty"]').val(displayViewAmountDigit(1));
-                row.find('[data-field="rate"]').val(displayViewAmountDigit(selectedItem.mrp));
+                row.find('[data-field="rate"]').val(displayViewAmountDigit(selectedItem.purchaseBasicCost));
                 row.find('[data-field="discount"]').val(displayViewAmountDigit(0));
                 row.find('[data-field="total"]').val(displayViewAmountDigit(1 * itemRate));
                 row.find('[data-field="itemsGSTPer"]').val(displayViewAmountDigit(selectedItem
