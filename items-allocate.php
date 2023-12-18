@@ -80,8 +80,15 @@ include_once "include/sidebar.php";
 
                                 <div class="col-2">
                                     <div class="form-group">
-                                        <label>Item Qty(USER’S STORE)</label>
+                                        <label>LIVE STORE (Qty)</label>
                                         <input type="text" name="itemQty" id="itemQty" disabled
+                                            class="form-control itemQty" placeholder="Item Qty">
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label>USER STORE (Qty)</label>
+                                        <input type="text" name="userExistingQty" id="userExistingQty" disabled
                                             class="form-control itemQty" placeholder="Item Qty">
                                     </div>
                                 </div>
@@ -91,7 +98,7 @@ include_once "include/sidebar.php";
                                         <label>Total</label>
                                         <input type="text" name="allocatedQty" class="form-control allocatedQty"
                                             placeholder="Allocate Qty" id="allocatedQty">
-                                        <span>Qty You have (LIVE STORE) : - <p id="userExistingQty"></p></span>
+
                                     </div>
                                 </div>
 
@@ -247,7 +254,7 @@ include_once "include/jquery.php";
             if (response.responseCode == RESULT_OK) {
                 $.each(response.result.itemList, function(index, items) {
                     console.log(items.openingStock)
-                    $('#itemQty').val(items.openingStock)
+                    $('#itemQty').val(displayViewAmountDigit(items.openingStock))
                 });
 
 
@@ -271,8 +278,8 @@ include_once "include/jquery.php";
             if (response.responseCode == RESULT_OK) {
 
                 $.each(response.result.itemList, function(index, items) {
-                    $("#userQty").val(items.allocateQty);
-                    $("#userExistingQty").html(items.allocateQty);
+                    $("#userQty").val(displayViewAmountDigit(items.allocateQty));
+                    $("#userExistingQty").val(displayViewAmountDigit(items.allocateQty));
                     $("#itemAllocationId").val(items.id);
                     $("#action").val("edit");
                 });
