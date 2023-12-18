@@ -14,18 +14,18 @@ include_once './include/common-constat.php';
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
-    include_once("include\commoncss.php");
-    ?>
+include_once "include\commoncss.php";
+?>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <?php
-        include_once("include/header.php");
-        include_once("include/sidebar.php");
+include_once "include/header.php";
+include_once "include/sidebar.php";
 
-        ?>
+?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -93,9 +93,9 @@ include_once './include/common-constat.php';
     </div>
     <?php
 
-    include_once("include/footer.php");
+include_once "include/footer.php";
 
-    ?>
+?>
 
     <!-- Control Sidebar -->
     <aside class=" control-sidebar control-sidebar-dark">
@@ -109,9 +109,9 @@ include_once './include/common-constat.php';
 
     <?php
 
-    include_once("include/jquery.php");
+include_once "include/jquery.php";
 
-    ?>
+?>
 
     <script>
     $(document).ready(function() {
@@ -170,11 +170,13 @@ include_once './include/common-constat.php';
                 let count = 1;
 
                 $.each(response.result.itemList, function(index, items) {
+
+
                     html += '<tr>';
                     html += '<td>' + count + '</td>';
                     html += '<td>' + items.itemCode + '</td>';
                     html += '<td>' + items.itemName + '</td>';
-                    html += '<td>' + displayViewAmountDigit(items.minimumStockLevel) + '</td>';
+                    html += '<td>' + displayViewAmountDigit(items.openingStock) + '</td>';
                     html += '<td>' + displayIndianRupeeCurrency(items.mrp) + '</td>';
                     html += '<td class="text-center-block py-0 align-middle">';
                     html += '<div class = "" > ';
