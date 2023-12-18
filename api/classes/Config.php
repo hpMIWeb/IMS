@@ -23,16 +23,16 @@ class Config
             'baseUrl' => 'http://localhost/ims/',
             'masterConnServer' => 'localhost',
             'masterConnUsername' => 'root',
-            'masterConnPassword' => 'admin@123',
-            'masterConnDBName' => 'ims'
+            'masterConnPassword' => 'Admin@123',
+            'masterConnDBName' => 'ims',
         ),
         'Server' => array(
-             'baseUrl' => 'https://miwebsolution.com/ims/',
+            'baseUrl' => 'https://miwebsolution.com/ims/',
             'masterConnServer' => 'localhost',
             'masterConnUsername' => 'husfilms_IMS',
             'masterConnPassword' => 'Um@ng_IMS@2023',
-            'masterConnDBName' => 'husfilms_IMS'
-        )
+            'masterConnDBName' => 'husfilms_IMS',
+        ),
     );
 
     /* Set Master Urls */
@@ -47,7 +47,6 @@ class Config
     protected static $companyMasterId = "0";
     protected static $companyMasterKey = "";
     protected static $callFrom = "";
-
 
     /* Owner Database Setting */
     public $IMSFileElement = 'IMSFileElement';
@@ -127,8 +126,6 @@ class Config
     public function __construct($HEADERS)
     {
 
-
-
         $this->systemProject = isset($_POST['systemProject']) ? $_POST['systemProject'] : self::$notSet;
         $this->systemModuleFunction = isset($_POST['systemModuleFunction']) ? $_POST['systemModuleFunction'] : self::$notSet;
 
@@ -145,7 +142,6 @@ class Config
         $this->arrayType = json_decode($_POST['arrayType'], true);
         $this->deleteAttachmentArray = json_decode($_POST['deleteAttachmentArray'], true);
 
-
         if (empty($_FILES['IMSFileElement'])) {
             $this->isAttachmentUpdate = false;
         } else {
@@ -156,7 +152,6 @@ class Config
             }
         }
 
-
         if (!in_array($this->systemModuleFunction, $this->ignoreSMF)) {
             $this->verifiedJwtToken($HEADERS);
         }
@@ -165,7 +160,6 @@ class Config
     /* include CommonFunctions */
     use CommonFunction;
     use ProjectCommon;
-
 
     /* Company or Shop Database Connection */
 
@@ -181,8 +175,8 @@ class Config
         try {
             $this->accessToken = isset($HEADERS['Authorization']) ? $HEADERS['Authorization'] : '';
             try {
-                $getPayLoadData = (array)JWT::decode($this->accessToken, $publicKey, ['RS256']);
-            } catch (Exception  $e) {
+                $getPayLoadData = (array) JWT::decode($this->accessToken, $publicKey, ['RS256']);
+            } catch (Exception $e) {
                 return false;
             }
 
@@ -199,7 +193,7 @@ class Config
             $this->webLoginDeviceId = $getPayLoadData['loginWebId'];
 
             return true;
-        } catch (Exception  $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -216,7 +210,7 @@ class Config
                     array(
                         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
                         PDO::ATTR_ERRMODE,
-                        PDO::ERRMODE_EXCEPTION
+                        PDO::ERRMODE_EXCEPTION,
                     )
                 );
 
