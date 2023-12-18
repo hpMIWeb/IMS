@@ -3,8 +3,6 @@ session_start();
 include_once './include/session-check.php';
 include_once './include/APICALL.php';
 include_once './include/common-constat.php';
-
-
 ?>
 <!DOCTYPE html>
 <html>

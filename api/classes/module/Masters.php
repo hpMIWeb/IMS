@@ -721,7 +721,7 @@ class Masters extends Config
 
                                 $query = $this::$masterConn->prepare("SELECT * FROM phone_book_master WHERE contact_number ='$contactNumber'");
                                 if ($query->execute()) {
-                                        if ($query->rowCount() > 0) {
+                                        if ($query->rowCount() === 0) {
                                             $itemInsertQuery = $this::$masterConn->prepare("INSERT INTO `phone_book_master` (`category`,`name`,`address`,`contact_number`,`designation`,`company_name`,`remark`,`created_by`)
 VALUES (0,'$clientName','$address','$contactNumber','','$clientName','','".$this->userMasterId."');");
                     

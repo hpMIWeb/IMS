@@ -12,7 +12,7 @@ if (!in_array('localhost', explode('/', $Base_link))) {
     // local connection
     $master_servername = "localhost";
     $master_username = "root";
-    $master_password = 'Admin@123';
+    $master_password = 'admin@123';
     $master_db = "ims";
 }
 // Create connection
