@@ -16,6 +16,23 @@ include_once './include/common-constat.php';
     <?php
 include_once "include\commoncss.php";
 ?>
+    <style>
+    /* Add this to your CSS file or within a style tag in your HTML */
+
+    /* Define the background color for outOfStock rows */
+    .outOfStock {
+        background-color: #ffcccc;
+        /* Light red, adjust the color as needed */
+        /* You can add more styles here, depending on your design preferences */
+    }
+
+    /* Optional: Add hover effect for better user interaction */
+    .outOfStock:hover {
+        background-color: #ff9999;
+        /* Lighter red on hover, adjust as needed */
+    }
+    </style>
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -171,8 +188,15 @@ include_once "include/jquery.php";
 
                 $.each(response.result.itemList, function(index, items) {
 
+                    console.log("items", items)
 
-                    html += '<tr>';
+                    let rowClass = "";
+
+                    if (parseFloat(items.openingStock) < parseFloat(items.minimumStockLevel)) {
+                        rowClass = "outOfStock";
+                    }
+
+                    html += '<tr class="' + rowClass + '">';
                     html += '<td>' + count + '</td>';
                     html += '<td>' + items.itemCode + '</td>';
                     html += '<td>' + items.itemName + '</td>';
