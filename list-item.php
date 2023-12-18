@@ -88,7 +88,7 @@ include_once "include/sidebar.php";
                                                 <th style="width: 10%;">Sr. No.</th>
                                                 <th>Item Code</th>
                                                 <th>Item Name</th>
-                                                <th>Item Qty</th>
+                                                <th>Item Stock</th>
                                                 <th>Item Rate</th>
                                                 <th style="width: 10%;">Action</th>
                                             </tr>
