@@ -589,6 +589,11 @@ class Masters extends Config
                 $query = $this::$masterConn->prepare("UPDATE `item_defective_master` SET `defective_qty`= defective_qty+ $defectiveQty,`modified_by`='" . $this->userMasterId . "' WHERE id = '$itemAllocationId'");
             }
 
+            $updateItemQty = $this::$masterConn->prepare("UPDATE item_user_allocation SET allocate_qty = allocate_qty - $defectiveQty WHERE item_id = '$itemId' AND user_id ='$userId';");
+            if ($updateItemQty->execute()) {
+
+            }
+
             if ($query->execute()) {
                 if ($this->equals($this->action, $this->arrayAllAction['add'])) {
                     $this->successData("Item Defective successfully.");
