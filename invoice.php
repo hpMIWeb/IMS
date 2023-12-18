@@ -589,7 +589,7 @@ include_once "include/jquery.php";
             if (selectedItem) {
                 // Set the values in the table fields based on the selected item
                 row.find('[data-field="qty"]').val(displayViewAmountDigit(1));
-                row.find('[data-field="rate"]').val(displayViewAmountDigit(selectedItem.mrp));
+                row.find('[data-field="rate"]').val(displayViewAmountDigit(selectedItem.basicSellingPrice));
                 row.find('[data-field="discount"]').val(displayViewAmountDigit(0));
                 row.find('[data-field="total"]').val(displayViewAmountDigit(1 * itemRate));
                 row.find('[data-field="itemsGSTPer"]').val(displayViewAmountDigit(selectedItem

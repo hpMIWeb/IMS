@@ -490,8 +490,7 @@ include_once "include/jquery.php";
 
         if (itemId) {
             let selectedItem = itemList.find(item => item.id == itemId);
-            console.log("selectedItem", selectedItem)
-            let itemRate = parseFloat(selectedItem.mrp);
+            let itemRate = parseFloat(selectedItem.purchaseBasicCost);
             let gstPercentage = parseFloat(selectedItem.basicSellingTax);
             let itemGSTAmount = 0;
             if (gstPercentage > 0) {
