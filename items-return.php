@@ -4,7 +4,6 @@ include_once './include/session-check.php';
 include_once './include/APICALL.php';
 include_once './include/common-constat.php';
 
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -16,18 +15,18 @@ include_once './include/common-constat.php';
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
-    include_once("include\commoncss.php");
-    ?>
+include_once "include\commoncss.php";
+?>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <?php
-        include_once("include/header.php");
-        include_once("include/sidebar.php");
+include_once "include/header.php";
+include_once "include/sidebar.php";
 
-        ?>
+?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -79,11 +78,18 @@ include_once './include/common-constat.php';
                                     </div>
                                 </div>
 
-                                <div class="col-1">
+                                <div class="col-2">
                                     <div class="form-group">
-                                        <label>Item Qty</label>
+                                        <label>LIVE STOCK(Qty)</label>
                                         <input type="text" name="itemQty" id="itemQty" disabled
                                             class="form-control itemQty" placeholder="Item Qty">
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label>User Stock (Qty)</label>
+                                        <input type="text" name="userExistingQty" id="userExistingQty" disabled
+                                            class="form-control itemQty" placeholder="User Stock Item Qty">
                                     </div>
                                 </div>
 
@@ -92,7 +98,7 @@ include_once './include/common-constat.php';
                                         <label>Return Qty</label>
                                         <input type="text" name="allocatedQty" class="form-control allocatedQty"
                                             placeholder="Return Qty" id="allocatedQty">
-                                        <span>Qty You have : - <p id="userExistingQty"></p></span>
+
                                     </div>
                                 </div>
 
@@ -131,9 +137,9 @@ include_once './include/common-constat.php';
     </div>
     <?php
 
-    include_once("include/footer.php");
+include_once "include/footer.php";
 
-    ?>
+?>
 
     <!-- Control Sidebar -->
     <aside class=" control-sidebar control-sidebar-dark">
@@ -147,9 +153,9 @@ include_once './include/common-constat.php';
 
     <?php
 
-    include_once("include/jquery.php");
+include_once "include/jquery.php";
 
-    ?>
+?>
     <script>
     $(document).ready(function() {
         getItemDetails();
@@ -248,7 +254,7 @@ include_once './include/common-constat.php';
             if (response.responseCode == RESULT_OK) {
                 $.each(response.result.itemList, function(index, items) {
                     console.log(items.openingStock)
-                    $('#itemQty').val(items.openingStock)
+                    $('#itemQty').val(displayViewAmountDigit(items.openingStock));
                 });
 
 
@@ -272,8 +278,8 @@ include_once './include/common-constat.php';
             if (response.responseCode == RESULT_OK) {
 
                 $.each(response.result.itemList, function(index, items) {
-                    $("#userQty").val(items.allocateQty);
-                    $("#userExistingQty").html(items.allocateQty);
+                    $("#userQty").val(displayViewAmountDigit(items.allocateQty));
+                    $("#userExistingQty").val(displayViewAmountDigit(items.allocateQty));
                     $("#itemAllocationId").val(items.id);
                     $("#action").val("edit");
                 });
@@ -344,7 +350,7 @@ include_once './include/common-constat.php';
 
         let sendApiDataObj = {
             '<?php echo systemProject ?>': 'Masters',
-            '<?php echo systemModuleFunction ?>': 'addUpdateItemAllocation',
+            '<?php echo systemModuleFunction ?>': 'addUpdateItemReturn',
             'itemId': itemId,
             'userId': userId,
             'allocatedQty': allocatedQty,

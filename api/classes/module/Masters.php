@@ -529,6 +529,35 @@ class Masters extends Config
         }
     }
 
+    public function addUpdateItemReturn()
+    {
+        try {
+            $itemAllocationId = $this->handleSpecialCharacters($_POST['itemAllocationId']);
+            $itemId = $this->handleSpecialCharacters($_POST['itemId']);
+            $userId = $this->handleSpecialCharacters($_POST['userId']);
+            $allocateQty = $this->handleSpecialCharacters($_POST['allocatedQty']);
+
+            $query = $this::$masterConn->prepare("UPDATE `item_user_allocation` SET `allocate_qty`=allocate_qty - $allocateQty,`modified_by`='" . $this->userMasterId . "' WHERE id = '$itemAllocationId'");
+
+            if ($query->execute()) {
+
+                $updateItemQty = $this::$masterConn->prepare("UPDATE item_list SET opening_stock = opening_stock + $allocateQty WHERE id = '$itemId';");
+                if ($updateItemQty->execute()) {
+
+                }
+                if ($this->equals($this->action, $this->arrayAllAction['add'])) {
+                    $this->successData("Item Assign successfully.");
+                } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
+                    $this->successData("Item Update successfully.");
+                }
+            } else {
+                $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);
+            }
+        } catch (PDOException $e) {
+            $this->exceptionData($e);
+        }
+    }
+
     public function getItemAllocationDetails()
     {
         try {
