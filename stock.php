@@ -4,7 +4,6 @@ include_once './include/session-check.php';
 include_once './include/APICALL.php';
 include_once './include/common-constat.php';
 
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,18 +14,18 @@ include_once './include/common-constat.php';
     <title>Item Stock</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
-    include_once("include\commoncss.php");
-    ?>
+include_once "include\commoncss.php";
+?>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <?php
-        include_once("include/header.php");
-        include_once("include/sidebar.php");
+include_once "include/header.php";
+include_once "include/sidebar.php";
 
-        ?>
+?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -56,7 +55,6 @@ include_once './include/common-constat.php';
                             <div class="row">
                                 <div class="col-3">
                                     <div class="form-group">
-                                        <label>Store:</label>
                                         <select name="stockType" id="stockType" class="form-control select2 stockType">
                                             <option value="">Select Store</option>
                                             <option value="live">LIVE Store</option>
@@ -107,16 +105,16 @@ include_once './include/common-constat.php';
         </div>
         <?php
 
-    include_once("include/footer.php");
+include_once "include/footer.php";
 
-    ?>
+?>
 
 
         <?php
 
-    include_once("include/jquery.php");
+include_once "include/jquery.php";
 
-    ?>
+?>
 
         <script>
         $(document).ready(function() {

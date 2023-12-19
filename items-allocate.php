@@ -60,7 +60,7 @@ include_once "include/sidebar.php";
 
                             <!-- /.row -->
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-2">
                                     <div class="form-group">
                                         <label>User Name</label>
                                         <select name="userId" id="userId" class="form-control select2">

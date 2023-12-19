@@ -78,13 +78,13 @@ include_once "include/sidebar.php";
                                     </div>
                                 </div>
 
-                                <div class="col-2">
+                                <!-- <div class="col-2">
                                     <div class="form-group">
                                         <label>LIVE STOCK(Qty)</label>
                                         <input type="text" name="itemQty" id="itemQty" disabled
                                             class="form-control itemQty" placeholder="Item Qty">
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="col-2">
                                     <div class="form-group">
                                         <label>User Stock (Qty)</label>
@@ -242,24 +242,7 @@ include_once "include/jquery.php";
     }
 
     $("#itemId").change(function() {
-        let itemId = $(this).val();
-        let sendApiDataObj = {
-            '<?php echo systemProject ?>': 'Masters',
-            '<?php echo systemModuleFunction ?>': 'getItemDetails',
-            'itemId': itemId
 
-        };
-        APICallAjax(sendApiDataObj, function(response) {
-
-            if (response.responseCode == RESULT_OK) {
-                $.each(response.result.itemList, function(index, items) {
-                    console.log(items.openingStock)
-                    $('#itemQty').val(displayViewAmountDigit(items.openingStock));
-                });
-
-
-            }
-        });
         getUserItemData();
     });
 
@@ -341,13 +324,6 @@ include_once "include/jquery.php";
 
         }
 
-        console.log("allocatedQty", allocatedQty);
-        console.log("itemQty", itemQty);
-
-
-
-
-
         let sendApiDataObj = {
             '<?php echo systemProject ?>': 'Masters',
             '<?php echo systemModuleFunction ?>': 'addUpdateItemReturn',
@@ -373,8 +349,9 @@ include_once "include/jquery.php";
     function resetFormFields() {
         $("#itemId").val('').trigger('change');
         $("#action").val('add')
-        $("#allocatedQty").val('0')
-        $("#itemAllocationId").val('0')
+        $("#allocatedQty").val(displayViewAmountDigit(0))
+        $("#itemAllocationId").val(displayViewAmountDigit(0))
+        $("#userExistingQty").val(displayViewAmountDigit(0));
         $("#itemQty").val(0);
         $("#userQty").val(0);
         $("#userExistingQty").html('');
