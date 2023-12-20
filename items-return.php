@@ -290,10 +290,12 @@ include_once "include/jquery.php";
         let itemQty = parseFloat($("#itemQty").val());
         let allocatedQty = parseFloat($("#allocatedQty").val());
         let userQty = parseFloat($("#userQty").val());
+        let userExistingQty = parseFloat($("#userExistingQty").val());
         let userId = $("#userId").val()
         let itemId = $("#itemId").val()
         let action = $("#action").val()
         let itemAllocationId = $("#itemAllocationId").val()
+
 
 
         console.log(allocatedQty > itemQty)
@@ -323,6 +325,13 @@ include_once "include/jquery.php";
             return false;
 
         }
+        if (userExistingQty < allocatedQty) {
+            toast_error("Please enter valid qty.");
+            $("#allocatedQty").focus();
+            return false;
+
+        }
+
 
         let sendApiDataObj = {
             '<?php echo systemProject ?>': 'Masters',
@@ -354,7 +363,6 @@ include_once "include/jquery.php";
         $("#userExistingQty").val(displayViewAmountDigit(0));
         $("#itemQty").val(0);
         $("#userQty").val(0);
-        $("#userExistingQty").html('');
         $("#itemAllocationId").val(0);
 
     }
