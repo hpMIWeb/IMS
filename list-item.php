@@ -108,6 +108,29 @@ include_once "include/sidebar.php";
     </section>
     <!-- /.content -->
     </div>
+
+    <div class="modal fade" id="modal-sm">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Warning</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="deleteMsg">Are you Sure want to Delete?</p>
+                    <input id="deleteItemId" value="" type="hidden">
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="deleteItems()">Delete</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
     <?php
 
 include_once "include/footer.php";
@@ -139,23 +162,27 @@ include_once "include/jquery.php";
     $('#listItemTable').on('click', '.delete-item', function(event) {
         event.preventDefault(); // Prevent the default link behavior
 
-        const itemId = $(this).data(
-            'items-id'); // Get the item ID from the data attribute
+        const itemId = $(this).data('items-id');
+        const itemName = $(this).data('items-name');
+        $('#deleteMsg').html('Are you Sure want to delete <b>' + itemName + ' ?');
 
-        deleteItems(itemId);
+        $('#deleteItemId').val(itemId);
+        $('#modal-sm').modal('show');
+        //  deleteItems(itemId);
     });
 
 
-    function deleteItems(itemId) {
+    function deleteItems() {
 
         let sendApiDataObj = {
             '<?php echo systemProject ?>': 'Masters',
             '<?php echo systemModuleFunction ?>': 'deleteItems',
-            'itemId': itemId,
+            'itemId': $('#deleteItemId').val(),
         };
         APICallAjax(sendApiDataObj, function(response) {
             if (response.responseCode == RESULT_OK) {
                 toast_success(response.message);
+                $('#modal-sm').modal('hide');
                 getItemDetails();
             } else {
                 toast_error(response.message);
@@ -211,7 +238,8 @@ include_once "include/jquery.php";
                     html += '</button>';
                     html +=
                         ' <button class="btn btn-danger btn-sm delete-item" data-items-id="' +
-                        items.id + '">';
+                        items.id + '" data-items-name="' +
+                        items.itemName + '">';
                     html += '<i class = "fas fa-trash" > </i>';
                     html += '</button>';
                     html += '</div>';
