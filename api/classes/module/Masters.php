@@ -1104,21 +1104,24 @@ VALUES (0,'$clientName','$address','$contactNumber','','$clientName','','" . $th
         try {
             $itemAllocationId = $this->handleSpecialCharacters($_POST['itemAllocationId']);
             $itemId = $this->handleSpecialCharacters($_POST['itemId']);
-            $userId = $this->handleSpecialCharacters($_POST['userId']);
-            $defectiveQty = $this->handleSpecialCharacters($_POST['defectiveQty']);
+            $chalanNumber = $this->handleSpecialCharacters($_POST['chalanNumber']);
+            $chalanQty = $this->handleSpecialCharacters($_POST['chalanQty']);
+            $defectiveItemId = $this->handleSpecialCharacters($_POST['defectiveItemId']);
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                $query = $this::$masterConn->prepare("INSERT INTO `item_company_store` (`user_id`,`item_id`,`qty`,`created_by`,`created_at`)
-                VALUES ('$userId','$itemId','$defectiveQty','" . $this->userMasterId . "','" . $this->getDateTime() . "');");
-            } elseif ($this->isNotNullOrEmptyOrZero($itemAllocationId) && $this->equals($this->action, $this->arrayAllAction['edit'])) {
-                $query = $this::$masterConn->prepare("UPDATE `item_company_store` SET `qty`= qty+ $defectiveQty,`modified_by`='" . $this->userMasterId . "' WHERE id = '$itemAllocationId'");
+                $query = $this::$masterConn->prepare("INSERT INTO `item_company_store` (`item_id`,`qty`,chalan_no,`created_by`,`created_at`)
+                VALUES ('$itemId','$chalanQty','$chalanNumber','" . $this->userMasterId . "','" . $this->getDateTime() . "');");
             }
 
             if ($query->execute()) {
+                $updateItemQty = $this::$masterConn->prepare("UPDATE item_defective_master SET defective_qty = defective_qty - $chalanQty WHERE id = '$defectiveItemId';");
+                if ($updateItemQty->execute()) {
+
+                }
+
                 if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                    $this->successData("Item Defective successfully.");
-                } elseif ($this->equals($this->action, $this->arrayAllAction['edit'])) {
-                    $this->successData("Item Defective successfully.");
+
+                    $this->successData("Challan Created successfully.");
                 }
             } else {
                 $this->failureData($this->APIMessage['ERR_QUERY_FAIL']);

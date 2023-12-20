@@ -224,3 +224,11 @@ CREATE TABLE `purchase_invoice_details`(
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(), `modified_by` INT(11) NOT NULL DEFAULT 0, `modified_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(), PRIMARY KEY(`id`)) ENGINE = InnoDB DEFAULT CHARSET = latin1 COLLATE = latin1_swedish_ci
 
 ***********End   query 24-11-2023**********************
+
+***********query 20-12-2023**********************
+
+ALTER TABLE `item_company_store` 
+ADD COLUMN `chalan_no` VARCHAR(45) NULL AFTER `modified_at`,
+ADD COLUMN `status` VARCHAR(45) NULL DEFAULT 'open' AFTER `chalan_no`;
+
+*********** END query 20-12-2023**********************

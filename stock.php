@@ -103,6 +103,61 @@ include_once "include/sidebar.php";
                 </div>
             </section>
         </div>
+
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Create Chalan</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Item Name</label>
+                                    <input type="text" name="itemName" id="itemName" class="form-control"
+                                        placeholder="Item Name" disabled>
+                                    <input type="text" name="itemId" id="itemId" disabled>
+                                    <input type="text" name="defectiveItemId" id="defectiveItemId" disabled>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Item Code</label>
+                                    <input type="text" name="itemCode" id="itemCode" class="form-control"
+                                        placeholder="Item Code" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Chalan No</label>
+                                    <input type="text" name="chalanNumber" id="chalanNumber"
+                                        class="form-control itemQty" placeholder="Chalan Number">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Qty</label>
+                                    <input type="text" name="chalanQty" id="chalanQty" class="form-control itemQty"
+                                        placeholder="Chalan Number">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id='createChalanBtn'>Save</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
         <?php
 
 include_once "include/footer.php";
@@ -176,10 +231,11 @@ include_once "include/jquery.php";
                         if (stockType !== 'live') {
                             html += '<td><div class="input-group mb-3">';
                             html +=
-                                '<input type="text" class="form-control" placeholder="Qty" >';
-                            html +=
                                 '<button class="btn btn-warning qtyTransferBtn" type ="button" id="button-addon2" data-items-id="' +
-                                items.id + '"> <i class="fa fa-edit"></i> </button>';
+                                items.id + '" data-item-code="' + items.itemCode +
+                                '" data-item-name="' + items.itemName +
+                                '"  data-item-defective-id="' + items.id +
+                                '"> <i class="fa fa-edit"></i> </button>';
                             html += '</div>';
                             html += '</td>';
                         }
@@ -215,8 +271,47 @@ include_once "include/jquery.php";
 
         $(document).on('click', '.qtyTransferBtn', function() {
             const itemId = $(this).data('items-id');
+            const defectiveItemId = $(this).data('item-defective-id');
+
+            const itemCode = $(this).data('item-code');
+            const itemName = $(this).data('item-name');
+
+            // Populate the modal with the item details
+            $('#itemId').val(itemId);
+            $('#defectiveItemId').val(defectiveItemId);
+            $('#itemName').val(itemName);
+            $('#itemCode').val(itemCode);
+            $('#modal-default').modal('show');
 
 
+
+        });
+
+        $(document).on('click', '#createChalanBtn', function() {
+            let itemId = $('#itemId').val();
+            let chalanNumber = $('#chalanNumber').val();
+            let chalanQty = $('#chalanQty').val();
+            let defectiveItemId = $('#defectiveItemId').val();
+
+            let sendApiDataObj = {
+                '<?php echo systemProject ?>': 'Masters',
+                '<?php echo systemModuleFunction ?>': 'addUpdateItemCompanyStore',
+                'itemId': itemId,
+                'chalanNumber': chalanNumber,
+                'chalanQty': chalanQty,
+                'action': 'add',
+                'defectiveItemId': 'defectiveItemId',
+            };
+
+            APICallAjax(sendApiDataObj, function(response) {
+                if (response.responseCode == RESULT_OK) {
+                    toast_success(response.message);
+                    getUserAllocatedItemList();
+                    resetFormFields()
+                } else {
+                    toast_error(response.message);
+                }
+            });
 
         });
         </script>
