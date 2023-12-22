@@ -149,10 +149,10 @@ include_once "include/sidebar.php";
                                             <label>State:</label>
                                             <select name="state" id="state" class="form-control select2"
                                                 style="width: 100%; ">
-                                                <option selected="selected"> Select State</option>
+                                                <option value="" selected="selected"> Select State</option>
                                                 <?php
 foreach ($indian_states as $key => $name) {?>
-                                                <option value="<?php echo $key; ?>"> <?php echo $name; ?>
+                                                <option value="<?php echo $name; ?>"> <?php echo $name; ?>
                                                 </option>
 
                                                 <?php }?>
@@ -241,9 +241,19 @@ foreach ($indian_states as $key => $name) {?>
                                             </div>
                                             <div class="col-6">
                                                 <div class="form-group">
-                                                    <label>IGST:</label>
+                                                    <label>SGST:</label>
                                                     <input type="text" name="invoiceSGSTAmount" id="invoiceSGSTAmount"
                                                         class="form-control" placeholder="GST" disabled>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label>IGST:</label>
+                                                    <input type="text" name="invoiceIGSTAmount" id="invoiceIGSTAmount"
+                                                        class="form-control" placeholder="IGST" disabled>
 
                                                 </div>
                                             </div>
@@ -327,7 +337,6 @@ include_once "include/jquery.php";
 
         let stateDropDown = '<option value="">Select State</option>';
 
-        console.log("IndiaStateArray", IndiaStateArray)
         $.each(IndiaStateArray, function(index, phoneBookMaster) {
             stateDropDown += '<option value="' + phoneBookMaster + '">' + phoneBookMaster +
                 '  </option>';
@@ -344,11 +353,6 @@ include_once "include/jquery.php";
         $("#invoiceGSTAmount").val(displayViewAmountDigit(0));
         $("#invoiceRoundOff").val(displayViewAmountDigit(0));
         $("#invoiceNetAmount").val(displayViewAmountDigit(0));
-
-
-
-
-
     });
 
 
@@ -610,7 +614,10 @@ include_once "include/jquery.php";
 
     // Add an event listener for changes in input fields
     $('#itemTable tbody').on('change', 'input', function() {
-        console.log("ccd")
+        itemAmountCalculation();
+    });
+    $('#state').on('change', function() {
+        console.log("vnjskn")
         itemAmountCalculation();
     });
 
@@ -654,6 +661,9 @@ include_once "include/jquery.php";
         let invoiceGSTAmount = parseFloat(displayViewAmountDigit(0));
 
         let totalGSTAmount = parseFloat(displayViewAmountDigit(0));
+        let state = $('#state').val()
+
+
 
         $('#itemTable tbody tr').each(function() {
             let row = $(this);
@@ -689,8 +699,21 @@ include_once "include/jquery.php";
 
         $("#invoiceTotalAmount").val(displayViewAmountDigit(totalInvoiceAmount));
         $("#invoiceTotalDiscountAmount").val(displayViewAmountDigit(totalDiscountAmount));
-        $("#invoiceCGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
-        $("#invoiceSGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
+
+        if (state !== '' && state === 'Gujarat') {
+            $("#invoiceCGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
+            $("#invoiceSGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
+            $("#invoiceIGSTAmount").val(displayViewAmountDigit(0));
+        } else if (state !== '' && state != 'Gujarat') {
+            $("#invoiceIGSTAmount").val(displayViewAmountDigit(totalGSTAmount));
+            $("#invoiceCGSTAmount").val(displayViewAmountDigit(0));
+            $("#invoiceSGSTAmount").val(displayViewAmountDigit(0));
+        } else {
+            $("#invoiceIGSTAmount").val(displayViewAmountDigit(0));
+            $("#invoiceCGSTAmount").val(displayViewAmountDigit(0));
+            $("#invoiceSGSTAmount").val(displayViewAmountDigit(0));
+        }
+
         $("#invoiceNetAmount").val(displayViewAmountDigit(invoiceNetAmount));
     }
     </script>
