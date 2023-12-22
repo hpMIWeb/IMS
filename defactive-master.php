@@ -4,7 +4,6 @@ include_once './include/session-check.php';
 include_once './include/APICALL.php';
 include_once './include/common-constat.php';
 
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -16,18 +15,18 @@ include_once './include/common-constat.php';
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
-    include_once("include\commoncss.php");
-    ?>
+include_once "include\commoncss.php";
+?>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <?php
-        include_once("include/header.php");
-        include_once("include/sidebar.php");
+include_once "include/header.php";
+include_once "include/sidebar.php";
 
-        ?>
+?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -81,6 +80,13 @@ include_once './include/common-constat.php';
 
                                 <div class="col-2">
                                     <div class="form-group">
+                                        <label>User Stock</label>
+                                        <input type="text" name="userExistingQty" class="form-control defectiveQty"
+                                            placeholder="User Stock" id="userExistingQty" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group">
                                         <label>Total</label>
                                         <input type="text" name="defectiveQty" class="form-control defectiveQty"
                                             placeholder="Defective Qty" id="defectiveQty">
@@ -122,9 +128,9 @@ include_once './include/common-constat.php';
     </div>
     <?php
 
-    include_once("include/footer.php");
+include_once "include/footer.php";
 
-    ?>
+?>
 
     <!-- Control Sidebar -->
     <aside class=" control-sidebar control-sidebar-dark">
@@ -138,9 +144,9 @@ include_once './include/common-constat.php';
 
     <?php
 
-    include_once("include/jquery.php");
+include_once "include/jquery.php";
 
-    ?>
+?>
     <script>
     $(document).ready(function() {
         getItemDetails();
@@ -196,9 +202,11 @@ include_once './include/common-constat.php';
 
     $("#itemId").change(function() {
         let itemId = $(this).val();
+        let userId = $("#userId").val();
         let sendApiDataObj = {
             '<?php echo systemProject ?>': 'Masters',
-            '<?php echo systemModuleFunction ?>': 'getItemDetails',
+            '<?php echo systemModuleFunction ?>': 'getItemDefectiveDetails',
+            'userId': userId,
             'itemId': itemId
 
         };
@@ -209,12 +217,32 @@ include_once './include/common-constat.php';
                     console.log(items.openingStock)
                     $('#itemQty').val(items.openingStock)
                 });
-
-
             }
         });
         getUserDefectiveItemList();
+        getUserItemData();
     });
+
+    function getUserItemData() {
+        let userId = $("#userId").val();
+        let itemId = $("#itemId").val();
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getItemAllocationDetails',
+            'userId': userId,
+            'itemId': itemId
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+
+            if (response.responseCode == RESULT_OK) {
+
+                $.each(response.result.itemList, function(index, items) {
+                    $("#userExistingQty").val(displayViewAmountDigit(items.allocateQty));
+                });
+            }
+        });
+    }
 
     function getUserDefectiveItemList() {
         let userId = $("#userId").val();
@@ -262,7 +290,7 @@ include_once './include/common-constat.php';
     });
 
     $('#assign').on('click', function(event) {
-        let itemQty = parseFloat($("#itemQty").val());
+        let userExistingQty = parseFloat($("#userExistingQty").val());
         let defectiveQty = parseFloat($("#defectiveQty").val());
         let userQty = parseFloat($("#userQty").val());
         let userId = $("#userId").val()
@@ -289,6 +317,12 @@ include_once './include/common-constat.php';
             $("#defectiveQty").focus();
             return false;
 
+        }
+
+        if (defectiveQty > userExistingQty) {
+            toast_error("Please enter valid qty.");
+            $("#defectiveQty").focus();
+            return false;
         }
 
 
@@ -321,7 +355,7 @@ include_once './include/common-constat.php';
         $("#itemAllocationId").val('0')
         $("#itemQty").val(0);
         $("#userQty").val(0);
-        $("#userExistingQty").html('');
+        $("#userExistingQty").val(displayViewAmountDigit(0));
         $("#itemAllocationId").val(0);
 
     }

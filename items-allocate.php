@@ -341,13 +341,6 @@ include_once "include/jquery.php";
 
         }
 
-        console.log("allocatedQty", allocatedQty);
-        console.log("itemQty", itemQty);
-
-
-
-
-
         let sendApiDataObj = {
             '<?php echo systemProject ?>': 'Masters',
             '<?php echo systemModuleFunction ?>': 'addUpdateItemAllocation',
@@ -373,12 +366,13 @@ include_once "include/jquery.php";
     function resetFormFields() {
         $("#itemId").val('').trigger('change');
         $("#action").val('add')
-        $("#allocatedQty").val('0')
+        $("#allocatedQty").val(displayViewAmountDigit(0))
         $("#itemAllocationId").val('0')
-        $("#itemQty").val(0);
+        $("#itemAllocationId").val('0')
+        $("#itemQty").val(displayViewAmountDigit(0));
         $("#userQty").val(0);
-        $("#userExistingQty").html('');
         $("#itemAllocationId").val(0);
+        $("#userExistingQty").val(displayViewAmountDigit(0));
 
     }
     </script>
