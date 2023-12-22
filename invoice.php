@@ -453,7 +453,7 @@ include_once "include/jquery.php";
         let state = $("#state").val();
         let invoiceTotalAmount = $("#invoiceTotalAmount").val();
         let invoiceTotalDiscountAmount = $("#invoiceTotalDiscountAmount").val();
-        let gstType = $("#gstType").val();
+        let gstType = 1;
         let invoiceGSTAmount = parseFloat($("#invoiceCGSTAmount").val()) + parseFloat($("#invoiceSGSTAmount")
             .val());
         let invoiceNetAmount = $("#invoiceNetAmount").val();
@@ -466,6 +466,14 @@ include_once "include/jquery.php";
             return false;
         }
         let itemsData = [];
+
+        if (state !== '' && state === 'Gujarat') {
+            gstType = 2;
+        } else if (state !== '' && state != 'Gujarat') {
+            gstType = 3;
+        } else {
+            gstType = 1;
+        }
 
         $('#itemTable tbody tr').each(function(index) {
             let row = $(this);
@@ -634,7 +642,7 @@ include_once "include/jquery.php";
         itemAmountCalculation()
     });
 
-    $('#gstType, #invoiceRoundOff').on('change', function() {
+    $('#invoiceRoundOff').on('change', function() {
         itemAmountCalculation();
     });
     //

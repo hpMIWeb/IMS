@@ -23,8 +23,10 @@ $_SESSION['invoiceId'] = $invoiceId;
 $_SESSION['invoiceType'] = '';
 $_SESSION['totalAmountBeforeTax'] = 0;
 $_SESSION['totalTaxAmount'] = 0;
+$_SESSION['totalITaxAmount'] = 0;
 $_SESSION['totalAmountWithTax'] = 0;
 $_SESSION['roundOff'] = 0;
+$_SESSION['gstType'] = 1;
 
 if (!empty($invoiceId)) {
     $invoiceResult = mysqli_query($master_conn, "SELECT * FROM invoice_master WHERE id='$invoiceId';");
@@ -34,6 +36,7 @@ if (!empty($invoiceId)) {
 
         $invoiceItemId = $invoiceData['id'];
         $invoiceItemId = $invoiceData['id'];
+        $_SESSION['gstType'] = $invoiceData['gst_type'];
         $_SESSION['invoiceData'] = $invoiceData;
         $_SESSION['invoiceType'] = $invoiceData['invoice_type'] == '1' ? 'CASH MEMO' : 'GST INVOICE';
 
@@ -217,6 +220,15 @@ class MYPDF extends TCPDF
                 $itemDiscountAmount = $data['item_discount_amount'];
                 $itemTaxableAmount = $itemTotal - $itemDiscountAmount;
                 $totalQty = $totalQty + $data['item_qty'];
+                $gstAmount = 0;
+                $iGSTAmount = 0;
+
+                if ($_SESSION['gstType'] == 2) {
+                    $gstAmount = $data['item_gst_amount'] / 2;
+                } else {
+                    $iGSTAmount = $data['item_gst_amount'];
+
+                }
 
                 $tableItem .= '<tr nobr="true">';
                 $tableItem .= '<td style="text-align: center;width: 3%;border-top: 0.5 solid #000;">' . $sr . '</td>';
@@ -229,9 +241,9 @@ class MYPDF extends TCPDF
                 $tableItem .= '<td style="text-align: right;width:7%;border-top: 0.5 solid #000;">' . displayInFormate($data['item_discount_amount']) . '</td>';
                 $tableItem .= '<td style="text-align: right;width:10%;border-top: 0.5 solid #000;">' . displayInFormate($itemTaxableAmount) . '</td>';
                 $tableItem .= '<td style="text-align: center;width:5%;border-top: 0.5 solid #000;"><b>' . displayInFormate($data['item_gst']) . '</b></td>';
-                $tableItem .= '<td style="text-align: right;width:7%;border-top: 0.5 solid #000;">' . displayInFormate($data['item_gst_amount'] / 2) . '</td>';
-                $tableItem .= '<td style="text-align: right;width:7%;border-top: 0.5 solid #000;">' . displayInFormate($data['item_gst_amount'] / 2) . '</td>';
-                $tableItem .= '<td style="text-align: center;width:7%;border-top: 0.5 solid #000;"></td>';
+                $tableItem .= '<td style="text-align: right;width:7%;border-top: 0.5 solid #000;">' . displayInFormate($gstAmount) . '</td>';
+                $tableItem .= '<td style="text-align: right;width:7%;border-top: 0.5 solid #000;">' . displayInFormate($gstAmount) . '</td>';
+                $tableItem .= '<td style="text-align: center;width:7%;border-top: 0.5 solid #000;">' . displayInFormate($iGSTAmount) . '</td>';
                 $tableItem .= '<td style="text-align: right;width:8%;border-top: 0.5 solid #000;">' . displayInFormate($data['item_total']) . '</td>';
                 $tableItem .= '</tr>';
                 $sr++;
@@ -241,7 +253,14 @@ class MYPDF extends TCPDF
                 $totalTaxableAmount = $totalTaxableAmount + $itemTaxableAmount;
 
                 $_SESSION['totalAmountBeforeTax'] = $itemTaxableAmount;
-                $_SESSION['totalTaxAmount'] = $totalTax;
+
+                if ($_SESSION['gstType'] == 2) {
+                    $_SESSION['totalTaxAmount'] = $totalTax;
+                } else {
+                    $_SESSION['totalITaxAmount'] = $totalTax;
+
+                }
+
                 $_SESSION['totalAmountWithTax'] = $totalAmount;
                 $_SESSION['roundOff'] = 0;
 
@@ -333,11 +352,25 @@ class MYPDF extends TCPDF
         $tableGST .= '<td style="padding:2px;text-align:right;font-size: 10px;width: 40%;"><b>' . displayInFormate($_SESSION['totalAmountBeforeTax']) . '</b></td>';
         $tableGST .= '</tr>';
 
-        $tableGST .= '<tr>';
-        $tableGST .= '<td style="padding:2px;text-align:right;font-size: 10px;width: 58%;">Total Tax Amount GST</td>';
-        $tableGST .= '<td style="padding:2px;text-align:center;font-size: 10px;width: 2%;">:</td>';
-        $tableGST .= '<td style="padding:2px;text-align:right;font-size: 10px;width: 40%;"><b>' . displayInFormate($_SESSION['totalTaxAmount']) . '</b></td>';
-        $tableGST .= '</tr>';
+        if ($_SESSION['gstType'] == 2) {
+            $tableGST .= '<tr>';
+            $tableGST .= '<td style="padding:2px;text-align:right;font-size: 10px;width: 58%;">Total Tax Amount CGST</td>';
+            $tableGST .= '<td style="padding:2px;text-align:center;font-size: 10px;width: 2%;">:</td>';
+            $tableGST .= '<td style="padding:2px;text-align:right;font-size: 10px;width: 40%;"><b>' . displayInFormate($_SESSION['totalTaxAmount']) . '</b></td>';
+            $tableGST .= '</tr>';
+            $tableGST .= '<tr>';
+            $tableGST .= '<td style="padding:2px;text-align:right;font-size: 10px;width: 58%;">Total Tax Amount SGST</td>';
+            $tableGST .= '<td style="padding:2px;text-align:center;font-size: 10px;width: 2%;">:</td>';
+            $tableGST .= '<td style="padding:2px;text-align:right;font-size: 10px;width: 40%;"><b>' . displayInFormate($_SESSION['totalTaxAmount']) . '</b></td>';
+            $tableGST .= '</tr>';
+
+        } else {
+            $tableGST .= '<tr>';
+            $tableGST .= '<td style="padding:2px;text-align:right;font-size: 10px;width: 58%;">Total Tax Amount IGST</td>';
+            $tableGST .= '<td style="padding:2px;text-align:center;font-size: 10px;width: 2%;">:</td>';
+            $tableGST .= '<td style="padding:2px;text-align:right;font-size: 10px;width: 40%;"><b>' . displayInFormate($_SESSION['totalITaxAmount']) . '</b></td>';
+            $tableGST .= '</tr>';
+        }
 
         $tableGST .= '<tr>';
         $tableGST .= '<td style="padding:2px;text-align:right;font-size: 10px;width: 58%;">Total Amount After Tax</td>';

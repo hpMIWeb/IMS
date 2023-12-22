@@ -691,6 +691,7 @@ class Masters extends Config
             $invoiceDate = $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['invoiceDate'], true, false));
             $billNo = $this->handleSpecialCharacters($_POST['billNo']);
             $invoiceType = $this->handleSpecialCharacters($_POST['invoiceType']);
+            $gstType = $this->handleSpecialCharacters($_POST['gstType']);
             $clientName = $this->handleSpecialCharacters($_POST['clientName']);
             $contactNumber = $this->handleSpecialCharacters($_POST['contactNumber']);
             $email = $this->handleSpecialCharacters($_POST['email']);
@@ -699,7 +700,6 @@ class Masters extends Config
             $state = $this->handleSpecialCharacters($_POST['state']);
             $invoiceTotalAmount = $this->handleSpecialCharacters($_POST['invoiceTotalAmount']);
             $invoiceTotalDiscountAmount = $this->handleSpecialCharacters($_POST['invoiceTotalDiscountAmount']);
-            $gstType = 0;
             $invoiceGSTAmount = $this->handleSpecialCharacters($_POST['invoiceGSTAmount']);
             $invoiceRoundOff = $this->handleSpecialCharacters($_POST['invoiceRoundOff']);
             $invoiceNetAmount = $this->handleSpecialCharacters($_POST['invoiceNetAmount']);
