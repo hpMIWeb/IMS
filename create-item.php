@@ -4,7 +4,6 @@ include_once './include/common-constat.php';
 include_once './include/APICALL.php';
 $itemId = isset($_GET['id']) ? $_GET['id'] : 0
 
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -16,18 +15,18 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
-    include_once("include\commoncss.php");
-    ?>
+include_once "include\commoncss.php";
+?>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <?php
-        include_once("include/header.php");
-        include_once("include/sidebar.php");
+include_once "include/header.php";
+include_once "include/sidebar.php";
 
-        ?>
+?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -113,9 +112,15 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label>Tax</label>
-                                        <input type="text" name="purchaseBasicCostTax" id="purchaseBasicCostTax"
-                                            class="form-control allowOnlyDigit purchaseBasicCostTax"
-                                            placeholder="Enter Tax">
+
+                                        <select name="purchaseBasicCostTax" id="purchaseBasicCostTax"
+                                            class="form-control select2 purchaseBasicCostTax">
+                                            <option value="">Select Tax</option>
+                                            <option value="5" map-cal-value='1.05'>5 %</option>
+                                            <option value="12" map-cal-value='1.12'>12 %</option>
+                                            <option value="18" map-cal-value='1.18'>18 %</option>
+                                            <option value="28" map-cal-value='1.28'>28 %</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -139,9 +144,15 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
                                 <div class="col-4">
                                     <div class="form-group">
                                         <label>Tax</label>
-                                        <input type="text" name="basicSellingPriceTax" id="basicSellingPriceTax"
-                                            class="form-control allowOnlyDigit basicSellingPriceTax"
-                                            placeholder="Enter Tax">
+
+                                        <select name="basicSellingPriceTax" id="basicSellingPriceTax"
+                                            class="form-control select2 basicSellingPriceTax">
+                                            <option value="">Select Tax</option>
+                                            <option value="5" map-cal-value='1.05'>5 %</option>
+                                            <option value="12" map-cal-value='1.12'>12 %</option>
+                                            <option value="18" map-cal-value='1.18'>18 %</option>
+                                            <option value="28" map-cal-value='1.28'>28 %</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -168,9 +179,9 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
     </div>
     <?php
 
-    include_once("include/footer.php");
+include_once "include/footer.php";
 
-    ?>
+?>
 
     <!-- Control Sidebar -->
     <aside class=" control-sidebar control-sidebar-dark">
@@ -180,9 +191,9 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
     </div>
     <?php
 
-    include_once("include/jquery.php");
+include_once "include/jquery.php";
 
-    ?>
+?>
 
     <script>
     $(document).ready(function() {
@@ -228,12 +239,23 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
         let mrp = parseFloat($("#mrp").val());
         let basicSellingPriceTax = parseFloat($("#basicSellingPriceTax").val());
         let basicSellingPrice = parseFloat($("#basicSellingPrice").val());
-        let taxAmount = 0
-        if (!isNaN(mrp) && !isNaN(basicSellingPriceTax)) {
-            taxAmount = (mrp * basicSellingPriceTax) / 100;
-        }
+        // Get the selected option of basicSellingPriceTax dropdown
+        var selectedOption = $("#purchaseBasicCostTax").find('option:selected');
 
-        $("#basicSellingPrice").val(displayViewAmountDigit((mrp - taxAmount)));
+        // Check if the 'map-cal-value' attribute exists
+        if (selectedOption.attr('map-cal-value') !== undefined) {
+            // Get the value of the 'map-cal-value' attribute
+            var mapCalValue = selectedOption.attr('map-cal-value');
+
+            // Log or use the mapCalValue as needed
+            console.log('Selected map-cal-value:', mapCalValue);
+
+            // Update basicSellingPrice using the calculated value
+            $("#basicSellingPrice").val(displayViewAmountDigit((mrp / mapCalValue)));
+        } else {
+            console.log('Selected option has no map-cal-value attribute.');
+        }
+        $("#basicSellingPrice").val(displayViewAmountDigit((mrp / mapCalValue)));
 
     }
     $('#mrp').on('change', updateBasicSellingCost);
@@ -246,7 +268,7 @@ $itemId = isset($_GET['id']) ? $_GET['id'] : 0
         let taxAmount = 0
 
         if (!isNaN(purchaseBasicCost) && !isNaN(purchaseBasicCostTax)) {
-            $("#basicSellingPriceTax").val((purchaseBasicCostTax))
+            $("#basicSellingPriceTax").val((purchaseBasicCostTax)).select2()
             taxAmount = (purchaseBasicCost * purchaseBasicCostTax) / 100;
         }
 
