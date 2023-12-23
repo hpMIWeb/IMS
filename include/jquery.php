@@ -49,7 +49,6 @@ $.widget.bridge('uibutton', $.ui.button)
 $('.select2').select2()
 
 function toast_success(msg) {
-    console.log(msg)
 
     toastr.options = {
         "closeButton": true,

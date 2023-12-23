@@ -171,7 +171,6 @@ include_once "include/jquery.php";
 
                             const phoneBookMasterId = $(this).data(
                                 'phone-book-master-id'); // Get the category ID from the data attribute
-                            console.log(phoneBookMasterId)
                             deletePhoneBookMaster(phoneBookMasterId);
                         });
 

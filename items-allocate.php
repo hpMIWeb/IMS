@@ -253,7 +253,6 @@ include_once "include/jquery.php";
 
             if (response.responseCode == RESULT_OK) {
                 $.each(response.result.itemList, function(index, items) {
-                    console.log(items.openingStock)
                     $('#itemQty').val(displayViewAmountDigit(items.openingStock))
                 });
 
@@ -313,7 +312,6 @@ include_once "include/jquery.php";
         let itemAllocationId = $("#itemAllocationId").val()
 
 
-        console.log(allocatedQty > itemQty)
         if (allocatedQty > itemQty) {
             toast_error("Enter Qty is Greater than to item Qty Please change it .");
             $(this).focus();

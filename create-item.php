@@ -247,9 +247,7 @@ include_once "include/jquery.php";
             // Get the value of the 'map-cal-value' attribute
             var mapCalValue = selectedOption.attr('map-cal-value');
             $("#basicSellingPrice").val(displayViewAmountDigit((mrp / mapCalValue)));
-        } else {
-            console.log('Selected option has no map-cal-value attribute.');
-        }
+        } else {}
         $("#basicSellingPrice").val(displayViewAmountDigit((mrp / mapCalValue)));
 
     }

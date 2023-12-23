@@ -497,22 +497,36 @@ include_once "include/jquery.php";
 
         $('#itemTable tbody tr').each(function(index) {
             let row = $(this);
-            let item = {
-                itemId: parseFloat(row.find('[data-field="itemid"]').val()) || 0,
-                itemQty: parseFloat(row.find('[data-field="qty"]').val()) || 0,
-                itemRate: parseFloat(row.find('[data-field="rate"]').val()) || 0,
-                itemDiscount: parseFloat(row.find('[data-field="discount"]').val()) || 0,
-                itemDiscountAmount: parseFloat(row.find('[data-field="itemsDiscountAmount"]')
-                    .val()) || 0,
-                itemGST: parseFloat(row.find('[data-field="itemsGSTPer"]')
-                    .val()) || 0,
-                itemGSTAmount: parseFloat(row.find('[data-field="itemsGSTAmount"]')
-                    .val()) || 0,
-                total: parseFloat(row.find('[data-field="total"]').val()) || 0
-            };
-            itemsData.push(item);
+            if (row.find('[data-field="itemid"]').val()) {
+                let item = {
+                    itemId: parseFloat(row.find('[data-field="itemid"]').val()) || 0,
+                    itemQty: parseFloat(row.find('[data-field="qty"]').val()) || 0,
+                    itemRate: parseFloat(row.find('[data-field="rate"]').val()) || 0,
+                    itemDiscount: parseFloat(row.find('[data-field="discount"]').val()) || 0,
+                    itemDiscountAmount: parseFloat(row.find('[data-field="itemsDiscountAmount"]')
+                        .val()) || 0,
+                    itemGST: parseFloat(row.find('[data-field="itemsGSTPer"]')
+                        .val()) || 0,
+                    itemGSTAmount: parseFloat(row.find('[data-field="itemsGSTAmount"]')
+                        .val()) || 0,
+                    total: parseFloat(row.find('[data-field="total"]').val()) || 0
+                };
+                itemsData.push(item);
+            }
+
         });
 
+
+
+
+        if (clientName == '') {
+            toast_error('Pease enter client name');
+            return false;
+        }
+        if (itemsData.length == 0) {
+            toast_error('Please  select at least 1 item');
+            return false;
+        }
 
 
         let jsonData = JSON.stringify(itemsData);

@@ -298,7 +298,6 @@ include_once "include/jquery.php";
 
 
 
-        console.log(allocatedQty > itemQty)
         if (allocatedQty > itemQty) {
             toast_error("Enter Qty is Greater than to item Qty Please change it .");
             $(this).focus();

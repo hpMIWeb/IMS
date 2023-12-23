@@ -214,7 +214,6 @@ include_once "include/jquery.php";
 
             if (response.responseCode == RESULT_OK) {
                 $.each(response.result.itemList, function(index, items) {
-                    console.log(items.openingStock)
                     $('#itemQty').val(items.openingStock)
                 });
             }

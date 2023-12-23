@@ -215,8 +215,6 @@ include_once "include/jquery.php";
 
                 $.each(response.result.itemList, function(index, items) {
 
-                    console.log("items", items)
-
                     let rowClass = "";
 
                     if (parseFloat(items.openingStock) < parseFloat(items.minimumStockLevel)) {

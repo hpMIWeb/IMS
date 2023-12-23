@@ -139,7 +139,6 @@ include_once "include/jquery.php";
                 let count = 1;
 
                 $.each(response.result.invoiceList, function(index, invoice) {
-                    console.log('invoice', invoice)
                     html += '<tr>';
                     html += '<td>' + count + '</td>';
                     html += '<td>' + invoice.billNo + '</td>';

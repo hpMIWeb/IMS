@@ -15,18 +15,18 @@ $phoneBookMasterId = isset($_GET['id']) ? $_GET['id'] : 0
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
-    include_once("include/commoncss.php");
-    ?>
+include_once "include/commoncss.php";
+?>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <?php
-        include_once("include/header.php");
-        include_once("include/sidebar.php");
+include_once "include/header.php";
+include_once "include/sidebar.php";
 
-        ?>
+?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -146,9 +146,9 @@ $phoneBookMasterId = isset($_GET['id']) ? $_GET['id'] : 0
 
                         <?php
 
-                        include_once("include/jquery.php");
+include_once "include/jquery.php";
 
-                        ?>
+?>
 
                         <script>
                         $('.select2').select2()
@@ -263,7 +263,6 @@ $phoneBookMasterId = isset($_GET['id']) ? $_GET['id'] : 0
                                 'category': category
                             };
 
-                            console.log(sendApiDataObj)
 
                             APICallAjax(sendApiDataObj, function(response) {
                                 if (response.responseCode == RESULT_OK) {

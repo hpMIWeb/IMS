@@ -505,7 +505,6 @@ include_once "include/jquery.php";
             'invoiceRoundOff': invoiceRoundOff
 
         };
-        console.log("sendApiDataObj", sendApiDataObj)
         APICallAjax(sendApiDataObj, function(response) {
 
             if (response.responseCode == RESULT_OK) {
@@ -685,7 +684,6 @@ include_once "include/jquery.php";
         invoiceNetAmount = parseFloat(totalInvoiceAmount) + parseFloat(invoiceGSTAmount) + parseFloat(
             invoiceRoundOffAmount);
 
-        console.log("state", state)
         if (state !== '' && state === 'Gujarat') {
             $("#invoiceCGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
             $("#invoiceSGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
