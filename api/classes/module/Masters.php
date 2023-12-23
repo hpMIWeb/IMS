@@ -852,7 +852,6 @@ VALUES (0,'$clientName','$address','$contactNumber','','$clientName','','" . $th
         try {
 
             $invoiceId = $this->handleSpecialCharacters($_POST['invoiceId']);
-            $displayNumber = $this->handleSpecialCharacters($_POST['displayNumber']);
             $invoiceDate = $this->handleSpecialCharacters($this->convertDateTimeFormat($_POST['invoiceDate'], true, false));
             $billNo = $this->handleSpecialCharacters($_POST['billNo']);
             $invoiceType = $this->handleSpecialCharacters($_POST['invoiceType']);
@@ -872,8 +871,8 @@ VALUES (0,'$clientName','$address','$contactNumber','','$clientName','','" . $th
             $itemArray = json_decode($_POST['itemArray'], true);
 
             if ($this->equals($this->action, $this->arrayAllAction['add'])) {
-                $query = $this::$masterConn->prepare("INSERT INTO `purchase_invoice_master`(`display_number`,`invoice_date`,`bill_no`,`invoice_type`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`,  `round_off`, `net_amount`, `remark`,`created_by`)
-                        VALUES  ('$displayNumber','$invoiceDate','$billNo','$invoiceType','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','$invoiceRoundOff','$invoiceNetAmount','$remark','" . $this->userMasterId . "')");
+                $query = $this::$masterConn->prepare("INSERT INTO `purchase_invoice_master`(`invoice_date`,`bill_no`,`invoice_type`, `client_name`, `contact_number`, `email`, `client_gst_number`, `client_address`, `client_state`, `total_amount`, `total_discount`, `gst_type`, `gst_amount`,  `round_off`, `net_amount`, `remark`,`created_by`)
+                        VALUES  ('$invoiceDate','$billNo','$invoiceType','$clientName','$contactNumber','$email','$clientGST','$address','$state','$invoiceTotalAmount','$invoiceTotalDiscountAmount','$gstType','$invoiceGSTAmount','$invoiceRoundOff','$invoiceNetAmount','$remark','" . $this->userMasterId . "')");
             }
 
             if ($query->execute()) {
@@ -979,6 +978,7 @@ VALUES (0,'$clientName','$address','$contactNumber','','$clientName','','" . $th
                             'vendorName' => $this->convertNullToEmptyString($row['vendor_name']),
                             'contactNumber' => $this->convertNullToEmptyString($row['contact_number']),
                             'contactName' => $this->convertNullToEmptyString($row['contact_name']),
+                            'email' => $this->convertNullToEmptyString($row['email']),
                             'gstNo' => $this->convertNullToEmptyString($row['gst_no']),
                             'billingAddress' => $this->convertNullToEmptyString($row['billing_address']),
                             'shippingAddress' => $this->convertNullToEmptyString($row['shipping_address']),

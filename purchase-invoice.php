@@ -55,8 +55,18 @@ include_once "include/sidebar.php";
                             <!-- /.card-header -->
                             <div class="card-header">
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-3">
 
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label>Vendor:</label>
+                                            <select name="vendorId" id="vendorId" class="form-control select2"
+                                                style="width: 100%; ">
+                                                <option value="0"> Select Vendor</option>
+
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <div class="col-3">
@@ -65,7 +75,7 @@ include_once "include/sidebar.php";
                                             <div class="input-group date" id="reservationdate"
                                                 data-target-input="nearest">
                                                 <input type="text" class="form-control datetimepicker-input "
-                                                    data-target="#reservationdate">
+                                                    data-target="#reservationdate" id="invoiceDate">
                                                 <div class="input-group-append" data-target="#reservationdate"
                                                     data-toggle="datetimepicker">
                                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -77,7 +87,7 @@ include_once "include/sidebar.php";
                                         <div class="form-group">
                                             <label>Bill No</label>
                                             <input type="text" name="billNo" id="billNo" class="form-control"
-                                                placeholder="Enter GST Number" value="">
+                                                placeholder="Enter Bill Number" value="">
                                         </div>
                                     </div>
                                 </div>
@@ -131,10 +141,10 @@ include_once "include/sidebar.php";
                                             <label>State:</label>
                                             <select name="state" id="state" class="form-control select2"
                                                 style="width: 100%; ">
-                                                <option selected="selected"> Select State</option>
+                                                <option selected="selected" value=""> Select State</option>
                                                 <?php
 foreach ($indian_states as $key => $name) {?>
-                                                <option value="<?php echo $key; ?>"> <?php echo $name; ?>
+                                                <option value="<?php echo $name; ?>"> <?php echo $name; ?>
                                                 </option>
 
                                                 <?php }?>
@@ -222,9 +232,19 @@ foreach ($indian_states as $key => $name) {?>
                                             </div>
                                             <div class="col-6">
                                                 <div class="form-group">
-                                                    <label>IGST:</label>
+                                                    <label>SGST:</label>
                                                     <input type="text" name="invoiceSGSTAmount" id="invoiceSGSTAmount"
                                                         class="form-control" placeholder="GST" disabled>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label>IGST:</label>
+                                                    <input type="text" name="invoiceIGSTAmount" id="invoiceIGSTAmount"
+                                                        class="form-control" placeholder="IGST" disabled>
 
                                                 </div>
                                             </div>
@@ -306,7 +326,7 @@ include_once "include/jquery.php";
 
         getItemDetails();
         addNewItemRow();
-
+        getVendorDetails();
         $("#invoiceTotalAmount").val(displayViewAmountDigit(0));
         $("#invoiceTotalDiscountAmount").val(displayViewAmountDigit(0));
         $("#invoiceGSTAmount").val(displayViewAmountDigit(0));
@@ -354,11 +374,63 @@ include_once "include/jquery.php";
 
     }
 
+    function getVendorDetails() {
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getVendorDetails',
+
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+
+            let html = '<option value="">Select vendor</option>';
+            if (response.responseCode == RESULT_OK) {
+
+                $.each(response.result.vendorList, function(index, vendor) {
+                    html += '<option value="' + vendor.id + '">' + vendor
+                        .vendorName + '  </option>';
+                });
+            }
+
+            $('#vendorId').html(html);
+        });
+
+    }
+
+
+    $(document).on('change', '#vendorId', function() {
+        let vendorId = $(this).val();
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getVendorDetails',
+            'vendorId': vendorId
+
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+
+            let html = '<option value="">Select vendor</option>';
+            if (response.responseCode == RESULT_OK) {
+
+                $.each(response.result.vendorList, function(index, vendor) {
+
+                    $('#clientName').val(vendor.vendorName);
+                    $('#contactNumber').val(vendor.contactNumber);
+                    $('#email').val(vendor.email);
+                    $('#email').val(vendor.email);
+                    $('#clientGST').val(vendor.gstNo);
+                    $('#address').val(vendor.billingAddress);
+                });
+            }
+
+        });
+    });
 
     $('#addUpdateInvoiceBtn').on('click', function() {
         let action = $("#action").val();
         let invoiceDate = $("#invoiceDate").val();
-        let displayNumber = $("#displayNumber").val();
         let billNo = $("#billNo").val();
         let invoiceId = $("#invoiceId").val();
         let clientName = $("#clientName").val();
@@ -370,10 +442,19 @@ include_once "include/jquery.php";
         let invoiceTotalAmount = $("#invoiceTotalAmount").val();
         let invoiceTotalDiscountAmount = $("#invoiceTotalDiscountAmount").val();
         let gstType = $("#gstType").val();
-        let invoiceGSTAmount = $("#invoiceGSTAmount").val();
+        let invoiceGSTAmount = parseFloat($("#invoiceCGSTAmount").val()) + parseFloat($("#invoiceSGSTAmount")
+            .val() + parseFloat($("#invoiceIGSTAmount").val()));
         let invoiceNetAmount = $("#invoiceNetAmount").val();
+        let invoiceRoundOff = $("#invoiceRoundOff").val();
         let remark = $("#remark").val();
 
+        if (state !== '' && state === 'Gujarat') {
+            gstType = 2;
+        } else if (state !== '' && state != 'Gujarat') {
+            gstType = 3;
+        } else {
+            gstType = 1;
+        }
 
         let itemsData = [];
 
@@ -404,7 +485,6 @@ include_once "include/jquery.php";
             'invoiceId': invoiceId,
             'invoiceDate': invoiceDate,
             'invoiceType': '1',
-            'displayNumber': displayNumber,
             'billNo': billNo,
             'clientName': clientName,
             'contactNumber': contactNumber,
@@ -419,8 +499,10 @@ include_once "include/jquery.php";
             'invoiceNetAmount': invoiceNetAmount,
             'remark': remark,
             'itemArray': JSON.stringify(itemsData),
+            'invoiceRoundOff': invoiceRoundOff
 
         };
+        console.log("sendApiDataObj", sendApiDataObj)
         APICallAjax(sendApiDataObj, function(response) {
 
             if (response.responseCode == RESULT_OK) {
@@ -524,6 +606,10 @@ include_once "include/jquery.php";
         itemAmountCalculation();
     });
 
+    $('#state').on('change', function() {
+        itemAmountCalculation();
+    });
+
     // Handle item deletion
     $('#itemTable tbody').on('click', '.delete-item', function() {
         $(this).closest('tr').remove(); // Remove the row
@@ -563,6 +649,7 @@ include_once "include/jquery.php";
         let invoiceGSTAmount = parseFloat(displayViewAmountDigit(0));
         let discountAmount = parseFloat(displayViewAmountDigit(0));
         let totalGSTAmount = parseFloat(displayViewAmountDigit(0));
+        let state = $('#state').val()
 
         $('#itemTable tbody tr').each(function() {
             let row = $(this);
@@ -595,10 +682,25 @@ include_once "include/jquery.php";
         invoiceNetAmount = parseFloat(totalInvoiceAmount) + parseFloat(invoiceGSTAmount) + parseFloat(
             invoiceRoundOffAmount);
 
+        console.log("state", state)
+        if (state !== '' && state === 'Gujarat') {
+            $("#invoiceCGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
+            $("#invoiceSGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
+            $("#invoiceIGSTAmount").val(displayViewAmountDigit(0));
+        } else if (state !== '' && state != 'Gujarat') {
+            $("#invoiceIGSTAmount").val(displayViewAmountDigit(totalGSTAmount));
+            $("#invoiceCGSTAmount").val(displayViewAmountDigit(0));
+            $("#invoiceSGSTAmount").val(displayViewAmountDigit(0));
+        } else {
+            $("#invoiceIGSTAmount").val(displayViewAmountDigit(0));
+            $("#invoiceCGSTAmount").val(displayViewAmountDigit(0));
+            $("#invoiceSGSTAmount").val(displayViewAmountDigit(0));
+        }
+
+
         $("#invoiceTotalAmount").val(displayViewAmountDigit(totalInvoiceAmount));
         $("#invoiceTotalDiscountAmount").val(displayViewAmountDigit(totalDiscountAmount));
-        $("#invoiceCGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
-        $("#invoiceSGSTAmount").val(displayViewAmountDigit(totalGSTAmount / 2));
+
         $("#invoiceNetAmount").val(displayViewAmountDigit(invoiceNetAmount));
     }
     </script>

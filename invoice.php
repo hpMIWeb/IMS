@@ -57,10 +57,10 @@ include_once "include/sidebar.php";
                                 <div class="row">
                                     <div class="col-3">
                                         <div class="form-group">
-                                            <label>Client:</label>
-                                            <select name="Client" id="clientId" class="form-control select2"
+                                            <label>Vendor:</label>
+                                            <select name="vendorId" id="vendorId" class="form-control select2"
                                                 style="width: 100%; ">
-                                                <option value="0"> Select Client Type</option>
+                                                <option value="0"> Select Vendor</option>
 
                                             </select>
                                         </div>
@@ -333,21 +333,11 @@ include_once "include/jquery.php";
     let itemList = []
     $(document).ready(function() {
 
-
-
-        let stateDropDown = '<option value="">Select State</option>';
-
-        $.each(IndiaStateArray, function(index, phoneBookMaster) {
-            stateDropDown += '<option value="' + phoneBookMaster + '">' + phoneBookMaster +
-                '  </option>';
-        });
-        $('#stated').html(stateDropDown);
-
         $("#invoiceType").val(1).select2();
         getLastDisplayNumber()
         getItemDetails();
         addNewItemRow();
-        getClientDetails();
+        getVendorDetails();
         $("#invoiceTotalAmount").val(displayViewAmountDigit(0));
         $("#invoiceTotalDiscountAmount").val(displayViewAmountDigit(0));
         $("#invoiceGSTAmount").val(displayViewAmountDigit(0));
@@ -378,29 +368,59 @@ include_once "include/jquery.php";
 
     }
 
-    function getClientDetails() {
+    function getVendorDetails() {
 
         let sendApiDataObj = {
             '<?php echo systemProject ?>': 'Masters',
-            '<?php echo systemModuleFunction ?>': 'getPhoneBookMasterDetails',
+            '<?php echo systemModuleFunction ?>': 'getVendorDetails',
 
 
         };
         APICallAjax(sendApiDataObj, function(response) {
 
-            let html = '<option value="">Select Client</option>';
+            let html = '<option value="">Select vendor</option>';
             if (response.responseCode == RESULT_OK) {
 
-                $.each(response.result.phoneBookMaster, function(index, phoneBookMaster) {
-                    html += '<option value="' + phoneBookMaster.id + '">' + phoneBookMaster
-                        .companyName + '  </option>';
+                $.each(response.result.vendorList, function(index, vendor) {
+                    html += '<option value="' + vendor.id + '">' + vendor
+                        .vendorName + '  </option>';
                 });
             }
 
-            $('#clientId').html(html);
+            $('#vendorId').html(html);
         });
 
     }
+
+
+    $(document).on('change', '#vendorId', function() {
+        let vendorId = $(this).val();
+
+        let sendApiDataObj = {
+            '<?php echo systemProject ?>': 'Masters',
+            '<?php echo systemModuleFunction ?>': 'getVendorDetails',
+            'vendorId': vendorId
+
+
+        };
+        APICallAjax(sendApiDataObj, function(response) {
+
+            let html = '<option value="">Select vendor</option>';
+            if (response.responseCode == RESULT_OK) {
+
+                $.each(response.result.vendorList, function(index, vendor) {
+
+                    $('#clientName').val(vendor.vendorName);
+                    $('#contactNumber').val(vendor.contactNumber);
+                    $('#email').val(vendor.email);
+                    $('#email').val(vendor.email);
+                    $('#clientGST').val(vendor.gstNo);
+                    $('#address').val(vendor.billingAddress);
+                });
+            }
+
+        });
+    });
 
     function getLastDisplayNumber() {
 
@@ -455,7 +475,7 @@ include_once "include/jquery.php";
         let invoiceTotalDiscountAmount = $("#invoiceTotalDiscountAmount").val();
         let gstType = 1;
         let invoiceGSTAmount = parseFloat($("#invoiceCGSTAmount").val()) + parseFloat($("#invoiceSGSTAmount")
-            .val());
+            .val() + parseFloat($("#invoiceIGSTAmount").val()));
         let invoiceNetAmount = $("#invoiceNetAmount").val();
         let remark = $("#remark").val();
         let invoiceRoundOff = $('#invoiceRoundOff').val()
@@ -519,7 +539,7 @@ include_once "include/jquery.php";
             'invoiceNetAmount': invoiceNetAmount,
             'remark': remark,
             'itemArray': JSON.stringify(itemsData),
-            'invoiceRoundOff': invoiceRoundOff
+            'invoiceRoundOff': invoiceRoundOff,
 
         };
         APICallAjax(sendApiDataObj, function(response) {
@@ -625,7 +645,6 @@ include_once "include/jquery.php";
         itemAmountCalculation();
     });
     $('#state').on('change', function() {
-        console.log("vnjskn")
         itemAmountCalculation();
     });
 
