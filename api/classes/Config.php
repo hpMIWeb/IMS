@@ -64,6 +64,8 @@ class Config
     protected $apiKey;
     protected $accessToken;
     protected $userMasterId;
+    protected $userRole;
+    protected $userRoleId;
     protected $userMasterDeviceType;
     protected $webLoginDeviceId;
 
@@ -187,6 +189,8 @@ class Config
             }
 
             $this->userMasterId = $getPayLoadData['userMasterId'];
+            $this->userRoleId = $getPayLoadData['roleId'];
+            $this->userRole = $getPayLoadData['role'];
             $this->userMasterDeviceType = $getPayLoadData['userMasterDeviceType'];
             $this->userMasterDeviceId = $getPayLoadData['userMasterDeviceId'];
             $this->userMasterDeviceToken = $getPayLoadData['userMasterDeviceToken'];
