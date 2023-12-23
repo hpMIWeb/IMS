@@ -224,7 +224,9 @@ include_once "include/jquery.php";
 
 
                         html += '<tr>';
-                        html += '<td>' + count + '</td>';
+                        html += '<td style="align:center"> ' + (stockType !== 'live' ?
+                            '<input type="checkbox" class="icheck-primary" data-items-id="' +
+                            items.id + '">' : count) + '</td>';
                         html += '<td>' + items.itemCode + '</td>';
                         html += '<td>' + items.itemName + '</td>';
                         html += '<td>' + displayViewAmountDigit(items.itemStock) + '</td>';
