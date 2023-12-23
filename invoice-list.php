@@ -72,6 +72,7 @@ include_once "include/sidebar.php";
                                                 <th style="width: 10%;">Sr. No.</th>
                                                 <th>Bill No.</th>
                                                 <th>Invoice Date</th>
+                                                <th>Invoice Type</th>
                                                 <th>Client Name</th>
                                                 <th>Contact Number</th>
                                                 <th>Amount</th>
@@ -143,6 +144,7 @@ include_once "include/jquery.php";
                     html += '<td>' + count + '</td>';
                     html += '<td>' + invoice.billNo + '</td>';
                     html += '<td>' + invoice.startDateDisplay + '</td>';
+                    html += '<td>' + invoice.invoiceType + '</td>';
                     html += '<td>' + invoice.clientName + '</td>';
                     html += '<td>' + invoice.contactNumber + '</td>';
                     html += '<td>' + displayIndianRupeeCurrency(invoice.netAmount) + '</td>';

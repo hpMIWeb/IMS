@@ -785,6 +785,8 @@ VALUES (0,'$clientName','$address','$contactNumber','','$clientName','','" . $th
                             'displayNumber' => $this->convertNullOrEmptyStringToZero($row['display_number']),
                             'billNo' => $this->convertNullToEmptyString($row['bill_no']),
                             'clientName' => $this->convertNullToEmptyString($row['client_name']),
+                            'invoiceTypeId' => $this->convertNullToEmptyString($row['invoice_type']),
+                            'invoiceType' => $this->getArrayNameById($this->invoiceType, $row['invoice_type']),
                             'contactNumber' => $this->convertNullToEmptyString($row['contact_number']),
                             'invoiceDate' => $this->convertNullToEmptyString($row['invoice_date']),
                             'startDateDisplay' => $this->convertNullToEmptyString($this->formatDateTime('d-m-Y', $row['invoice_date'])),

@@ -27,16 +27,15 @@ trait ProjectCommon
         "3" => "Normal User",
     );
 
-
     protected $arrayAllAction = array(
         "add" => "add",
         "edit" => "edit",
     );
 
     protected $arrayStockType = array(
-        "live" =>"live",
-        "defective" =>"defective",
-        "company" =>"company"
+        "live" => "live",
+        "defective" => "defective",
+        "company" => "company",
     );
 
     protected $filePrefixName = array(
@@ -45,36 +44,36 @@ trait ProjectCommon
         'users' => "catalogue_",
     );
 
+    protected $invoiceType = array(
+        '1' => "Cash Memo",
+        '2' => "GST Invoice",
+    );
+
     /* constants generation key */
     protected $urlKeyUniqueId = "?uniqueid=";
 
-
-
     protected $userEnable = 1;
-
-
 
     /* all data logic */
     protected $arrayAllDataLogic = array();
 
-
-    function getArrayIdByName($arrayName, $value)
+    public function getArrayIdByName($arrayName, $value)
     {
 
         return array_search($value, $arrayName);
     }
 
-    function getArrayNameById($arrayName, $value)
+    public function getArrayNameById($arrayName, $value)
     {
         return $arrayName[$value];
     }
 
-    function generateAttachmentFilePath($filePathStructure)
+    public function generateAttachmentFilePath($filePathStructure)
     {
         return $this->filePathStructure['attachment'] . $filePathStructure;
     }
 
-    function generateAttachmentFileName($filePrefixName, $attachmentName, $otherPostfix = "", $putFileName = "")
+    public function generateAttachmentFileName($filePrefixName, $attachmentName, $otherPostfix = "", $putFileName = "")
     {
         if ($this->isNotNullOrEmptyOrZero($putFileName)) {
             return $filePrefixName . $putFileName;
@@ -95,7 +94,7 @@ trait ProjectCommon
      * @param string $expectedDateTimeFormat = This function work form only DateTime Format so if you want to get date other format then pass there format here
      * @return false|string = return as expected format wise date or DateTime value
      */
-    function convertDateTimeFormat($getDateTimeValue = "", $isGetDateTimeValue = true, $isGetOnlyDate = false, $expectedDateFormat = "", $expectedDateTimeFormat = "")
+    public function convertDateTimeFormat($getDateTimeValue = "", $isGetDateTimeValue = true, $isGetOnlyDate = false, $expectedDateFormat = "", $expectedDateTimeFormat = "")
     {
 
         if (empty($expectedDateFormat)) // default set 'Y-m-d' Format
@@ -107,7 +106,7 @@ trait ProjectCommon
             $expectedDateTimeFormat = 'Y-m-d H:i:s';
         }
 
-        if ($isGetDateTimeValue)  // Convert only DateTime
+        if ($isGetDateTimeValue) // Convert only DateTime
         {
             if ($this->isNotNullOrEmptyOrZero($getDateTimeValue)) // if you pass Date or DateTime Value
             {
@@ -116,7 +115,7 @@ trait ProjectCommon
                 if ($this->isNotNullOrEmptyOrZero($getTime) || $getTime[1] == "00:00:00") {
                     $getDateTimeValue = $getTime[0] . ' ' . date('H:i:s');
                 }
-                
+
                 return date($expectedDateTimeFormat, strtotime(str_replace("/", "-", "$getDateTimeValue")));
             } else {
                 return date($expectedDateTimeFormat);
@@ -132,8 +131,7 @@ trait ProjectCommon
         }
     }
 
-
-    function uploadAttachment($filePathStructure, $filePrefixName, $attachmentName = '', $attachmentBase64Str = '', $otherPostfix = "", $putFileName = "", $isTicket = false)
+    public function uploadAttachment($filePathStructure, $filePrefixName, $attachmentName = '', $attachmentBase64Str = '', $otherPostfix = "", $putFileName = "", $isTicket = false)
     {
         $fileNameArray = array();
         $i = 0;
@@ -170,7 +168,7 @@ trait ProjectCommon
     }
 
     /* delete attachment */
-    function deleteAttachment($filePathStructure, $attachmentName, $isOwner = false)
+    public function deleteAttachment($filePathStructure, $attachmentName, $isOwner = false)
     {
         if ($this->isNotNullOrEmptyOrZero($attachmentName)) {
             unlink($this->filePathStructure['attachment'] . $filePathStructure . $attachmentName);
@@ -178,18 +176,18 @@ trait ProjectCommon
     }
 
     /* get microseconds name */
-    function getMicroSeconds($preFix = '')
+    public function getMicroSeconds($preFix = '')
     {
         return $preFix . round(microtime(true) * 1000);
     }
 
     /* get uniqId */
-    function getUniqId($preFix = '')
+    public function getUniqId($preFix = '')
     {
         return $preFix . "_" . uniqid();
     }
 
-    function isFileUpdate($isAddFile = false)
+    public function isFileUpdate($isAddFile = false)
     {
         $isFileUpdate = false;
         if ($this->isNotNullOrEmptyOrZero($this->deleteAttachmentArray)) {
@@ -208,7 +206,7 @@ trait ProjectCommon
         return $isFileUpdate;
     }
 
-    function generatePortfolioAttachmentUrl($attachmentName)
+    public function generatePortfolioAttachmentUrl($attachmentName)
     {
         $url = '';
         if ($this->isNotNullOrEmptyOrZero($attachmentName)) {
@@ -217,7 +215,7 @@ trait ProjectCommon
         return $url;
     }
 
-    function generateUserProfileAttachmentUrl($attachmentName)
+    public function generateUserProfileAttachmentUrl($attachmentName)
     {
         $url = '';
         if ($this->isNotNullOrEmptyOrZero($attachmentName)) {
