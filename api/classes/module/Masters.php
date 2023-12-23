@@ -734,20 +734,17 @@ class Masters extends Config
 
                         }
 
-                        if ($this->equals('Super Admin', $this->getArrayNameById($this->arrayAllRole, $this->userRole)) || $this->equals('Back Office', $this->getArrayNameById($this->arrayAllRole, $this->userRole))) {
+                        if ($this->equals('Super Admin', $this->getArrayNameById($this->arrayAllRole, $this->userRoleId)) || $this->equals('Back Office', $this->getArrayNameById($this->arrayAllRole, $this->userRoleId))) {
 
                             // super admin and back office stock - from live stock
                             $updateItemQty = $this::$masterConn->prepare("UPDATE item_list SET opening_stock = opening_stock - $itemsQty WHERE id = '$itemsId';");
                             if ($updateItemQty->execute()) {
-
                             }
 
-                        } else if ($this->equals('Super Admin', $this->getArrayNameById($this->arrayAllRole, $this->userRole))) {
+                        } else if ($this->equals('Normal User', $this->getArrayNameById($this->arrayAllRole, $this->userRoleId))) {
                             // Normal User - from user stock
-
                             $updateItemQty = $this::$masterConn->prepare("UPDATE item_user_allocation SET allocate_qty = allocate_qty - $itemsQty WHERE item_id = '$itemsId' AND user_id='$this->userMasterId';");
                             if ($updateItemQty->execute()) {
-
                             }
 
                         }
