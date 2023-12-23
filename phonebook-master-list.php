@@ -15,18 +15,18 @@ include_once './include/common-constat.php';
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php
-    include_once("include/commoncss.php");
-    ?>
+include_once "include/commoncss.php";
+?>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <?php
-        include_once("include/header.php");
-        include_once("include/sidebar.php");
+include_once "include/header.php";
+include_once "include/sidebar.php";
 
-        ?>
+?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -63,7 +63,9 @@ include_once './include/common-constat.php';
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="float-right">
-                                                    <a href="phonebook-master.php" class="btn btn-primary">
+                                                    <a href="phonebookExcel.php" class="btn btn-primary">
+                                                        <i class="fas fa-file-excel"></i> Export
+                                                    </a> <a href="phonebook-master.php" class="btn btn-primary">
                                                         <i class="fas fa-plus"></i> Add
                                                     </a>
                                                 </div>
@@ -81,6 +83,8 @@ include_once './include/common-constat.php';
                                                     </select>
                                                 </div>
                                             </div>
+
+
                                             <div class="row">
                                                 <div class="col-12">
                                                     <table id="phoneBookMasterTable"
@@ -119,9 +123,9 @@ include_once './include/common-constat.php';
 
                         <?php
 
-                        include_once("include/jquery.php");
+include_once "include/jquery.php";
 
-                        ?>
+?>
 
                         <script>
                         $('.select2').select2()

@@ -458,6 +458,9 @@ include_once "include/jquery.php";
 
         let itemsData = [];
 
+
+
+
         $('#itemTable tbody tr').each(function(index) {
             let row = $(this);
             let item = {
